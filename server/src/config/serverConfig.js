@@ -1,0 +1,10 @@
+require('dotenv').config();
+module.exports = {
+    BACKEND_PORT: process.env.BACKEND_PORT || 3001,
+    JWT_SECRET_KEY: process.env.JWT_SECRET_KEY || 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3NDIxMjIyMjksImV4cCI6MTc3MzY1ODIyOSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.mK4gLFCO597pLXSukTwPTO7X6y9M7-3zLCwSlsuGLk2IIGTy7SupW5cLPNqjMuzA',
+    JWT_EXPIRE: process.env.JWT_EXPIRE || '1d',
+    EXPIRES_IN: process.env.EXPIRES_IN,
+    ADMIN_EMAIL:process.env.ADMIN_EMAIL,
+    ADMIN_EMAIL_PASSWORD:process.env.ADMIN_EMAIL_PASSWORD,
+    ADMIN_CREATE_FLAG:0
+};
