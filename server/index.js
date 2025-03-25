@@ -24,12 +24,12 @@ mongoose.connect(dbConfig.MONGODB_URI, dbConfig.MONGOOSE_OPTIONS)
 );
 
 const apiRoutes = require('./src/routes');
-app.use('/api', apiRoutes);
 
 
 app.get('/', (req, res) => {
     res.status(200).send('Sevrer is running.........');
 });
+app.use('/api', apiRoutes);
 
 
 const PORT = serverConfig.BACKEND_PORT ;
