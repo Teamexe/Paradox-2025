@@ -31,7 +31,7 @@ class LeaderboardScreen extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             // Leaderboard content
             Expanded(
               child: Container(
@@ -48,7 +48,8 @@ class LeaderboardScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/images/leaderboard_icon.png', width: 40),
+                          Image.asset('assets/images/leaderboard_icon.png',
+                              width: 40),
                           SizedBox(width: 10),
                           Text(
                             'Leaderboard',
@@ -61,7 +62,7 @@ class LeaderboardScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    
+
                     // Podium
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 20),
@@ -72,7 +73,8 @@ class LeaderboardScreen extends StatelessWidget {
                           // 2nd place
                           Column(
                             children: [
-                              _buildPlayerAvatar('Sona', 'assets/images/avatar2.png', true),
+                              _buildPlayerAvatar(
+                                  'Sona', 'assets/images/avatar2.png', true),
                               Container(
                                 width: 80,
                                 padding: EdgeInsets.symmetric(vertical: 5),
@@ -107,17 +109,19 @@ class LeaderboardScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          
+
                           // 1st place
                           Column(
                             children: [
                               Stack(
                                 alignment: Alignment.topCenter,
                                 children: [
-                                  _buildPlayerAvatar('Aanya', 'assets/images/avatar1.png', true),
+                                  _buildPlayerAvatar('Aanya',
+                                      'assets/images/avatar1.png', true),
                                   Positioned(
                                     top: -10,
-                                    child: Icon(Icons.keyboard_option_key_sharp, color: Colors.amber, size: 30),
+                                    child: Icon(Icons.keyboard_option_key_sharp,
+                                        color: Colors.amber, size: 30),
                                   ),
                                 ],
                               ),
@@ -155,11 +159,12 @@ class LeaderboardScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          
+
                           // 3rd place
                           Column(
                             children: [
-                              _buildPlayerAvatar('Anjali', 'assets/images/avatar3.png', true),
+                              _buildPlayerAvatar(
+                                  'Anjali', 'assets/images/avatar3.png', true),
                               Container(
                                 width: 80,
                                 padding: EdgeInsets.symmetric(vertical: 5),
@@ -197,7 +202,7 @@ class LeaderboardScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    
+
                     // List of other players
                     Expanded(
                       child: Container(
@@ -226,7 +231,7 @@ class LeaderboardScreen extends StatelessWidget {
       bottomNavigationBar: ParadoxBottomNavBar(currentIndex: 1),
     );
   }
-  
+
   Widget _buildPlayerAvatar(String name, String imagePath, bool showFlag) {
     return Column(
       children: [
@@ -257,7 +262,7 @@ class LeaderboardScreen extends StatelessWidget {
       ],
     );
   }
-  
+
   Widget _buildPlayerListItem(int rank, String name, int level) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5),

@@ -5,18 +5,19 @@ class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
 
   @override
-  _QuizScreenState createState() => _QuizScreenState();
+  QuizScreenState createState() =>
+      QuizScreenState(); // Remove underscore to make it public
 }
 
-class _QuizScreenState extends State<QuizScreen> {
+class QuizScreenState extends State<QuizScreen> {
   final TextEditingController _answerController = TextEditingController();
-  
+
   @override
   void dispose() {
     _answerController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +51,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 ),
               ),
             ),
-            
+
             // Image placeholder
             Expanded(
               child: Container(
@@ -58,11 +59,15 @@ class _QuizScreenState extends State<QuizScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: AssetImage(
+                        'assets/images/question_image.png'), // Ensure this exists
+                    fit: BoxFit.cover,
+                  ),
                 ),
-                // This would be where the image is displayed
               ),
             ),
-            
+
             // Hint
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
@@ -92,7 +97,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 ],
               ),
             ),
-            
+
             // Answer input
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -112,7 +117,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 ),
               ),
             ),
-            
+
             // Submit button
             Container(
               margin: EdgeInsets.only(left: 20, right: 20, bottom: 30),

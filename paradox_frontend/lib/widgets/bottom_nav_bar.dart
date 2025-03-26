@@ -2,18 +2,15 @@ import 'package:flutter/material.dart';
 
 class ParadoxBottomNavBar extends StatelessWidget {
   final int currentIndex;
-  
-  const ParadoxBottomNavBar({
-    super.key,
-    required this.currentIndex,
-  });
+
+  const ParadoxBottomNavBar({super.key, required this.currentIndex});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 70,
       decoration: BoxDecoration(
-        color: Color(0xFF555555),
+        color: const Color(0xFF555555),
         border: Border(
           top: BorderSide(
             color: Colors.grey.shade700,
@@ -24,39 +21,23 @@ class ParadoxBottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(context, 0, Icons.home, 'Home'),
-          _buildNavItem(context, 1, Icons.bar_chart, 'Leaderboard'),
-          _buildNavItem(context, 2, Icons.menu, 'Rules'),
-          _buildNavItem(context, 3, Icons.emoji_events, 'Prizes'),
-          _buildNavItem(context, 4, Icons.person, 'Profile'),
+          _buildNavItem(context, 0, Icons.home, 'Home', '/'),
+          _buildNavItem(context, 1, Icons.bar_chart, 'Leaderboard', '/leaderboard'),
+          _buildNavItem(context, 2, Icons.menu, 'Rules', '/rules'),
+          _buildNavItem(context, 3, Icons.emoji_events, 'Prizes', '/prizes'), // Fix added
+          _buildNavItem(context, 4, Icons.person, 'Profile', '/profile'),
         ],
       ),
     );
   }
-  
-  Widget _buildNavItem(BuildContext context, int index, IconData icon, String label) {
+
+  Widget _buildNavItem(BuildContext context, int index, IconData icon, String label, String route) {
     final isSelected = currentIndex == index;
-    
+
     return InkWell(
       onTap: () {
         if (!isSelected) {
-          switch (index) {
-            case 0:
-              Navigator.pushReplacementNamed(context, '/');
-              break;
-            case 1:
-              Navigator.pushReplacementNamed(context, '/leaderboard');
-              break;
-            case 2:
-              Navigator.pushReplacementNamed(context, '/rules');
-              break;
-            case 3:
-              // Navigate to prizes
-              break;
-            case 4:
-              Navigator.pushReplacementNamed(context, '/profile');
-              break;
-          }
+          Navigator.pushNamed(context, route); // pushNamed for better navigation
         }
       },
       child: Column(
@@ -67,7 +48,7 @@ class ParadoxBottomNavBar extends StatelessWidget {
             color: isSelected ? Colors.white : Colors.grey,
             size: 28,
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
             label,
             style: TextStyle(

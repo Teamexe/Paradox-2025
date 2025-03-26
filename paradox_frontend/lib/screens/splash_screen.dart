@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/bottom_nav_bar.dart';
+import '../widgets/google_sign_in_button.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -7,113 +7,33 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          color: Colors.black,
-          image: DecorationImage(
-            image: AssetImage('assets/images/space_background.png'),
-            fit: BoxFit.cover,
+      body: Stack(
+        children: [
+          // Background Image
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/bg.png', // Background
+              fit: BoxFit.fill,
+            ),
           ),
-        ),
-        child: Stack(
-          children: [
-            // Pink geometric shapes
-            Positioned(
-              top: 20,
-              left: 20,
-              child: Image.asset('assets/images/pink_shape.png', width: 60),
-            ),
-            Positioned(
-              top: 20,
-              right: 20,
-              child: Image.asset('assets/images/pink_shape.png', width: 60),
-            ),
-            Positioned(
-              top: 100,
-              right: 60,
-              child: Image.asset('assets/images/pink_shape.png', width: 40),
-            ),
-            
-            // Main content
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+          // Center Google Button
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                // PARADOX title
-                Padding(
-                  padding: EdgeInsets.only(top: 60),
-                  child: Text(
-                    'PARADOX',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2,
-                      fontFamily: 'Stencil',
-                    ),
-                  ),
+                GoogleSignInButton(
+                  onTap: () {
+                    // Navigate to Home Screen after sign-in
+                    Navigator.pushReplacementNamed(context, '/home');
+                  },
                 ),
-                
-                // Center logo
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 200,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: RadialGradient(
-                          colors: [
-                            Color(0xFF333333),
-                            Colors.black,
-                          ],
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'P',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 100,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                
-                // Google search bar
-                Padding(
-                  padding: EdgeInsets.only(bottom: 100),
-                  child: Container(
-                    width: 300,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF333333),
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: Row(
-                      children: [
-                        SizedBox(width: 15),
-                        Image.asset('assets/images/google_logo.png', height: 24),
-                        SizedBox(width: 10),
-                        Text(
-                          'Google',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                const SizedBox(height: 50),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      bottomNavigationBar: ParadoxBottomNavBar(currentIndex: 0),
     );
   }
 }
