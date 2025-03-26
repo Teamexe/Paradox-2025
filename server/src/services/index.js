@@ -1,3 +1,4 @@
 module.exports={
-    AuthService:require('./authService')
+    AuthService:require('./authService'),
+    QuestionService:require('./questionService')
 }
