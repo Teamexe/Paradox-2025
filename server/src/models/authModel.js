@@ -20,9 +20,13 @@ const userSchema= new Schema({
         type:Number,
         default: 0
     },
-    level2:{
-        type:Boolean,
-        default:0
+    currQues:{
+        type:Number,
+        default:1
+    },
+    currLvl:{
+        type:Number,
+        default:1
     }
 },{
     timestamps:true
