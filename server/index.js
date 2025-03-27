@@ -1,11 +1,21 @@
 const dotenv = require('dotenv');
 dotenv.config();
+const passport=require('passport')
 const { serverConfig, dbConfig } = require('./src/config');
 const express = require('express');
 const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 
+const session = require('express-session');
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'your_secret_key', // Replace with a strong secret
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Set `true` if using HTTPS
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(cors({
     origin: "*",
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
