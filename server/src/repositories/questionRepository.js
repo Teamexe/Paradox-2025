@@ -16,7 +16,7 @@ class QuestionRepository extends crudRepository{
             return question.answer===userAnswer;
         } catch (error) {
             console.log(error);
-            throw new AppError("Error while fetching Answer",StatusCodes.INTERNAL_SERVER_ERROR)
+            throw new AppError("Question not found",StatusCodes.INTERNAL_SERVER_ERROR)
         }
     }
     async nextQues(id,lvl){
@@ -35,7 +35,8 @@ class QuestionRepository extends crudRepository{
         try {
             const lastQuestion = await Questions.findOne().sort({ id: -1 }); 
             if (!lastQuestion) {
-                throw new AppError("No questions found",StatusCodes.INTERNAL_SERVER_ERROR);
+                // throw new AppError("No questions found",StatusCodes.INTERNAL_SERVER_ERROR);
+                return 0;
             }
             return lastQuestion.id;
         } catch (error) {

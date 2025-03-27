@@ -5,6 +5,7 @@ const {AuthRepository} = require('../repositories');
 const { response } = require('express');
 const AuthRepo=new AuthRepository();
 const quesRepo=new QuestionRepository();
+const {serverConfig}=require('../config')
 
 async function nextQues(answer,userId){
     try {
@@ -19,7 +20,7 @@ async function nextQues(answer,userId){
         }
         if(isCorrect){
             const newQues=await quesRepo.nextQues(user.currQues,user.currLvl);
-            const updateUser=await AuthRepo.update(userId,{currQues:newQues.id});
+            const updateUser=await AuthRepo.update(userId,{currQues:newQues.id,score:((user.score)+serverConfig.SCORE)});
             console.log('updatedUser',updateUser);
             return newQues;
         }
@@ -34,7 +35,8 @@ async function addQues(data) {
     try {
         const lastQues=(await quesRepo.lastQues()) || 0;
         const id=(lastQues)+1;
-        data={data,id};
+        data.id=id
+        console.log("data",data)
         const response=await quesRepo.create(data);
         console.log("response of add ques:",response);
         return response;
