@@ -7,45 +7,76 @@ const bcrypt = require('bcryptjs');
 
 const authRepo=new AuthRepository();
 
-async function createUser(data) {
+// async function createUser(data) {
+//     try {
+//         email=data.email;
+//         const existingUser = await authRepo.findUserByEmail(email);
+//         if (existingUser) {
+//             throw new AppError("User already exists", StatusCodes.BAD_REQUEST);
+//         }
+//         const user =await authRepo.create(data);
+//         const token=await generateToken(user);
+//         if(!token){
+//             throw new AppError("Token not generated", StatusCodes.INTERNAL_SERVER);
+//         }
+//         const User={user,token};
+//         return User;
+//     } catch (err) {
+//         throw err;
+//     }
+// }
+// async function signIn(data) {
+//     try {
+//         email=data.email;
+//         // console.log(email);
+//         const user = await authRepo.findUserByEmail(email);
+//         console.log(user);
+//         if (!user) {
+//             throw new AppError("Invalid email", StatusCodes.BAD_REQUEST);
+//         }
+//         const isMatch = await comparePassword(data.password, user.password);
+//         // console.log("hgfh",data.password);
+//         // console.log("hgfh",isMatch);
+//         if (!isMatch) {
+//             throw new AppError("Invalid password", StatusCodes.BAD_REQUEST);
+//         }
+//         return user;
+//     } catch (error) {
+//         throw new AppError("Invalid credentials", StatusCodes.BAD_REQUEST);
+//     }
+// }
+async function findOrCreateUser(profile) {
     try {
-        email=data.email;
-        const existingUser = await authRepo.findUserByEmail(email);
+        const existingUser = await authRepo.findUserByEmail(profile.emails[0].value);
         if (existingUser) {
-            throw new AppError("User already exists", StatusCodes.BAD_REQUEST);
+            return existingUser;
         }
-        const user =await authRepo.create(data);
-        const token=await generateToken(user);
-        if(!token){
-            throw new AppError("Token not generated", StatusCodes.INTERNAL_SERVER);
-        }
-        const User={user,token};
-        return User;
-    } catch (err) {
-        throw err;
-    }
-}
-async function signIn(data) {
-    try {
-        email=data.email;
-        // console.log(email);
-        const user = await authRepo.findUserByEmail(email);
-        console.log(user);
-        if (!user) {
-            throw new AppError("Invalid email", StatusCodes.BAD_REQUEST);
-        }
-        const isMatch = await comparePassword(data.password, user.password);
-        // console.log("hgfh",data.password);
-        // console.log("hgfh",isMatch);
-        if (!isMatch) {
-            throw new AppError("Invalid password", StatusCodes.BAD_REQUEST);
-        }
-        return user;
+
+        const newUser = {
+            name: profile.displayName,
+            email: profile.emails[0].value,
+            googleId: profile.id,
+            profilePicture: profile.photos[0].value
+        };
+
+        return await authRepo.create(newUser);
     } catch (error) {
-        throw new AppError("Invalid credentials", StatusCodes.BAD_REQUEST);
+        throw new AppError('Error in findOrCreateUser', StatusCodes.INTERNAL_SERVER_ERROR);
     }
 }
 
+
+async function findUserById(id) {
+    try {
+        const user = await authRepo.findUserById(id);
+        if (!user) {
+            throw new AppError('User not found', StatusCodes.NOT_FOUND);
+        }
+        return user;
+    } catch (error) {
+        throw error;
+    }
+}
 
 
 async function generateToken(params) {
@@ -81,8 +112,10 @@ async function isAuthentication(token) {
 
 
 module.exports={
-    createUser,
+    // createUser,
     generateToken,
-    signIn,
+    // signIn,
+    findUserById,
+    findOrCreateUser,
     isAuthentication
 }

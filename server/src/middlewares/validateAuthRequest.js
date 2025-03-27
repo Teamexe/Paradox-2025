@@ -27,7 +27,8 @@ function validateAuthRequest(req, res, next) {
 
 async function checkAuth(req,res,next){
     try{
-        const authHeader = req.headers.authorization?.replace('Bearer ', ''); // Fetch the Authorization header
+        const authHeader = req.headers.authorization; // Fetch the Authorization header
+        // console.log(authHeader)
         if (!authHeader) {
             throw new Error('No Authorization header provided');
         }

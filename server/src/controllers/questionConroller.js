@@ -11,7 +11,7 @@ async function nextQues(req,res) {
         const userId = req.user.id;
         if(!answer){
             ErrorResponse.message='Answer is required';
-            return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse)
+            return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
         }
         const reponse=await QuestionService.nextQues(answer,userId);
         if(!reponse){
@@ -54,7 +54,88 @@ async function addQues(req,res) {
     }
 }
 
+async function currentQues(req,res) {
+    try {
+        const user=req.user;
+        console.log(user)
+        if(!user){
+            ErrorResponse.message='UserId is required';
+            return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse)
+        }
+        const response=await QuestionService.currentQues(user);
+        return res.status(StatusCodes.ACCEPTED).json(response);
+    } catch (error) {
+        console.log(error);
+        ErrorResponse.message="Something went wrong while fetching Question";
+        ErrorResponse.error=error;
+        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+    }
+}
+
+
+async function getAll(req,res) {
+    try {
+        const reponse=await QuestionService.getAll();
+        SuccessResponse.data=reponse
+        SuccessResponse.message="Fetched All Questions";
+        return res.status(StatusCodes.ACCEPTED).json(SuccessResponse);
+    } catch (error) {
+        console.log(error);
+        ErrorResponse.error=error;
+        ErrorResponse.message="Cant fetch all questions";
+        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+    }
+}
+
+
+
+async function deleteQues(req,res) {
+    try {
+        const id=req.params.id;
+        const response=await QuestionService.deleteQues(id);
+        SuccessResponse.message="deleted Successfully";
+        SuccessResponse.data=response;
+        return res.status(StatusCodes.ACCEPTED).json(SuccessResponse);
+    } catch (error) {
+        console.log(error);
+        ErrorResponse.error=error;
+        ErrorResponse.message="cant delete question";
+        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+    }
+}
+
+
+
+
+async function updateQues(req,res) {
+    try {
+        const id=req.params.id;
+        const data={
+            lvl:req.body?.lvl,
+            title:req.body?.title,
+            descriptionOrImgUrl:req.body?.descriptionOrImgUrl,
+            hint:req.body?.hint,
+            answer:req.body?.answer
+        }
+        console.log("data:",data);
+        const reponse=await QuestionService.updateQues(id,data);
+        SuccessResponse.data=reponse;
+        SuccessResponse.message="Updated Successfully";
+        return res.status(StatusCodes.ACCEPTED).json(SuccessResponse);
+    } catch (error) {
+        console.log(error);
+        ErrorResponse.error=error;
+        ErrorResponse.message="Cant Update Question";
+        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+    }
+}
+
+
 module.exports={
     nextQues,
     addQues,
+    currentQues,
+    getAll,
+    updateQues,
+    deleteQues
 }

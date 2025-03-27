@@ -5,6 +5,7 @@ const {AuthRepository} = require('../repositories');
 const { response } = require('express');
 const AuthRepo=new AuthRepository();
 const quesRepo=new QuestionRepository();
+const {serverConfig}=require('../config')
 
 async function nextQues(answer,userId){
     try {
@@ -19,7 +20,7 @@ async function nextQues(answer,userId){
         }
         if(isCorrect){
             const newQues=await quesRepo.nextQues(user.currQues,user.currLvl);
-            const updateUser=await AuthRepo.update(userId,{currQues:newQues.id});
+            const updateUser=await AuthRepo.update(userId,{currQues:newQues.id,score:((user.score)+serverConfig.SCORE)});
             console.log('updatedUser',updateUser);
             return newQues;
         }
@@ -34,7 +35,8 @@ async function addQues(data) {
     try {
         const lastQues=(await quesRepo.lastQues()) || 0;
         const id=(lastQues)+1;
-        data={data,id};
+        data.id=id
+        console.log("data",data)
         const response=await quesRepo.create(data);
         console.log("response of add ques:",response);
         return response;
@@ -45,4 +47,50 @@ async function addQues(data) {
 }
 
 
-module.exports={nextQues,addQues};
+async function currentQues(user) {
+    try {
+        const query={ lvl: user.currLvl, id: user.currQues };
+        const reponse=await quesRepo.getAll(query);
+        console.log("Current Quest:",reponse);
+        return reponse || null;
+    } catch (error) {
+        console.log(error);
+        throw new AppError(error,StatusCodes.BAD_REQUEST);
+    }
+}
+
+
+async function getAll() {
+    try {
+        const reponse=await quesRepo.getAll();
+        return reponse;
+    } catch (error) {
+        console.log(error);
+        throw new AppError(error,StatusCodes.BAD_REQUEST);
+    }
+}
+
+
+async function updateQues(id,data) {
+    try {
+        const reponse=await quesRepo.update(id,data);
+        return reponse;
+    } catch (error) {
+        console.log(error);
+        throw new AppError(error,StatusCodes.BAD_REQUEST); 
+    }
+}
+
+
+async function deleteQues(id) {
+    try {
+        const response=await quesRepo.destroy(id);
+        return response;
+    } catch (error) {
+        console.log(error);
+        throw new AppError(error,StatusCodes.BAD_REQUEST);
+    }
+}
+
+
+module.exports={nextQues,addQues,currentQues,getAll,updateQues,deleteQues};

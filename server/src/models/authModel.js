@@ -12,9 +12,16 @@ const userSchema= new Schema({
         type:String,
         require:true
     },
-    password:{
-        type:String,
-        require:true
+    password: {
+        type: String
+    },
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true // Allows null values while ensuring uniqueness
+    },
+    profilePicture: {
+        type: String
     },
     score:{
         type:Number,

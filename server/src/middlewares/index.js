@@ -1,3 +1,4 @@
 module.exports = {
-    ValidateAuthReq: require('./validateAuthRequest')
+    ValidateAuthReq: require('./validateAuthRequest'),
+    ValidateAdmin: require('./validateAdmin')
 }
