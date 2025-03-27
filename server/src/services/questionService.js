@@ -60,4 +60,37 @@ async function currentQues(user) {
 }
 
 
-module.exports={nextQues,addQues,currentQues};
+async function getAll() {
+    try {
+        const reponse=await quesRepo.getAll();
+        return reponse;
+    } catch (error) {
+        console.log(error);
+        throw new AppError(error,StatusCodes.BAD_REQUEST);
+    }
+}
+
+
+async function updateQues(id,data) {
+    try {
+        const reponse=await quesRepo.update(id,data);
+        return reponse;
+    } catch (error) {
+        console.log(error);
+        throw new AppError(error,StatusCodes.BAD_REQUEST); 
+    }
+}
+
+
+async function deleteQues(id) {
+    try {
+        const response=await quesRepo.destroy(id);
+        return response;
+    } catch (error) {
+        console.log(error);
+        throw new AppError(error,StatusCodes.BAD_REQUEST);
+    }
+}
+
+
+module.exports={nextQues,addQues,currentQues,getAll,updateQues,deleteQues};

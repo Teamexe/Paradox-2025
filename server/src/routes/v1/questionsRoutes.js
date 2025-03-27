@@ -7,8 +7,9 @@ const {ValidateAuthReq}=require('../../middlewares');
 router.patch('/next',ValidateAuthReq.checkAuth,QuestionConroller.nextQues);
 router.get('/current',ValidateAuthReq.checkAuth,QuestionConroller.currentQues);
 router.post('/add',QuestionConroller.addQues);
-// router.delete('/delete',QuestionConroller.deleteQues);
-// router.patch('/update',QuestionConroller.updateQues);
+router.get('/getAll',QuestionConroller.getAll);
+router.delete('/delete/:id',QuestionConroller.deleteQues);
+router.patch('/update/:id',QuestionConroller.updateQues);
 
 
 
