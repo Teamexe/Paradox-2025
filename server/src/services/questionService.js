@@ -47,4 +47,17 @@ async function addQues(data) {
 }
 
 
-module.exports={nextQues,addQues};
+async function currentQues(user) {
+    try {
+        const query={ lvl: user.currLvl, id: user.currQues };
+        const reponse=await quesRepo.getAll(query);
+        console.log("Current Quest:",reponse);
+        return reponse || null;
+    } catch (error) {
+        console.log(error);
+        throw new AppError(error,StatusCodes.BAD_REQUEST);
+    }
+}
+
+
+module.exports={nextQues,addQues,currentQues};

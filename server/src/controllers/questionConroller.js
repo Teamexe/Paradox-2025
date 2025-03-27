@@ -11,7 +11,7 @@ async function nextQues(req,res) {
         const userId = req.user.id;
         if(!answer){
             ErrorResponse.message='Answer is required';
-            return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse)
+            return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
         }
         const reponse=await QuestionService.nextQues(answer,userId);
         if(!reponse){
@@ -54,7 +54,26 @@ async function addQues(req,res) {
     }
 }
 
+async function currentQues(req,res) {
+    try {
+        const user=req.user;
+        console.log(user)
+        if(!user){
+            ErrorResponse.message='UserId is required';
+            return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse)
+        }
+        const response=await QuestionService.currentQues(user);
+        return res.status(StatusCodes.ACCEPTED).json(response);
+    } catch (error) {
+        console.log(error);
+        ErrorResponse.message="Something went wrong while fetching Question";
+        ErrorResponse.error=error;
+        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+    }
+}
+
 module.exports={
     nextQues,
     addQues,
+    currentQues
 }
