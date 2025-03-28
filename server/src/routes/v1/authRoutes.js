@@ -26,7 +26,7 @@ const { googleConfig } = require('../../config');
 passport.use(new GoogleStrategy({
     clientID: googleConfig.clientID,
     clientSecret: googleConfig.clientSecret,
-    callbackURL: '/api/v1/auth/google/callback', // Ensure this matches Google console
+    callbackURL: googleConfig.callbackURL, // Ensure this matches Google console
 }, async (accessToken, refreshToken, profile, done) => {
     try {
         const user = await AuthService.findOrCreateUser(profile);
