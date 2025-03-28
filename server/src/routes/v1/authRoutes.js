@@ -21,10 +21,11 @@ const { SuccessResponse, ErrorResponse } = require('../../utils/common');
 const { StatusCodes } = require('http-status-codes');
 const express = require('express');
 const router = express.Router();
+const { googleConfig } = require('../../config');
 
 passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID ,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    clientID: googleConfig.clientID,
+    clientSecret: googleConfig.clientSecret,
     callbackURL: '/api/v1/auth/google/callback', // Ensure this matches Google console
 }, async (accessToken, refreshToken, profile, done) => {
     try {
