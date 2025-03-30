@@ -34,7 +34,11 @@ const userSchema= new Schema({
     currLvl:{
         type:Number,
         default:1
-    }
+    },
+    hintUsed: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Questions'
+    }]
 },{
     timestamps:true
 })

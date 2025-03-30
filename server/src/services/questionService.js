@@ -60,6 +60,22 @@ async function currentQues(user) {
 }
 
 
+async function hint(user) {
+    try {
+        const query={ lvl: user.currLvl, id: user.currQues };
+        const response=await quesRepo.getAll(query);
+        console.log("Current Quest hint:",response);
+        const hintUsed=await AuthRepo.addHintUsed(user._id,response[0]._id);
+        console.log(hintUsed);
+        const hint =response.length > 0 ? response[0].hint : "No hint available";        
+        return hint;
+    } catch (error) {
+        console.log(error);
+        throw new AppError(error,StatusCodes.BAD_REQUEST);
+    }
+}
+
+
 async function getAll() {
     try {
         const reponse=await quesRepo.getAll();
@@ -93,4 +109,4 @@ async function deleteQues(id) {
 }
 
 
-module.exports={nextQues,addQues,currentQues,getAll,updateQues,deleteQues};
+module.exports={nextQues,addQues,currentQues,getAll,updateQues,deleteQues,hint};
