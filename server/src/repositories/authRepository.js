@@ -21,7 +21,19 @@ class AuthRepository extends crudRepository {
             throw new AppError(err.message, StatusCodes.INTERNAL_SERVER_ERROR);
         }
     }
-    
+    async  addHintUsed(userId, questionId) {
+        try {
+            const updatedUser = await User.findByIdAndUpdate(
+                userId,
+                { $addToSet: { hintUsed: questionId } }, 
+                { new: true }
+            ).populate('hintUsed'); 
+            return updatedUser;
+        } catch (error) {
+            console.error("Error adding to hintUsed:", error);
+            throw error;
+        }
+    }
     
 }
 

@@ -21,5 +21,23 @@ router.get('/home',ValidateAuthReq.checkAuth,async (req,res)=>{
     }
 })
 
+router.get('/score',ValidateAuthReq.checkAuth,async(req,res)=>{
+    try {
+        const user=req.user;
+        console.log("user:",user);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        const ogScore=user.score;
+        const hintUsed = Array.isArray(user.hintUsed) ? user.hintUsed.length : 0;
+        const response = ogScore - (hintUsed * 20);
+        console.log(ogScore,hintUsed)
+        return res.status(StatusCodes.ACCEPTED).json(response);
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Internal server error' });
+    }
+});
+
 
 module.exports=router;
