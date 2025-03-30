@@ -73,6 +73,24 @@ async function currentQues(req,res) {
 }
 
 
+async function hint(req,res) {
+    try {
+        const user=req.user;
+        console.log(user)
+        if(!user){
+            ErrorResponse.message='UserId is required';
+            return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse)
+        }
+        const response=await QuestionService.hint(user);
+        return res.status(StatusCodes.ACCEPTED).json(response);
+    } catch (error) {
+        console.log(error);
+        ErrorResponse.error=error;
+        ErrorResponse.message="Can't Fetch Hint";
+        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+    }
+}
+
 async function getAll(req,res) {
     try {
         const reponse=await QuestionService.getAll();
@@ -137,5 +155,6 @@ module.exports={
     currentQues,
     getAll,
     updateQues,
-    deleteQues
+    deleteQues,
+    hint
 }
