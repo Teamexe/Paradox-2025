@@ -63,8 +63,14 @@ flutter:
     - assets/images/leaderboard_bg.png
     - assets/images/leaderboard_list_bg.png
     - assets/images/leaderboard_podium.png
+    - assets/images/RULES.png
+    - assets/images/profile_section.png
+    - assets/images/profile_image.png
     
   fonts:
     - family: PixelFont
       fonts:
         - asset: assets/fonts/PixelFont.ttf
+    - family: Oswald
+      fonts:
+        - asset: assets/fonts/Oswald.ttf     
