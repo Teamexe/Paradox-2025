@@ -66,6 +66,7 @@ flutter:
     - assets/images/RULES.png
     - assets/images/profile_section.png
     - assets/images/profile_image.png
+   
     
   fonts:
     - family: PixelFont
