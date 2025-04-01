@@ -7,12 +7,10 @@ import 'screens/leaderboard_screen.dart';
 import 'screens/prizes_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/rules_screen.dart';
-// ignore: unused_import
 import 'screens/question_screen.dart';
 import 'widgets/bottom_navigation.dart';
 
 void main() {
-    
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const ParadoxApp());
@@ -31,7 +29,7 @@ class ParadoxApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.black,
         fontFamily: 'Roboto', // Replace with your actual font
       ),
-      home: const MainScreen(),
+      home: const SplashScreen(),
     );
   }
 }
@@ -45,9 +43,9 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  
+
   final List<Widget> _screens = [
-    const SplashScreen(),
+    const QuestionScreen(),
     const LeaderboardScreen(),
     const RulesScreen(),
     const PrizesScreen(),
@@ -66,7 +64,8 @@ class _MainScreenState extends State<MainScreen> {
       body: _screens[_selectedIndex],
       bottomNavigationBar: ParadoxBottomNavigation(
         selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped, currentIndex: 1,
+        onItemTapped: _onItemTapped,
+        currentIndex: 1,
       ),
     );
   }

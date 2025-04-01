@@ -24,7 +24,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
           // Comment: Add the space background with red swirl from assets
           color: Colors.black,
           image: DecorationImage(
-            image: AssetImage('assets/images/background.png'),
+            image: AssetImage('assets/images/all_bg.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -52,7 +52,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
             // Image Area
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
-              height: 300,
+              height: 400,
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(10),

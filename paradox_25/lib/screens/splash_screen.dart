@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../main.dart'; // Import MainScreen
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -8,7 +9,6 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          
           Positioned.fill(
             child: Image.asset(
               'assets/images/home_bg.png',
@@ -30,7 +30,6 @@ class SplashScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 10), // Reduced space
-
                   // Paradox Text
                   SizedBox(
                     height: 60, // Adjusted height
@@ -38,13 +37,18 @@ class SplashScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 30), // Reduced space
-
                   // Google Sign-In Button
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        // Add Google sign-in logic
+                        // Navigate to MainScreen (with navigation bar)
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MainScreen(),
+                          ),
+                        );
                       },
                       icon: SizedBox(
                         height: 24,
@@ -53,16 +57,23 @@ class SplashScreen extends StatelessWidget {
                       ),
                       label: const Text(
                         'Google',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        // ignore: deprecated_member_use
-                        backgroundColor: Colors.white.withOpacity(0.1), // Transparency
+                        backgroundColor: Colors.white.withOpacity(
+                          0.1,
+                        ), // Transparency
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 16),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 100,
+                          vertical: 16,
+                        ),
                         elevation: 0,
                       ),
                     ),
@@ -76,4 +87,3 @@ class SplashScreen extends StatelessWidget {
     );
   }
 }
-

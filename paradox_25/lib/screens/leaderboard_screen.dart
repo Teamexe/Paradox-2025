@@ -302,7 +302,7 @@ class LeaderboardScreen extends StatelessWidget {
                     level,
                     style: const TextStyle(
                       color: Colors.black,
-                      fontSize: 16,
+                      fontSize: 20,
                       fontFamily: 'Kenia', // Use the Kenia font for the level
                     ),
                   ),
