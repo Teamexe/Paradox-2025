@@ -12,6 +12,7 @@ import 'screens/question_screen.dart';
 import 'widgets/bottom_navigation.dart';
 
 void main() {
+    
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const ParadoxApp());

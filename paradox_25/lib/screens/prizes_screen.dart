@@ -8,26 +8,23 @@ class PrizesScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          // Comment: Add the space background with red swirl from assets
-          color: Colors.black,
+          // Background with the all_bg.png image
           image: DecorationImage(
-            image: AssetImage('assets/images/background.png'),
-            fit: BoxFit.cover,
+            image: AssetImage(
+              'assets/images/all_bg.png',
+            ), // Add the background image
+            fit: BoxFit.cover, // Ensure the image covers the entire screen
           ),
         ),
         child: Column(
           children: [
             const SizedBox(height: 60),
-            // PARADOX Logo
-            const Text(
-              'PARADOX',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 48,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2,
-                // Comment: Use the stencil-like font from assets
-                fontFamily: 'Stencil',
+            // PARADOX Logo (Image)
+            SizedBox(
+              height: 60, // Adjust the height of the image
+              child: Image.asset(
+                'assets/images/paradox_text.png', // Replace text with the image
+                fit: BoxFit.contain,
               ),
             ),
             const SizedBox(height: 20),
@@ -35,8 +32,9 @@ class PrizesScreen extends StatelessWidget {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
-                // ignore: deprecated_member_use
-                color: const Color(0xFF333333).withOpacity(0.7),
+                color: const Color(
+                  0xFF333333,
+                ).withOpacity(0.7), // Semi-transparent background
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Column(
@@ -47,7 +45,7 @@ class PrizesScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // Comment: Add the blue crystal logo from assets
+                        // Blue crystal logo
                         Image.asset(
                           'assets/images/crystal_logo.png',
                           height: 30,
@@ -58,11 +56,12 @@ class PrizesScreen extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 28,
-                            fontFamily: 'PixelFont', // Comment: Use pixel-like font from assets
+                            fontFamily:
+                                'PixelFont', // Use pixel-like font from assets
                           ),
                         ),
                         const SizedBox(width: 10),
-                        // Comment: Add the hexagon logo from assets
+                        // Hexagon logo
                         Image.asset(
                           'assets/images/hexagon_logo.png',
                           height: 30,
@@ -84,15 +83,21 @@ class PrizesScreen extends StatelessWidget {
                   ),
                   // Announcement
                   Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 15,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.grey.shade700,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Row(
                       children: [
-                        // Comment: Add diamond icon from assets
+                        // Diamond icon
                         Image.asset(
                           'assets/images/diamond_icon.png',
                           height: 24,
@@ -101,10 +106,7 @@ class PrizesScreen extends StatelessWidget {
                         const Expanded(
                           child: Text(
                             'The prize will be announced soon',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
+                            style: TextStyle(color: Colors.white, fontSize: 16),
                           ),
                         ),
                       ],
@@ -138,23 +140,11 @@ class PrizesScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 2,
-                    height: 18,
-                    color: Colors.yellow,
-                  ),
+                  Container(width: 2, height: 18, color: Colors.yellow),
                   const SizedBox(width: 5),
-                  Container(
-                    width: 2,
-                    height: 18,
-                    color: Colors.yellow,
-                  ),
+                  Container(width: 2, height: 18, color: Colors.yellow),
                   const SizedBox(width: 5),
-                  Container(
-                    width: 2,
-                    height: 18,
-                    color: Colors.yellow,
-                  ),
+                  Container(width: 2, height: 18, color: Colors.yellow),
                 ],
               ),
             ),
@@ -170,14 +160,13 @@ class PrizesScreen extends StatelessWidget {
                   border: Border.all(color: Colors.orange.shade800, width: 2),
                   boxShadow: [
                     BoxShadow(
-                      // ignore: deprecated_member_use
                       color: Colors.amber.withOpacity(0.5),
                       spreadRadius: 2,
                       blurRadius: 5,
                     ),
                   ],
                 ),
-                // Comment: Add medal image from assets
+                // Medal image (optional)
                 // child: Image.asset('assets/images/medal.png'),
               ),
             ),

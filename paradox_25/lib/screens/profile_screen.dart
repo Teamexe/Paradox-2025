@@ -17,7 +17,6 @@ class ProfileScreen extends StatelessWidget {
         ),
         child: Column(
           children: [
-            
             // PARADOX Logo
             const SizedBox(height: 60),
             // PARADOX Logo
@@ -31,14 +30,18 @@ class ProfileScreen extends StatelessWidget {
               child: Center(
                 child: Container(
                   height: 538, // Outer container height
-                  width: 352,  // Outer container width
+                  width: 352, // Outer container width
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
                     color: const Color(0xFF333333).withOpacity(0.7),
                     borderRadius: BorderRadius.circular(30),
                     image: const DecorationImage(
-                      image: AssetImage('assets/images/leaderboard_list_bg.png'), // Add the background image
-                      fit: BoxFit.fill, // Ensure the image covers the entire container
+                      image: AssetImage(
+                        'assets/images/leaderboard_list_bg.png',
+                      ), // Add the background image
+                      fit:
+                          BoxFit
+                              .fill, // Ensure the image covers the entire container
                     ),
                   ),
                   child: Column(
@@ -46,98 +49,93 @@ class ProfileScreen extends StatelessWidget {
                       // Inner container
                       Container(
                         height: 458, // Inner container height
-                        width: 292,  // Inner container width
+                        width: 292, // Inner container width
                         margin: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
                           color: const Color(0xFFE58B87),
                           borderRadius: BorderRadius.circular(20),
                           image: const DecorationImage(
-                            image: AssetImage('assets/images/profile_section.png'), // Add the background image
-                            fit: BoxFit.cover, // Ensure the image covers the entire container
+                            image: AssetImage(
+                              'assets/images/profile_section.png',
+                            ), // Add the background image
+                            fit:
+                                BoxFit
+                                    .fill, // Ensure the image covers the entire container
                           ),
                         ),
                         child: Column(
                           children: [
-                            // Profile Image and Name
-                            Container(
-                              padding: const EdgeInsets.all(20),
-                              decoration: const BoxDecoration(
-                                color: Color(0xFFE5C0BE),
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
+                            // Profile Image and Name in Circular Box
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 10,
+                              ), // Add padding to move it downward
+                              child: Container(
+                                width:
+                                    200, // Adjust the size of the circular container
+                                height:
+                                    200, // Ensure width and height are equal for a circle
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color:
+                                        Colors
+                                            .grey
+                                            .shade800, // Outer circle border color (black or grey)
+                                    width:
+                                        5, // Border width for the outer circle
+                                  ),
+                                  color:
+                                      Colors
+                                          .white, // Background color of the circular container
                                 ),
-                              ),
-                              child: Column(
-                                children: [
-                                  // Profile Image with #1 and Flag
-                                  Stack(
-                                    alignment: Alignment.topRight,
-                                    children: [
-                                      Container(
-                                        width: 100,
-                                        height: 100,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color: Colors.white,
-                                            width: 3,
-                                          ),
-                                        ),
-                                        // Comment: Add the avatar image from assets
-                                        child: const Center(
-                                          child: Text(
-                                            "A",
-                                            style: TextStyle(
-                                              fontSize: 40,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        // child: Image.asset('assets/images/avatar_aanya.png'),
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 5,
-                                          vertical: 2,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey.shade800,
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        child: const Text(
-                                          '#1',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    // Profile Image
+                                    Container(
+                                      width: 100,
+                                      height: 100,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color:
+                                              Colors
+                                                  .black, // Border color for the profile image
+                                          width:
+                                              3, // Border width for the profile image
                                         ),
                                       ),
-                                     
-                                    ],
-                                  ),
-                                  const SizedBox(height: 10),
-                                  // Name
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                      vertical: 5,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: const Text(
-                                      'Aanya',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
+                                      child: ClipOval(
+                                        child: Image.asset(
+                                          'assets/images/profile_image.png',
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(height: 10),
+                                    // Name
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                        vertical: 5,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade300,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: const Text(
+                                        'Aanya',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             // Stats
@@ -149,28 +147,37 @@ class ProfileScreen extends StatelessWidget {
                                   Container(
                                     padding: const EdgeInsets.symmetric(
                                       vertical: 10,
+                                      horizontal:
+                                          15, // Add horizontal padding for equal spacing
                                     ),
                                     decoration: BoxDecoration(
                                       color: Colors.grey.shade300,
                                       borderRadius: BorderRadius.circular(15),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment
+                                              .spaceBetween, // Distribute items evenly
                                       children: [
-                                        Icon(
-                                          Icons.bar_chart,
-                                          color: Colors.blue.shade300,
+                                        // Icon and #1 on the left
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.bar_chart,
+                                              color: Colors.blue.shade300,
+                                            ),
+                                            const SizedBox(width: 10),
+                                            const Text(
+                                              '#1',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(width: 10),
-                                        const Text(
-                                          '#1',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 10),
+                                        // Leaderboard text on the right
                                         const Text(
                                           'LeaderBoard',
                                           style: TextStyle(
@@ -208,23 +215,23 @@ class ProfileScreen extends StatelessWidget {
                                   // Coins and Attempts
                                   Row(
                                     children: [
-                                      Expanded(
+                                      Flexible(
                                         child: _buildStatItem(
                                           icon: Icons.monetization_on,
                                           value: '15000',
                                           label: 'Coins',
                                           iconColor: Colors.amber,
-                                          customIcon: true,
                                         ),
                                       ),
-                                      const SizedBox(width: 15),
-                                      Expanded(
+                                      const SizedBox(
+                                        width: 10,
+                                      ), // Reduce the width
+                                      Flexible(
                                         child: _buildStatItem(
                                           icon: Icons.refresh,
                                           value: '30',
                                           label: 'Attempts',
                                           iconColor: Colors.blue,
-                                          customIcon: true,
                                         ),
                                       ),
                                     ],
@@ -240,8 +247,6 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
             ),
-            
-           
           ],
         ),
       ),
@@ -256,24 +261,27 @@ class ProfileScreen extends StatelessWidget {
     bool customIcon = false,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      padding: const EdgeInsets.symmetric(
+        vertical: 10,
+        horizontal: 15,
+      ), // Uniform padding
       decoration: BoxDecoration(
         color: Colors.grey.shade300,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(15), // Uniform border radius
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start, // Align items consistently
         children: [
           if (customIcon) ...[
-            // Comment: Add custom icon from assets if needed
             Image.asset(
               'assets/images/${label.toLowerCase()}_icon.png',
-              height: 24,
+              height: 24, // Uniform icon size
               color: iconColor,
             ),
           ] else ...[
-            Icon(icon, color: iconColor),
+            Icon(icon, color: iconColor, size: 24), // Uniform icon size
           ],
-          const SizedBox(width: 10),
+          const SizedBox(width: 10), // Uniform spacing between icon and text
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -281,7 +289,7 @@ class ProfileScreen extends StatelessWidget {
                 value,
                 style: const TextStyle(
                   color: Colors.black,
-                  fontSize: 18,
+                  fontSize: 18, // Uniform font size for value
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -289,7 +297,7 @@ class ProfileScreen extends StatelessWidget {
                 label,
                 style: TextStyle(
                   color: Colors.grey.shade700,
-                  fontSize: 14,
+                  fontSize: 14, // Uniform font size for label
                 ),
               ),
             ],

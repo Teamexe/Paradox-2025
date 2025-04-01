@@ -8,7 +8,7 @@ class LeaderboardScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          // Comment: Add the space background with red swirl from assets
+          // Background with space and red swirl
           color: Colors.black,
           image: DecorationImage(
             image: AssetImage('assets/images/all_bg.png'),
@@ -18,24 +18,22 @@ class LeaderboardScreen extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 60),
+            // Paradox Logo
             SizedBox(
               height: 60, // Adjusted height
               child: Image.asset('assets/images/paradox_text.png'),
             ),
-
             const SizedBox(height: 20),
             // Main Content Card
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
-                color:
-                    Colors
-                        .transparent, // Set the container background to transparent
+                color: Colors.transparent, // Transparent background
                 borderRadius: BorderRadius.circular(30), // Rounded corners
                 image: const DecorationImage(
                   image: AssetImage(
                     'assets/images/leaderboard_bg.png',
-                  ), // Replace with your image path
+                  ), // Background image
                   fit: BoxFit.none, // Keeps the image in its original size
                   alignment:
                       Alignment.topCenter, // Aligns the image to the top center
@@ -57,7 +55,7 @@ class LeaderboardScreen extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
-                            fontFamily: 'PixelFont', // Use pixel-like font
+                            fontFamily: 'PixelFont', // Pixel-like font
                           ),
                         ),
                         const SizedBox(width: 42),
@@ -77,12 +75,12 @@ class LeaderboardScreen extends StatelessWidget {
                       child: Stack(
                         alignment: Alignment.bottomCenter,
                         children: [
-                          // Shift the podium image upward
+                          // Podium image
                           Positioned(
                             bottom:
                                 45, // Adjust this value to move the image upward
                             child: Image.asset(
-                              'assets/images/leaderboard_podium.png', // Replace with your image path
+                              'assets/images/leaderboard_podium.png', // Podium image
                               fit: BoxFit.contain,
                             ),
                           ),
@@ -94,8 +92,9 @@ class LeaderboardScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
-                      
-                      borderRadius: BorderRadius.circular(15), // Optional: Rounded corners
+                      borderRadius: BorderRadius.circular(
+                        15,
+                      ), // Rounded corners
                     ),
                     child: Column(
                       children: [
@@ -155,7 +154,7 @@ class LeaderboardScreen extends StatelessWidget {
               shape: BoxShape.circle,
               border: Border.all(color: Colors.red, width: 2),
             ),
-            // Comment: Add the avatar image from assets
+            // Add avatar image if available
             // child: Image.asset('assets/images/avatar_$rank.png'),
           ),
           const SizedBox(width: 15),
