@@ -66,6 +66,7 @@ flutter:
     - assets/images/RULES.png
     - assets/images/profile_section.png
     - assets/images/profile_image.png
+    - assets/images/navbar.png
    
     
   fonts:
@@ -74,4 +75,10 @@ flutter:
         - asset: assets/fonts/PixelFont.ttf
     - family: Oswald
       fonts:
-        - asset: assets/fonts/Oswald.ttf     
+        - asset: assets/fonts/Oswald.ttf    
+    - family: KdamThmorPro
+      fonts:
+        - asset: assets/fonts/KdamThmorPro-Regular.ttf
+    - family: Kenia
+      fonts:
+        - asset: assets/fonts/Kenia-Regular.ttf

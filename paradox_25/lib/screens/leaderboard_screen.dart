@@ -154,8 +154,6 @@ class LeaderboardScreen extends StatelessWidget {
               shape: BoxShape.circle,
               border: Border.all(color: Colors.red, width: 2),
             ),
-            // Add avatar image if available
-            // child: Image.asset('assets/images/avatar_$rank.png'),
           ),
           const SizedBox(width: 15),
           // Name and level
@@ -173,13 +171,19 @@ class LeaderboardScreen extends StatelessWidget {
                     name,
                     style: const TextStyle(
                       color: Colors.black,
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
+                      fontFamily:
+                          'KdamThmorPro', // Use the custom font for the name
                     ),
                   ),
                   Text(
                     level,
-                    style: const TextStyle(color: Colors.black, fontSize: 16),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontFamily: 'Kenia', // Use the Kenia font for the level
+                    ),
                   ),
                 ],
               ),
