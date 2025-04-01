@@ -34,6 +34,7 @@ class ProfileScreen extends StatelessWidget {
                   width: 352,  // Outer container width
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
+                    // ignore: deprecated_member_use
                     color: const Color(0xFF333333).withOpacity(0.7),
                     borderRadius: BorderRadius.circular(30),
                     image: const DecorationImage(

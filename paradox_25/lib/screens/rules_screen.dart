@@ -39,6 +39,7 @@ class RulesScreen extends StatelessWidget {
                   width: 350, // Set the width
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
+                    // ignore: deprecated_member_use
                     color: Colors.grey.shade300.withOpacity(0.7),
                     borderRadius: BorderRadius.circular(30),
                   ),
