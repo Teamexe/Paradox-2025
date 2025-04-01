@@ -292,13 +292,19 @@ class LeaderboardScreen extends StatelessWidget {
                     name,
                     style: const TextStyle(
                       color: Colors.black,
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
+                      fontFamily:
+                          'KdamThmorPro', // Use the custom font for the name
                     ),
                   ),
                   Text(
                     level,
-                    style: const TextStyle(color: Colors.black, fontSize: 16),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontFamily: 'Kenia', // Use the Kenia font for the level
+                    ),
                   ),
                 ],
               ),
