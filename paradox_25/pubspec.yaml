@@ -66,8 +66,16 @@ flutter:
     - assets/images/RULES.png
     - assets/images/profile_section.png
     - assets/images/profile_image.png
-   
-    
+    - assets/images/india_flag.png
+    - assets/images/medal.png
+    - assets/images/avatar_2.png
+    - assets/images/avatar_3.png
+    - assets/images/avatar_1.png
+    - assets/images/prizes_bg.png
+    - assets/images/speaker.png
+    - assets/images/cash_prize.png
+    - assets/images/watch.png
+    - assets/images/Rectangle 82.png
   fonts:
     - family: PixelFont
       fonts:
@@ -81,3 +89,6 @@ flutter:
     - family: Kenia
       fonts:
         - asset: assets/fonts/Kenia-Regular.ttf
+    - family: Overlock
+      fonts:
+       - asset: assets/fonts/Overlock-Regular.ttf    
