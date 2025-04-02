@@ -246,16 +246,16 @@ class ProfileScreen extends StatelessWidget {
             ),
           ],
         ),
-      ],
+      ),
     );
   }
 
-  Widget _buildStatItem(
-    IconData icon,
-    String value,
-    String label,
-    Color iconColor,
-  ) {
+  Widget _buildStatItem({
+    required IconData icon,
+    required String value,
+    required String label,
+    required Color iconColor,
+  }) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       decoration: BoxDecoration(
