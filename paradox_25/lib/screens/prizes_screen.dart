@@ -30,89 +30,154 @@ class PrizesScreen extends StatelessWidget {
             const SizedBox(height: 20),
             // Main Content Card
             Container(
+              height:
+                  MediaQuery.of(context).size.height *
+                  0.55, // Reduced height to 55% of the screen
               margin: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
                 color: const Color(
                   0xFF333333,
                 ).withOpacity(0.7), // Semi-transparent background
                 borderRadius: BorderRadius.circular(30),
+                image: const DecorationImage(
+                  image: AssetImage(
+                    'assets/images/leaderboard_list_bg.png',
+                  ), // Add the background image
+                  fit:
+                      BoxFit
+                          .fill, // Ensure the image covers the entire container
+                ),
               ),
-              child: Column(
+              child: Stack(
                 children: [
-                  // Header
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Blue crystal logo
-                        Image.asset(
-                          'assets/images/crystal_logo.png',
-                          height: 30,
+                  // Inner container
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      height: 377,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(
+                          0.5,
+                        ), // Adjust color and opacity
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                          bottomLeft: Radius.circular(
+                            50,
+                          ), // Make the bottom area more curvy
+                          bottomRight: Radius.circular(
+                            50,
+                          ), // Make the bottom area more curvy
                         ),
-                        const SizedBox(width: 10),
-                        const Text(
-                          'Top Prizes',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontFamily:
-                                'PixelFont', // Use pixel-like font from assets
+                        image: const DecorationImage(
+                          image: AssetImage(
+                            'assets/images/prizes_bg.png',
+                          ), // Add the background image
+                          fit:
+                              BoxFit
+                                  .cover, // Ensure the image covers the entire container
+                        ),
+                      ),
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      // Header
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/images/exe_logo.png',
+                              height: 36.0, // Slightly reduced height
+                              width: 36.0, // Slightly reduced width
+                            ),
+                            const SizedBox(width: 8.0), // Uniform spacing
+                            const Text(
+                              'Top Prizes',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 28,
+                                fontFamily:
+                                    'PixelFont', // Use pixel-like font from assets
+                              ),
+                            ),
+                            const SizedBox(width: 8.0), // Uniform spacing
+                            Image.asset(
+                              'assets/images/nimbus_blacklogo.png',
+                              height: 36.0, // Slightly reduced height
+                              width: 36.0, // Slightly reduced width
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Prizes
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          children: [
+                            _buildPrize(
+                              'assets/images/cash_prize.png',
+                              'Cash prize',
+                            ),
+                            const SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                _buildPrize(
+                                  'assets/images/speaker.png',
+                                  'Speaker',
+                                ),
+                                _buildPrize('assets/images/watch.png', 'Watch'),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                  Positioned(
+                    bottom: 10, // Add a 10-pixel space from the bottom
+                    left: 20, // Add a 20-pixel space from the left
+                    right: 20, // Add a 20-pixel space from the right
+                    child: Container(
+                      height: 40,
+                      width:
+                          MediaQuery.of(context).size.width -
+                          40, // Adjusted width
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 10), // Space from the left
+                          Image.asset(
+                            'assets/images/Rectangle 82.png',
+                            height: 22, // Slightly increased height
+                            width: 21, // Slightly increased width
+                            fit: BoxFit.contain,
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        // Hexagon logo
-                        Image.asset(
-                          'assets/images/hexagon_logo.png',
-                          height: 30,
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Prizes
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildPrize('Speaker', Colors.purple),
-                        _buildPrize('Cash prize', Colors.red),
-                        _buildPrize('Watch', Colors.blue),
-                      ],
-                    ),
-                  ),
-                  // Announcement
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 15,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade700,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Row(
-                      children: [
-                        // Diamond icon
-                        Image.asset(
-                          'assets/images/diamond_icon.png',
-                          height: 24,
-                        ),
-                        const SizedBox(width: 10),
-                        const Expanded(
-                          child: Text(
+                          const SizedBox(
+                            width: 10,
+                          ), // Space between image and text
+                          const Text(
                             'The prize will be announced soon',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontFamily: 'Overlock', // Set font to Overlock
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -122,63 +187,22 @@ class PrizesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPrize(String name, Color ribbonColor) {
+  Widget _buildPrize(String imagePath, String prizeName) {
     return Column(
       children: [
-        // Medal with ribbon
-        Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            // Ribbon
-            Container(
-              width: 60,
-              height: 20,
-              decoration: BoxDecoration(
-                color: ribbonColor,
-                border: Border.all(color: Colors.yellow, width: 1),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(width: 2, height: 18, color: Colors.yellow),
-                  const SizedBox(width: 5),
-                  Container(width: 2, height: 18, color: Colors.yellow),
-                  const SizedBox(width: 5),
-                  Container(width: 2, height: 18, color: Colors.yellow),
-                ],
-              ),
-            ),
-            // Medal
-            Padding(
-              padding: const EdgeInsets.only(top: 15),
-              child: Container(
-                width: 70,
-                height: 70,
-                decoration: BoxDecoration(
-                  color: Colors.amber,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.orange.shade800, width: 2),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.amber.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                    ),
-                  ],
-                ),
-                // Medal image (optional)
-                // child: Image.asset('assets/images/medal.png'),
-              ),
-            ),
-          ],
+        SizedBox(
+          height: 100, // Keep the height unchanged
+          width: 110, // Slightly increased width
+          child: Image.asset(imagePath, fit: BoxFit.contain),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 8),
         Text(
-          name,
+          prizeName,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 16,
+            fontSize: 18, // Increased font size
             fontWeight: FontWeight.bold,
+            fontFamily: 'Overlock', // Set font to Overlock
           ),
         ),
       ],
