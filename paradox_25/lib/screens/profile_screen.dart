@@ -8,7 +8,7 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          // Comment: Add the space background with red swirl from assets
+          
           color: Colors.black,
           image: DecorationImage(
             image: AssetImage('assets/images/all_bg.png'),
@@ -21,7 +21,7 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 60),
             // PARADOX Logo
             SizedBox(
-              height: 60, // Adjusted height
+              height: 60, 
               child: Image.asset('assets/images/paradox_text.png'),
             ),
             const SizedBox(height: 20),
@@ -29,8 +29,8 @@ class ProfileScreen extends StatelessWidget {
             Expanded(
               child: Center(
                 child: Container(
-                  height: 538, // Outer container height
-                  width: 352, // Outer container width
+                  height: 538, 
+                  width: 352, 
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
                     // ignore: deprecated_member_use
@@ -39,18 +39,17 @@ class ProfileScreen extends StatelessWidget {
                     image: const DecorationImage(
                       image: AssetImage(
                         'assets/images/leaderboard_list_bg.png',
-                      ), // Add the background image
+                      ), 
                       fit:
-                          BoxFit
-                              .fill, // Ensure the image covers the entire container
+                          BoxFit.fill, 
                     ),
                   ),
                   child: Column(
                     children: [
-                      // Inner container
+                      
                       Container(
-                        height: 458, // Inner container height
-                        width: 292, // Inner container width
+                        height: 458, 
+                        width: 292, 
                         margin: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
                           color: const Color(0xFFE58B87),
@@ -58,37 +57,30 @@ class ProfileScreen extends StatelessWidget {
                           image: const DecorationImage(
                             image: AssetImage(
                               'assets/images/profile_section.png',
-                            ), // Add the background image
+                            ),
                             fit:
-                                BoxFit
-                                    .fill, // Ensure the image covers the entire container
+                                BoxFit.fill, 
                           ),
                         ),
                         child: Column(
                           children: [
-                            // Profile Image and Name in Circular Box
+                            
                             Padding(
                               padding: const EdgeInsets.only(
                                 top: 10,
-                              ), // Add padding to move it downward
+                              ), 
                               child: Container(
-                                width:
-                                    200, // Adjust the size of the circular container
-                                height:
-                                    200, // Ensure width and height are equal for a circle
+                                width:200, 
+                                height:200, 
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
                                     color:
-                                        Colors
-                                            .grey
-                                            .shade800, // Outer circle border color (black or grey)
-                                    width:
-                                        5, // Border width for the outer circle
+                                        Colors.grey.shade800,
+                                    width:5, 
                                   ),
                                   color:
-                                      Colors
-                                          .white, // Background color of the circular container
+                                      Colors.white, 
                                 ),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
