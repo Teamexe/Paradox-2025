@@ -27,23 +27,22 @@ function validateAuthRequest(req, res, next) {
 
 async function checkAuth(req,res,next){
     try{
-        // const authHeader = req.headers.authorization; // Fetch the Authorization header
-        // // console.log(authHeader)
-        // if (!authHeader) {
-        //     throw new Error('No Authorization header provided');
-        // }
-        // const token = authHeader.split(' ')[1]; // Extract the token part after 'Bearer'
-        // if (!token) {
-        //     throw new Error('Malformed Authorization header');
-        // }
-        // const response= await AuthService.isAuthentication(token);
-        // console.log("the response will be in auth....",response) 
-        // if(response){
-        //     req.user=response;
-        //     // console.log(response)
-        //     next()
-        // }
-        next();
+        const authHeader = req.headers.authorization; // Fetch the Authorization header
+        // console.log(authHeader)
+        if (!authHeader) {
+            throw new Error('No Authorization header provided');
+        }
+        const token = authHeader.split(' ')[1]; // Extract the token part after 'Bearer'
+        if (!token) {
+            throw new Error('Malformed Authorization header');
+        }
+        const response= await AuthService.isAuthentication(token);
+        console.log("the response will be in auth....",response) 
+        if(response){
+            req.user=response;
+            // console.log(response)
+            next()
+        }
    }
     catch(error){
         console.log(error)
