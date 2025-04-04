@@ -7,6 +7,7 @@ const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 
+
 const session = require('express-session');
 app.use(session({
     secret: process.env.SESSION_SECRET || 'your_secret_key', // Replace with a strong secret
