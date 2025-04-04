@@ -81,7 +81,7 @@ const { googleConfig } = require('../../config');
 const router = express.Router();
 const client = new OAuth2Client(googleConfig.clientID);
 
-router.get('/google', async (req, res) => {
+router.post('/google', async (req, res) => {
     try {
         const { idToken } = req.body;
         const ticket = await client.verifyIdToken({
