@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class QuestionScreen extends StatefulWidget {
-  const QuestionScreen({super.key});
+  final int level;
+  final VoidCallback onLevelComplete;
+
+  const QuestionScreen({
+    super.key,
+    required this.level,
+    required this.onLevelComplete,
+  });
 
   @override
   State<QuestionScreen> createState() => _QuestionScreenState();
@@ -9,20 +16,87 @@ class QuestionScreen extends StatefulWidget {
 
 class _QuestionScreenState extends State<QuestionScreen> {
   final TextEditingController _answerController = TextEditingController();
-  bool _isHintVisible = false; // Variable to track hint visibility
+  int _currentQuestionIndex = 0;
+  bool _isHintVisible = false; // Track hint visibility
 
-  @override
-  void dispose() {
-    _answerController.dispose();
-    super.dispose();
+  // Questions for Level 1 and Level 2
+  final Map<int, List<Map<String, String>>> _questions = {
+    1: [
+      {
+        'question': 'Q1. What is the capital of France?',
+        'answer': 'paris',
+        'image': 'assets/images/france.png',
+        'hint': 'It is known as the city of love.',
+      },
+      {
+        'question': 'Q2. What is 2 + 2?',
+        'answer': '4',
+        'image': 'assets/images/math.png',
+        'hint': 'It is the first even number.',
+      },
+    ],
+    2: [
+      {
+        'question': 'Q1. What is the capital of Germany?',
+        'answer': 'berlin',
+        'image': 'assets/images/germany.png',
+        'hint': 'It is a famous European city.',
+      },
+      {
+        'question': 'Q2. What is 5 * 5?',
+        'answer': '25',
+        'image': 'assets/images/multiplication.png',
+        'hint': 'It is a square of 5.',
+      },
+    ],
+  };
+
+  void _checkAnswer() {
+    String userAnswer = _answerController.text.trim().toLowerCase();
+    String correctAnswer =
+        _questions[widget.level]![_currentQuestionIndex]['answer']!
+            .toLowerCase();
+
+    if (userAnswer == correctAnswer) {
+      if (_currentQuestionIndex < _questions[widget.level]!.length - 1) {
+        setState(() {
+          _currentQuestionIndex++;
+          _answerController.clear();
+          _isHintVisible = false; // Hide hint for the next question
+        });
+      } else {
+        widget.onLevelComplete(); // Notify that the level is complete
+        Navigator.pop(context); // Go back to the HomeScreen
+      }
+    } else {
+      showDialog(
+        context: context,
+        builder:
+            (context) => AlertDialog(
+              title: const Text('Incorrect Answer'),
+              content: const Text('Please try again.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Level ${widget.level}'),
+        backgroundColor: Colors.blue,
+      ),
       body: Container(
         decoration: const BoxDecoration(
-          // Comment: Add the space background with red swirl from assets
           color: Colors.black,
           image: DecorationImage(
             image: AssetImage('assets/images/all_bg.png'),
@@ -39,9 +113,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
                 color: Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: const Text(
-                'Q1. What is the message that image signifies.',
-                style: TextStyle(
+              child: Text(
+                _questions[widget.level]![_currentQuestionIndex]['question']!,
+                style: const TextStyle(
                   color: Colors.black,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -53,62 +127,61 @@ class _QuestionScreenState extends State<QuestionScreen> {
             // Image Area
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
-              height: 400,
+              height: 200,
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(10),
               ),
-              // Comment: Add the question image from assets
-              // child: Image.asset(
-              //   'assets/images/question_image.png',
-              //   fit: BoxFit.contain,
-              // ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset(
+                  _questions[widget.level]![_currentQuestionIndex]['image']!,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Center(
+                      child: Text(
+                        'Image not available',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
             const Spacer(),
             // Hint Icon and Hint Text
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  _isHintVisible = !_isHintVisible; // Toggle hint visibility
+                });
+              },
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Hint Icon with Text
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _isHintVisible =
-                            !_isHintVisible; // Toggle hint visibility
-                      });
-                    },
-                    child: Row(
-                      children: [
-                        Icon(Icons.lightbulb_outline, color: Colors.yellow),
-                        const SizedBox(width: 5),
-                        const Text(
-                          'Hint',
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                      ],
-                    ),
+                  Icon(Icons.lightbulb_outline, color: Colors.yellow),
+                  const SizedBox(width: 5),
+                  const Text(
+                    'Hint',
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 15),
-            // Hint Text (conditionally visible)
             if (_isHintVisible)
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 15,
+                margin: const EdgeInsets.symmetric(
                   horizontal: 20,
+                  vertical: 10,
                 ),
+                padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade800,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Text(
-                  'Hint: The place known for coffee',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+                child: Text(
+                  _questions[widget.level]![_currentQuestionIndex]['hint']!,
+                  style: const TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
             const SizedBox(height: 15),
@@ -125,7 +198,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                 controller: _answerController,
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration(
-                  hintText: 'What do you think?',
+                  hintText: 'Enter your answer',
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
                 ),
@@ -136,9 +209,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: ElevatedButton(
-                onPressed: () {
-                  // Submit answer logic
-                },
+                onPressed: _checkAnswer,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,

@@ -8,6 +8,7 @@ import 'screens/prizes_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/rules_screen.dart';
 import 'screens/question_screen.dart';
+import 'screens/home_screen.dart';
 import 'widgets/bottom_navigation.dart';
 
 void main() {
@@ -45,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    const QuestionScreen(),
+    const HomeScreen(), // Add HomeScreen as the first screen
     const LeaderboardScreen(),
     const RulesScreen(),
     const PrizesScreen(),
@@ -65,7 +66,6 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: ParadoxBottomNavigation(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
-        currentIndex: 1,
       ),
     );
   }
