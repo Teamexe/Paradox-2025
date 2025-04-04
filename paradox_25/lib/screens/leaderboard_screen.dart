@@ -60,7 +60,6 @@ class LeaderboardScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   Positioned(
                     top: 145, // Adjusted to move the podium slightly downward
                     child: Image.asset(
@@ -70,114 +69,55 @@ class LeaderboardScreen extends StatelessWidget {
                       fit: BoxFit.contain,
                     ),
                   ),
-                  // 1st Place Avatar (Center Avatar)
                   _buildPodiumAvatar(
-                    top: 40, // Adjusted to move the avatar slightly downward
+                    top: 40,
                     left: null,
                     right: null,
                     name: "Aanya",
                     avatarPath: 'assets/images/avatar_1.png',
                   ),
-                  // Medal for 1st Place
                   Positioned(
-                    top: 28, // Positioned slightly above the avatar
+                    top: 28,
                     left: null,
                     right: null,
                     child: Image.asset(
-                      'assets/images/medal.png', // Medal image
+                      'assets/images/medal.png',
                       width: 40,
                       height: 40,
                     ),
                   ),
-                  // 2nd Place Avatar
                   _buildPodiumAvatar(
-                    top: 65, // Adjusted to move the avatar slightly downward
+                    top: 65,
                     left: 60,
                     right: null,
                     name: "Sona",
                     avatarPath: 'assets/images/avatar_2.png',
                   ),
-                  // 3rd Place Avatar
                   _buildPodiumAvatar(
-                    top: 85, // Adjusted to move the avatar slightly downward
+                    top: 85,
                     left: null,
                     right: 65,
                     name: "Anjali",
                     avatarPath: 'assets/images/avatar_3.png',
                   ),
-                  // Level Buttons
-                  Positioned(
-                    top: 160, // Adjusted position for Level 3 button
-                    left: 60, // Positioned to the left
-                    child: Container(
-                      width: 67.18,
-                      height: 34,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFDB8A8B),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Level 3',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 130, // Adjusted position for Level 2 button
-                    left: null,
-                    right: null,
-                    child: Container(
-                      width: 67.18,
-                      height: 34,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFDB8A8B),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Level 2',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 180, // Adjusted position for Level 4 button
-                    right: 65, // Positioned to the right
-                    child: Container(
-                      width: 67.18,
-                      height: 34,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFDB8A8B),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Level 4',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
             const SizedBox(height: 20),
-            // Leaderboard List
-            _buildLeaderboardItem(5, 'Utkarsh', 'Level 1'),
-            _buildLeaderboardItem(4, 'Harsh', 'Level 1'),
-            _buildLeaderboardItem(3, 'Piyush', 'Level 1'),
+            // ✅ Wrap in Expanded to make it scrollable
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                itemCount: leaderboardData.length,
+                itemBuilder: (context, index) {
+                  return _buildLeaderboardItem(
+                    leaderboardData[index]['rank'],
+                    leaderboardData[index]['name'],
+                    leaderboardData[index]['level'],
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -189,7 +129,7 @@ class LeaderboardScreen extends StatelessWidget {
     double? left,
     double? right,
     required String name,
-    required String avatarPath, // Added parameter for avatar image path
+    required String avatarPath,
   }) {
     return Positioned(
       top: top,
@@ -209,7 +149,7 @@ class LeaderboardScreen extends StatelessWidget {
                 ),
                 child: ClipOval(
                   child: Image.asset(
-                    avatarPath, // Use the passed avatar image path
+                    avatarPath,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -241,7 +181,7 @@ class LeaderboardScreen extends StatelessWidget {
 
   Widget _buildLeaderboardItem(int rank, String name, String level) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      margin: const EdgeInsets.symmetric(vertical: 5),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.grey.shade800,
@@ -294,8 +234,7 @@ class LeaderboardScreen extends StatelessWidget {
                       color: Colors.black,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      fontFamily:
-                          'KdamThmorPro', // Use the custom font for the name
+                      fontFamily: 'KdamThmorPro',
                     ),
                   ),
                   Text(
@@ -303,7 +242,7 @@ class LeaderboardScreen extends StatelessWidget {
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 20,
-                      fontFamily: 'Kenia', // Use the Kenia font for the level
+                      fontFamily: 'Kenia',
                     ),
                   ),
                 ],
@@ -315,3 +254,17 @@ class LeaderboardScreen extends StatelessWidget {
     );
   }
 }
+
+// Dummy Data for Leaderboard
+final List<Map<String, dynamic>> leaderboardData = [
+  {'rank': 1, 'name': 'Utkarsh', 'level': 'Level 1'},
+  {'rank': 2, 'name': 'Harsh', 'level': 'Level 1'},
+  {'rank': 3, 'name': 'Piyush', 'level': 'Level 1'},
+  {'rank': 4, 'name': 'Ananya', 'level': 'Level 2'},
+  {'rank': 5, 'name': 'Sona', 'level': 'Level 3'},
+  {'rank': 6, 'name': 'Raj', 'level': 'Level 4'},
+  {'rank': 7, 'name': 'Kritika', 'level': 'Level 2'},
+  {'rank': 8, 'name': 'Amit', 'level': 'Level 3'},
+  {'rank': 9, 'name': 'Pooja', 'level': 'Level 1'},
+  {'rank': 10, 'name': 'Rohan', 'level': 'Level 4'},
+];

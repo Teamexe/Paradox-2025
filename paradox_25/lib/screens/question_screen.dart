@@ -9,6 +9,7 @@ class QuestionScreen extends StatefulWidget {
 
 class _QuestionScreenState extends State<QuestionScreen> {
   final TextEditingController _answerController = TextEditingController();
+  bool _isHintVisible = false; // Variable to track hint visibility
 
   @override
   void dispose() {
@@ -64,22 +65,52 @@ class _QuestionScreenState extends State<QuestionScreen> {
               // ),
             ),
             const Spacer(),
-            // Hint
+            // Hint Icon and Hint Text
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade800,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Text(
-                'Hint: The place known for coffee',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // Hint Icon with Text
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _isHintVisible =
+                            !_isHintVisible; // Toggle hint visibility
+                      });
+                    },
+                    child: Row(
+                      children: [
+                        Icon(Icons.lightbulb_outline, color: Colors.yellow),
+                        const SizedBox(width: 5),
+                        const Text(
+                          'Hint',
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
+            const SizedBox(height: 15),
+            // Hint Text (conditionally visible)
+            if (_isHintVisible)
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 15,
+                  horizontal: 20,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade800,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Text(
+                  'Hint: The place known for coffee',
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+              ),
             const SizedBox(height: 15),
             // Answer Input
             Container(
@@ -118,10 +149,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                 ),
                 child: const Text(
                   'Submit',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
