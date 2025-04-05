@@ -30,7 +30,7 @@ router.get('/score',ValidateAuthReq.checkAuth,async(req,res)=>{
         }
         const ogScore=user.score;
         const hintUsed = Array.isArray(user.hintUsed) ? user.hintUsed.length : 0;
-        const response.data= ogScore - (hintUsed * 20);
+        const response= ogScore - (hintUsed * 20);
         console.log(ogScore,hintUsed)
         return res.status(StatusCodes.ACCEPTED).json(response);
     } catch (error) {
