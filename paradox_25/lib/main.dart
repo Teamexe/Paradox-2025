@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'screens/splash_screen.dart';
-// ignore: unused_import
-import 'screens/top_scorers_screen.dart';
 import 'screens/leaderboard_screen.dart';
 import 'screens/prizes_screen.dart';
 import 'screens/profile_screen.dart';

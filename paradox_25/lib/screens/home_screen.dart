@@ -9,185 +9,174 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isLevel1Completed = false; // Track if Level 1 is completed
+  bool isLevel1Completed = false;
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    final double width = size.width;
+    final double height = size.height;
+
+    final double topSpacing = height * 0.07;
+    final double logoHeight = height * 0.07;
+    final double cardHeight = height * 0.6;
+    final double cardWidth = width * 0.85;
+    final double buttonWidth = width * 0.55;
+    final double buttonHeight = height * 0.08;
+    final double titleFontSize = width * 0.06;
+    final double buttonFontSize = width * 0.055;
+
     return Scaffold(
       body: Container(
-        width: double.infinity, // Ensure full width
-        height: double.infinity, // Ensure full height
+        width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/all_bg.png'),
-            fit: BoxFit.cover, // Cover the entire screen
+            fit: BoxFit.cover,
           ),
         ),
         child: Column(
           children: [
-            const SizedBox(height: 60), // Add spacing at the top
-            // Add the paradox_text.png image at the top
+            SizedBox(height: topSpacing),
+            // Paradox logo
             SizedBox(
-              height: 60, // Adjust the height of the image
+              height: logoHeight,
               child: Image.asset(
-                'assets/images/paradox_text.png', // Add the paradox_text.png image
+                'assets/images/paradox_text.png',
                 fit: BoxFit.contain,
               ),
             ),
-            const SizedBox(
-              height: 40,
-            ), // Add spacing between the image and buttons
-            // Add spacing to lower the container
-            const SizedBox(
-              height: 20,
-            ), // Adjust this value to move the container lower
-            // Add the container with leaderboard_list_bg.png
+            SizedBox(height: height * 0.05),
             Center(
               child: Container(
-                height: 500, // Set the height of the outer container
-                width: 370, 
+                height: cardHeight,
+                width: cardWidth,
                 decoration: BoxDecoration(
                   image: const DecorationImage(
                     image: AssetImage('assets/images/leaderboard_list_bg.png'),
-                    fit: BoxFit.fill, 
+                    fit: BoxFit.fill,
                   ),
-                  borderRadius: BorderRadius.circular(
-                    20,
-                  ),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: Stack(
-                  alignment: Alignment.center, 
+                  alignment: Alignment.center,
                   children: [
-                   
-                    const Positioned(
-                      top: 20, 
+                    Positioned(
+                      top: height * 0.035,
                       child: Text(
                         "Let's Begin",
                         style: TextStyle(
-                          fontFamily: 'PixelFont', 
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold, 
-                          color: Colors.white, 
+                          fontFamily: 'PixelFont',
+                          fontSize: titleFontSize,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                       ),
                     ),
-                  
+
+                    // Profile Section
                     Positioned(
-                      top: 100, 
+                      top: height * 0.12,
                       child: Container(
-                        height: 300, 
-                        width: 300, 
+                        height: height * 0.32,
+                        width: width * 0.6,
                         decoration: BoxDecoration(
                           image: const DecorationImage(
-                            image: AssetImage(
-                              'assets/images/profile_section.png',
-                            ),
-                            fit: BoxFit.cover, 
+                            image: AssetImage('assets/images/profile_section.png'),
+                            fit: BoxFit.cover,
                           ),
-                          borderRadius: BorderRadius.circular(
-                            15,
-                          ), 
+                          borderRadius: BorderRadius.circular(15),
                         ),
                       ),
                     ),
-                   
+
+                    // Level 1 Button
                     Positioned(
-                      top: 150, 
+                      top: height * 0.22,
                       child: Container(
-                        width: 220, 
-                        height: 70, 
+                        width: buttonWidth,
+                        height: buttonHeight,
                         decoration: BoxDecoration(
                           image: const DecorationImage(
                             image: AssetImage('assets/images/level_image.png'),
                             fit: BoxFit.cover,
                           ),
-                          borderRadius: BorderRadius.circular(
-                            10,
-                          ), 
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                           
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder:
-                                    (context) => QuestionScreen(
-                                      level: 1,
-                                      onLevelComplete: () {
-                                        setState(() {
-                                          isLevel1Completed = true;
-                                        });
-                                      },
-                                    ),
+                                builder: (context) => QuestionScreen(
+                                  level: 1,
+                                  onLevelComplete: () {
+                                    setState(() {
+                                      isLevel1Completed = true;
+                                    });
+                                  },
+                                ),
                               ),
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Colors.transparent, 
-                            shadowColor: Colors.transparent, 
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
                           ),
-                          child: const Text(
+                          child: Text(
                             'Level 1',
                             style: TextStyle(
-                              fontSize: 25,
+                              fontSize: buttonFontSize,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black, 
-                              fontFamily:
-                                  'RaviPrakash', 
+                              color: Colors.black,
+                              fontFamily: 'RaviPrakash',
                             ),
                           ),
                         ),
                       ),
                     ),
-                
+
+                    // Level 2 Button
                     Positioned(
-                      top: 250, 
+                      top: height * 0.33,
                       child: Container(
-                        width: 220, 
-                        height: 70, 
+                        width: buttonWidth,
+                        height: buttonHeight,
                         decoration: BoxDecoration(
                           image: const DecorationImage(
                             image: AssetImage('assets/images/level_image.png'),
-                            fit: BoxFit.cover, 
+                            fit: BoxFit.cover,
                           ),
-                          borderRadius: BorderRadius.circular(
-                            10,
-                          ), 
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: ElevatedButton(
-                          onPressed:
-                              isLevel1Completed
-                                  ? () {
-                                    
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) => QuestionScreen(
-                                              level: 2,
-                                              onLevelComplete: () {
-                                                
-                                              },
-                                            ),
+                          onPressed: isLevel1Completed
+                              ? () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => QuestionScreen(
+                                        level: 2,
+                                        onLevelComplete: () {
+                                          // Handle Level 2 completion
+                                        },
                                       ),
-                                    );
-                                  }
-                                  : null,
+                                    ),
+                                  );
+                                }
+                              : null,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Colors.transparent, 
-                            shadowColor: Colors.transparent, 
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
                           ),
-                          child: const Text(
+                          child: Text(
                             'Level 2',
                             style: TextStyle(
-                              fontSize: 25,
+                              fontSize: buttonFontSize,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black, 
-                              fontFamily:
-                                  'RaviPrakash', 
+                              color: Colors.black,
+                              fontFamily: 'RaviPrakash',
                             ),
                           ),
                         ),
@@ -203,3 +192,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+

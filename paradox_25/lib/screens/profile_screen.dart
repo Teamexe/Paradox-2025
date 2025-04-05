@@ -5,66 +5,70 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    double responsiveFont(double size) => size * screenWidth / 375;
+
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          color: Colors.black,
-          image: DecorationImage(
-            image: AssetImage('assets/images/all_bg.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Column(
-          children: [
-            const SizedBox(height: 60),
-            SizedBox(
-              height: 60, // Adjusted height
-              child: Image.asset('assets/images/paradox_text.png'),
+      body: SafeArea(
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            color: Colors.black,
+            image: DecorationImage(
+              image: AssetImage('assets/images/all_bg.png'),
+              fit: BoxFit.cover,
             ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: Center(
-                child: Container(
-                  height: 500, // Slightly reduced outer container height
-                  width: 352, // Outer container width remains the same
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF333333).withOpacity(0.7),
-                    borderRadius: BorderRadius.circular(30),
-                    image: const DecorationImage(
-                      image: AssetImage(
-                        'assets/images/leaderboard_list_bg.png',
-                      ),
-                      fit: BoxFit.fill,
+          ),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+              child: Column(
+                children: [
+                  SizedBox(height: screenHeight * 0.05),
+                  SizedBox(
+                    height: screenHeight * 0.07,
+                    child: Image.asset(
+                      'assets/images/paradox_text.png',
+                      fit: BoxFit.contain,
                     ),
                   ),
-                  child: Column(
-                    children: [
-                      // Inner container
-                      Container(
-                        height: 400, // Inner container height remains the same
-                        width: 292, // Inner container width remains the same
-                        margin: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFE58B87),
-                          borderRadius: BorderRadius.circular(20),
-                          image: const DecorationImage(
-                            image: AssetImage(
-                              'assets/images/profile_section.png',
+                  SizedBox(height: screenHeight * 0.03),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(screenWidth * 0.03),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF333333).withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(30),
+                      image: const DecorationImage(
+                        image: AssetImage('assets/images/leaderboard_list_bg.png'),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFE58B87),
+                            borderRadius: BorderRadius.circular(20),
+                            image: const DecorationImage(
+                              image: AssetImage('assets/images/profile_section.png'),
+                              fit: BoxFit.fill,
                             ),
-                            fit: BoxFit.fill,
                           ),
-                        ),
-                        child: Column(
-                          children: [
-                            // Profile Image in Circular Box
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Container(
-                                width:
-                                    150, // Adjusted size of the circular container
-                                height:
-                                    150, // Ensure width and height are equal for a circle
+                          padding: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.03,
+                            horizontal: screenWidth * 0.05,
+                          ),
+                          child: Column(
+                            children: [
+                              // Profile Image
+                              Container(
+                                width: screenWidth * 0.35,
+                                height: screenWidth * 0.35,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
@@ -80,139 +84,111 @@ class ProfileScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ), // Increased spacing below profile image
-                            // Name (Aanya) above Leaderboard Box
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8,
-                                horizontal: 12,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: const Text(
-                                'Aanya',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                              SizedBox(height: screenHeight * 0.025),
+
+                              // Name
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                  horizontal: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade300,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Text(
+                                  'Aanya',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: responsiveFont(18),
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 25,
-                            ), // Increased spacing below the name
-                            // Leaderboard Box
-                            Container(
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                              ), // Add margin
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8, // Reduced vertical padding
-                                horizontal: 12, // Reduced horizontal padding
+                              SizedBox(height: screenHeight * 0.03),
+
+                              // Leaderboard Box
+                              _buildInfoBox(
+                                context,
+                                icon: Icons.bar_chart,
+                                iconColor: Colors.blue.shade300,
+                                value: '#1',
+                                label: 'LeaderBoard',
+                                fontSize: responsiveFont(16),
                               ),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                borderRadius: BorderRadius.circular(15),
+                              SizedBox(height: screenHeight * 0.02),
+
+                              // Score Box
+                              _buildInfoBox(
+                                context,
+                                icon: Icons.star,
+                                iconColor: Colors.orange.shade300,
+                                value: '220',
+                                label: 'Score',
+                                fontSize: responsiveFont(16),
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  // Icon and #1 on the left
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.bar_chart,
-                                        color: Colors.blue.shade300,
-                                        size: 20, // Reduced icon size
-                                      ),
-                                      const SizedBox(width: 8),
-                                      const Text(
-                                        '#1',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16, // Reduced font size
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  // Leaderboard text on the right
-                                  const Text(
-                                    'LeaderBoard',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16, // Reduced font size
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ), // Increased spacing between boxes
-                            // Score Box (same size as Leaderboard Box)
-                            Container(
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                              ), // Add margin
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8, // Reduced vertical padding
-                                horizontal: 12, // Reduced horizontal padding
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  // Icon and Score on the left
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.orange.shade300,
-                                        size: 20, // Reduced icon size
-                                      ),
-                                      const SizedBox(width: 8),
-                                      const Text(
-                                        '220',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16, // Reduced font size
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  // Score text on the right
-                                  const Text(
-                                    'Score',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16, // Reduced font size
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+                  SizedBox(height: screenHeight * 0.04),
+                ],
               ),
             ),
-          ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildInfoBox(
+    BuildContext context, {
+    required IconData icon,
+    required Color iconColor,
+    required String value,
+    required String label,
+    required double fontSize,
+  }) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade300,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Icon and Value
+          Row(
+            children: [
+              Icon(icon, color: iconColor, size: fontSize),
+              const SizedBox(width: 8),
+              Text(
+                value,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+
+          // Label
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: fontSize,
+            ),
+          ),
+        ],
       ),
     );
   }

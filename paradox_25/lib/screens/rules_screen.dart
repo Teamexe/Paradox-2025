@@ -5,94 +5,96 @@ class RulesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final isSmallScreen = screenWidth < 400;
+
+    double responsiveFont(double size) => size * MediaQuery.of(context).textScaleFactor;
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
           color: Colors.black,
           image: DecorationImage(
-            image: AssetImage(
-              'assets/images/all_bg.png',
-            ), // Add the background image
-            fit: BoxFit.cover, // Ensure the image covers the entire screen
+            image: AssetImage('assets/images/all_bg.png'),
+            fit: BoxFit.cover,
           ),
         ),
         child: Column(
           children: [
-            const SizedBox(height: 60),
-            // PARADOX Logo
+            SizedBox(height: screenHeight * 0.06),
             SizedBox(
-              height: 60, // Adjusted height
+              height: screenHeight * 0.07,
               child: Image.asset('assets/images/paradox_text.png'),
             ),
-            const SizedBox(height: 20),
-            // RULES Title
+            SizedBox(height: screenHeight * 0.02),
             SizedBox(
-              height: 60, // Adjusted height
+              height: screenHeight * 0.06,
               child: Image.asset('assets/images/RULES.png'),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: screenHeight * 0.02),
 
-            // Main Content Card
+            // Main Content
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
-                  width: 400, // Increased width
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 20,
-                  ), // Adjusted margin to move it to the top
+                  width: screenWidth * 0.9,
+                  margin: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.05,
+                    vertical: screenHeight * 0.02,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade300.withOpacity(0.7),
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  child: Column(
-                    children: [
-                      // Instructions
-                      Container(
-                        margin: const EdgeInsets.all(20),
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade800,
-                          borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    margin: EdgeInsets.all(screenWidth * 0.05),
+                    padding: EdgeInsets.all(screenWidth * 0.05),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade800,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Text(
+                            'Instructions',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: responsiveFont(isSmallScreen ? 28 : 36),
+                              fontFamily: 'Oswald',
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Center(
-                              child: Text(
-                                'Instructions',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 40,
-                                  fontFamily: 'Oswald',
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            _buildRuleItem(
-                              'Eligibility: The game is open to all.',
-                            ),
-                            const SizedBox(height: 20),
-                            _buildRuleItem(
-                              'Participation: Participants can choose to play the game in solo format or can choose their partners by choice during or at the end of level 1.',
-                            ),
-                            const SizedBox(height: 20),
-                            _buildRuleItem(
-                              'Partner Matching: If any qualified candidate for level 2 from level 1 to get into a team, they will be randomly matched with another partner by the organizers.',
-                            ),
-                            const SizedBox(height: 20),
-                            _buildRuleItem(
-                              'Scoring: Each correct answer will increase the score by 50 points.',
-                            ),
-                            const SizedBox(height: 20),
-                            _buildRuleItem(
-                              
-                              'Use of Hint: Using hint will decrease the score by 10 points.'
-                            ),
-                          ],
+                        SizedBox(height: screenHeight * 0.03),
+                        _buildRuleItem(
+                          context,
+                          'Eligibility: The game is open to all.',
                         ),
-                      ),
-                    ],
+                        _buildSpacing(screenHeight),
+                        _buildRuleItem(
+                          context,
+                          'Participation: Participants can choose to play the game in solo format or can choose their partners by choice during or at the end of level 1.',
+                        ),
+                        _buildSpacing(screenHeight),
+                        _buildRuleItem(
+                          context,
+                          'Partner Matching: If any qualified candidate for level 2 from level 1 to get into a team, they will be randomly matched with another partner by the organizers.',
+                        ),
+                        _buildSpacing(screenHeight),
+                        _buildRuleItem(
+                          context,
+                          'Scoring: Each correct answer will increase the score by 50 points.',
+                        ),
+                        _buildSpacing(screenHeight),
+                        _buildRuleItem(
+                          context,
+                          'Use of Hint: Using hint will decrease the score by 10 points.',
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -103,7 +105,15 @@ class RulesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRuleItem(String text) {
+  // Spacing widget
+  Widget _buildSpacing(double screenHeight) =>
+      SizedBox(height: screenHeight * 0.025);
+
+  // Rule builder
+  Widget _buildRuleItem(BuildContext context, String text) {
+    final isSmallScreen = MediaQuery.of(context).size.width < 400;
+    double fontSize = isSmallScreen ? 15 : 19;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -114,10 +124,11 @@ class RulesScreen extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white,
-              fontSize: 19, // Ensure font size is 18
-              fontFamily: 'Overlock', // Ensure font family is Overlock-Regular
+              fontSize: fontSize,
+              fontFamily: 'Overlock',
+              height: 1.5,
             ),
           ),
         ),
@@ -125,3 +136,4 @@ class RulesScreen extends StatelessWidget {
     );
   }
 }
+
