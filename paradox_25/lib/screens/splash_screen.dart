@@ -19,16 +19,19 @@ class SplashScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Paradox Logo
                   SizedBox(
                     height: 400,
                     child: Image.asset('assets/images/paradox_logo.png'),
                   ),
                   const SizedBox(height: 10),
+                  // Paradox Text
                   SizedBox(
                     height: 60,
                     child: Image.asset('assets/images/paradox_text.png'),
                   ),
                   const SizedBox(height: 50),
+                  // Sign In Button
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: ElevatedButton(
@@ -41,6 +44,21 @@ class SplashScreen extends StatelessWidget {
                           ),
                         );
                       },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white.withOpacity(
+                          0.1,
+                        ), // Transparent background
+                        foregroundColor:
+                            Colors.grey.shade300, // Greyish white text color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 120, // Increased width
+                          vertical: 18, // Increased height
+                        ),
+                        elevation: 0, // Remove shadow
+                      ),
                       child: const Text(
                         'Sign In',
                         style: TextStyle(
@@ -51,6 +69,7 @@ class SplashScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
+                  // Sign Up Button
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: ElevatedButton(
@@ -63,6 +82,21 @@ class SplashScreen extends StatelessWidget {
                           ),
                         );
                       },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white.withOpacity(
+                          0.1,
+                        ), // Transparent background
+                        foregroundColor:
+                            Colors.grey.shade300, // Greyish white text color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 120, // Increased width
+                          vertical: 18, // Increased height
+                        ),
+                        elevation: 0, // Remove shadow
+                      ),
                       child: const Text(
                         'Sign Up',
                         style: TextStyle(

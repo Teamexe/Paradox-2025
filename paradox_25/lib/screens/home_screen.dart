@@ -45,69 +45,69 @@ class _HomeScreenState extends State<HomeScreen> {
             Center(
               child: Container(
                 height: 500, // Set the height of the outer container
-                width: 370, // Set the width of the outer container
+                width: 370, 
                 decoration: BoxDecoration(
                   image: const DecorationImage(
                     image: AssetImage('assets/images/leaderboard_list_bg.png'),
-                    fit: BoxFit.fill, // Cover the entire container
+                    fit: BoxFit.fill, 
                   ),
                   borderRadius: BorderRadius.circular(
                     20,
-                  ), // Add rounded corners
+                  ),
                 ),
                 child: Stack(
-                  alignment: Alignment.center, // Center the buttons
+                  alignment: Alignment.center, 
                   children: [
-                    // Add text "Let's Begin" at the top center
+                   
                     const Positioned(
-                      top: 20, // Position the text at the top
+                      top: 20, 
                       child: Text(
                         "Let's Begin",
                         style: TextStyle(
-                          fontFamily: 'PixelFont', // Use PixelFont
-                          fontSize: 24, // Font size
-                          fontWeight: FontWeight.bold, // Bold text
-                          color: Colors.white, // White text color
+                          fontFamily: 'PixelFont', 
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold, 
+                          color: Colors.white, 
                         ),
                       ),
                     ),
-                    // Background container for Level 1 and Level 2 buttons
+                  
                     Positioned(
-                      top: 100, // Position the background container
+                      top: 100, 
                       child: Container(
-                        height: 300, // Smaller height than the outer container
-                        width: 300, // Smaller width than the outer container
+                        height: 300, 
+                        width: 300, 
                         decoration: BoxDecoration(
                           image: const DecorationImage(
                             image: AssetImage(
                               'assets/images/profile_section.png',
                             ),
-                            fit: BoxFit.cover, // Cover the entire container
+                            fit: BoxFit.cover, 
                           ),
                           borderRadius: BorderRadius.circular(
                             15,
-                          ), // Rounded corners
+                          ), 
                         ),
                       ),
                     ),
-                    // Level 1 Button with background image
+                   
                     Positioned(
-                      top: 150, // Position Level 1 button
+                      top: 150, 
                       child: Container(
-                        width: 220, // Set the width of the button container
-                        height: 70, // Set the height of the button container
+                        width: 220, 
+                        height: 70, 
                         decoration: BoxDecoration(
                           image: const DecorationImage(
                             image: AssetImage('assets/images/level_image.png'),
-                            fit: BoxFit.cover, // Cover the entire container
+                            fit: BoxFit.cover,
                           ),
                           borderRadius: BorderRadius.circular(
                             10,
-                          ), // Rounded corners
+                          ), 
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            // Navigate to Level 1 Question Screen
+                           
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -125,42 +125,42 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
-                                Colors.transparent, // Transparent background
-                            shadowColor: Colors.transparent, // Remove shadow
+                                Colors.transparent, 
+                            shadowColor: Colors.transparent, 
                           ),
                           child: const Text(
                             'Level 1',
                             style: TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black, // Change text color to black
+                              color: Colors.black, 
                               fontFamily:
-                                  'RaviPrakash', // Use RaviPrakash-Regular.ttf font
+                                  'RaviPrakash', 
                             ),
                           ),
                         ),
                       ),
                     ),
-                    // Level 2 Button with background image
+                
                     Positioned(
-                      top: 250, // Position Level 2 button below Level 1
+                      top: 250, 
                       child: Container(
-                        width: 220, // Set the width of the button container
-                        height: 70, // Set the height of the button container
+                        width: 220, 
+                        height: 70, 
                         decoration: BoxDecoration(
                           image: const DecorationImage(
                             image: AssetImage('assets/images/level_image.png'),
-                            fit: BoxFit.cover, // Cover the entire container
+                            fit: BoxFit.cover, 
                           ),
                           borderRadius: BorderRadius.circular(
                             10,
-                          ), // Rounded corners
+                          ), 
                         ),
                         child: ElevatedButton(
                           onPressed:
                               isLevel1Completed
                                   ? () {
-                                    // Navigate to Level 2 Question Screen
+                                    
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -168,26 +168,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                             (context) => QuestionScreen(
                                               level: 2,
                                               onLevelComplete: () {
-                                                // Handle Level 2 completion if needed
+                                                
                                               },
                                             ),
                                       ),
                                     );
                                   }
-                                  : null, // Disable button if Level 1 is not completed
+                                  : null,
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
-                                Colors.transparent, // Transparent background
-                            shadowColor: Colors.transparent, // Remove shadow
+                                Colors.transparent, 
+                            shadowColor: Colors.transparent, 
                           ),
                           child: const Text(
                             'Level 2',
                             style: TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black, // Change text color to black
+                              color: Colors.black, 
                               fontFamily:
-                                  'RaviPrakash', // Use RaviPrakash-Regular.ttf font
+                                  'RaviPrakash', 
                             ),
                           ),
                         ),
