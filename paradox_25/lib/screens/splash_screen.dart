@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../main.dart'; // Import MainScreen
+import 'sign_in_screen.dart';
+import 'sign_up_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -10,43 +11,33 @@ class SplashScreen extends StatelessWidget {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(
-              'assets/images/home_bg.png',
-              fit: BoxFit.cover, // Ensures full-screen coverage
-            ),
+            child: Image.asset('assets/images/home_bg.png', fit: BoxFit.cover),
           ),
-
-          // Centered Content
           Center(
             child: Transform.translate(
-              offset: const Offset(0, -80), // Adjusted offset to move content lower
+              offset: const Offset(0, -80),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Paradox Logo (inside the vortex)
                   SizedBox(
-                    height: 400, // Adjusted size
+                    height: 400,
                     child: Image.asset('assets/images/paradox_logo.png'),
                   ),
-
-                  const SizedBox(height: 10), // Reduced space
-                  // Paradox Text
+                  const SizedBox(height: 10),
                   SizedBox(
-                    height: 60, // Adjusted height
+                    height: 60,
                     child: Image.asset('assets/images/paradox_text.png'),
                   ),
-
-                  const SizedBox(height: 50), // Increased space to move buttons lower
-                  // Sign In Button
+                  const SizedBox(height: 50),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: ElevatedButton(
                       onPressed: () {
-                        // Navigate to Sign In Screen
-                        Navigator.pushReplacement(
+                        // Navigate to SignInScreen
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const MainScreen(), // Replace with SignInScreen
+                            builder: (context) => const SignInScreen(),
                           ),
                         );
                       },
@@ -57,35 +48,18 @@ class SplashScreen extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.white.withOpacity(
-                          0.1,
-                        ), // Transparency
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 100,
-                          vertical: 16,
-                        ),
-                        elevation: 0,
-                      ),
                     ),
                   ),
-
-                  const SizedBox(height: 20), // Space between buttons
-
-                  // Sign Up Button
+                  const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: ElevatedButton(
                       onPressed: () {
-                        // Navigate to Sign Up Screen
-                        Navigator.pushReplacement(
+                        // Navigate to SignUpScreen
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const MainScreen(), // Replace with SignUpScreen
+                            builder: (context) => const SignUpScreen(),
                           ),
                         );
                       },
@@ -95,20 +69,6 @@ class SplashScreen extends StatelessWidget {
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.white.withOpacity(
-                          0.1,
-                        ), // Transparency
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 100,
-                          vertical: 16,
-                        ),
-                        elevation: 0,
                       ),
                     ),
                   ),
