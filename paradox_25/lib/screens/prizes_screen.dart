@@ -108,7 +108,7 @@ class PrizesScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 8.0), // Uniform spacing
                             Image.asset(
-                              'assets/images/nimbus_blacklogo.png',
+                              'assets/images/Nimbus_white_logo.png',
                               height: 36.0, // Slightly reduced height
                               width: 36.0, // Slightly reduced width
                             ),

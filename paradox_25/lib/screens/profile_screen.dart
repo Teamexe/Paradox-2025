@@ -8,7 +8,6 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          // Comment: Add the space background with red swirl from assets
           color: Colors.black,
           image: DecorationImage(
             image: AssetImage('assets/images/all_bg.png'),
@@ -26,8 +25,8 @@ class ProfileScreen extends StatelessWidget {
             Expanded(
               child: Center(
                 child: Container(
-                  height: 538, // Outer container height
-                  width: 352, // Outer container width
+                  height: 500, // Slightly reduced outer container height
+                  width: 352, // Outer container width remains the same
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
                     color: const Color(0xFF333333).withOpacity(0.7),
@@ -35,18 +34,16 @@ class ProfileScreen extends StatelessWidget {
                     image: const DecorationImage(
                       image: AssetImage(
                         'assets/images/leaderboard_list_bg.png',
-                      ), // Add the background image
-                      fit:
-                          BoxFit
-                              .fill, // Ensure the image covers the entire container
+                      ),
+                      fit: BoxFit.fill,
                     ),
                   ),
                   child: Column(
                     children: [
                       // Inner container
                       Container(
-                        height: 458, // Inner container height
-                        width: 292, // Inner container width
+                        height: 400, // Inner container height remains the same
+                        width: 292, // Inner container width remains the same
                         margin: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
                           color: const Color(0xFFE58B87),
@@ -54,184 +51,154 @@ class ProfileScreen extends StatelessWidget {
                           image: const DecorationImage(
                             image: AssetImage(
                               'assets/images/profile_section.png',
-                            ), // Add the background image
-                            fit:
-                                BoxFit
-                                    .fill, // Ensure the image covers the entire container
+                            ),
+                            fit: BoxFit.fill,
                           ),
                         ),
                         child: Column(
                           children: [
-                            // Profile Image and Name in Circular Box
+                            // Profile Image in Circular Box
                             Padding(
-                              padding: const EdgeInsets.only(
-                                top: 10,
-                              ), // Add padding to move it downward
+                              padding: const EdgeInsets.only(top: 10),
                               child: Container(
                                 width:
-                                    200, // Adjust the size of the circular container
+                                    150, // Adjusted size of the circular container
                                 height:
-                                    200, // Ensure width and height are equal for a circle
+                                    150, // Ensure width and height are equal for a circle
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color:
-                                        Colors
-                                            .grey
-                                            .shade800, // Outer circle border color (black or grey)
-                                    width:
-                                        5, // Border width for the outer circle
+                                    color: Colors.grey.shade800,
+                                    width: 5,
                                   ),
-                                  color:
-                                      Colors
-                                          .white, // Background color of the circular container
+                                  color: Colors.white,
                                 ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    // Profile Image
-                                    Container(
-                                      width: 100,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color:
-                                              Colors
-                                                  .black, // Border color for the profile image
-                                          width:
-                                              3, // Border width for the profile image
-                                        ),
-                                      ),
-                                      child: ClipOval(
-                                        child: Image.asset(
-                                          'assets/images/profile_image.png',
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    // Name
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 20,
-                                        vertical: 5,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.shade300,
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: const Text(
-                                        'Aanya',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                child: ClipOval(
+                                  child: Image.asset(
+                                    'assets/images/profile_image.png',
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                             ),
-                            // Stats
-                            Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: Column(
+                            const SizedBox(
+                              height: 20,
+                            ), // Increased spacing below profile image
+                            // Name (Aanya) above Leaderboard Box
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 12,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: const Text(
+                                'Aanya',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 25,
+                            ), // Increased spacing below the name
+                            // Leaderboard Box
+                            Container(
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ), // Add margin
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8, // Reduced vertical padding
+                                horizontal: 12, // Reduced horizontal padding
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  // Leaderboard Position
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 10,
-                                      horizontal:
-                                          15, // Add horizontal padding for equal spacing
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade300,
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment
-                                              .spaceBetween, // Distribute items evenly
-                                      children: [
-                                        // Icon and #1 on the left
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.bar_chart,
-                                              color: Colors.blue.shade300,
-                                            ),
-                                            const SizedBox(width: 10),
-                                            const Text(
-                                              '#1',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        // Leaderboard text on the right
-                                        const Text(
-                                          'LeaderBoard',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 15),
-                                  // Level and Score
+                                  // Icon and #1 on the left
                                   Row(
                                     children: [
-                                      Expanded(
-                                        child: _buildStatItem(
-                                          icon: Icons.trending_up,
-                                          value: '15',
-                                          label: 'Level',
-                                          iconColor: Colors.orange,
-                                        ),
+                                      Icon(
+                                        Icons.bar_chart,
+                                        color: Colors.blue.shade300,
+                                        size: 20, // Reduced icon size
                                       ),
-                                      const SizedBox(width: 15),
-                                      Expanded(
-                                        child: _buildStatItem(
-                                          icon: Icons.track_changes,
-                                          value: '220',
-                                          label: 'Score',
-                                          iconColor: Colors.black,
+                                      const SizedBox(width: 8),
+                                      const Text(
+                                        '#1',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16, // Reduced font size
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 15),
-                                  // Coins and Attempts
+                                  // Leaderboard text on the right
+                                  const Text(
+                                    'LeaderBoard',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16, // Reduced font size
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ), // Increased spacing between boxes
+                            // Score Box (same size as Leaderboard Box)
+                            Container(
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ), // Add margin
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8, // Reduced vertical padding
+                                horizontal: 12, // Reduced horizontal padding
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Icon and Score on the left
                                   Row(
                                     children: [
-                                      Flexible(
-                                        child: _buildStatItem(
-                                          icon: Icons.monetization_on,
-                                          value: '15000',
-                                          label: 'Coins',
-                                          iconColor: Colors.amber,
-                                        ),
+                                      Icon(
+                                        Icons.star,
+                                        color: Colors.orange.shade300,
+                                        size: 20, // Reduced icon size
                                       ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ), // Reduce the width
-                                      Flexible(
-                                        child: _buildStatItem(
-                                          icon: Icons.refresh,
-                                          value: '30',
-                                          label: 'Attempts',
-                                          iconColor: Colors.blue,
+                                      const SizedBox(width: 8),
+                                      const Text(
+                                        '220',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16, // Reduced font size
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ],
+                                  ),
+                                  // Score text on the right
+                                  const Text(
+                                    'Score',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16, // Reduced font size
+                                    ),
                                   ),
                                 ],
                               ),
@@ -246,43 +213,6 @@ class ProfileScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildStatItem({
-    required IconData icon,
-    required String value,
-    required String label,
-    required Color iconColor,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade300,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: iconColor, size: 24),
-          const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                value,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                label,
-                style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }

@@ -77,6 +77,8 @@ flutter:
     - assets/images/cash_prize.png
     - assets/images/watch.png
     - assets/images/Rectangle 82.png
+    - assets/images/Nimbus_white_logo.png
+    - assets/images/level_image.png
   fonts:
     - family: PixelFont
       fonts:
@@ -93,6 +95,9 @@ flutter:
     - family: Overlock
       fonts:
        - asset: assets/fonts/Overlock-Regular.ttf
+    - family: RaviPrakash
+      fonts:
+       - asset: assets/fonts/RaviPrakash-Regular.ttf   
 
 flutter_icons:
   android: true

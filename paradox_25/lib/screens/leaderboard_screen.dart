@@ -54,7 +54,7 @@ class LeaderboardScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 42),
                         Image.asset(
-                          'assets/images/nimbus_blacklogo.png',
+                          'assets/images/Nimbus_white_logo.png',
                           height: 47,
                         ),
                       ],
@@ -69,11 +69,13 @@ class LeaderboardScreen extends StatelessWidget {
                       fit: BoxFit.contain,
                     ),
                   ),
+                  // Podium avatars with scores
                   _buildPodiumAvatar(
                     top: 40,
                     left: null,
                     right: null,
                     name: "Aanya",
+                    score: 500, // Add score for Aanya
                     avatarPath: 'assets/images/avatar_1.png',
                   ),
                   Positioned(
@@ -91,6 +93,7 @@ class LeaderboardScreen extends StatelessWidget {
                     left: 60,
                     right: null,
                     name: "Sona",
+                    score: 450, // Add score for Sona
                     avatarPath: 'assets/images/avatar_2.png',
                   ),
                   _buildPodiumAvatar(
@@ -98,6 +101,7 @@ class LeaderboardScreen extends StatelessWidget {
                     left: null,
                     right: 65,
                     name: "Anjali",
+                    score: 400, // Add score for Anjali
                     avatarPath: 'assets/images/avatar_3.png',
                   ),
                 ],
@@ -113,7 +117,7 @@ class LeaderboardScreen extends StatelessWidget {
                   return _buildLeaderboardItem(
                     leaderboardData[index]['rank'],
                     leaderboardData[index]['name'],
-                    leaderboardData[index]['level'],
+                    leaderboardData[index]['score'],
                   );
                 },
               ),
@@ -129,6 +133,7 @@ class LeaderboardScreen extends StatelessWidget {
     double? left,
     double? right,
     required String name,
+    required int? score, // Allow score to be nullable
     required String avatarPath,
   }) {
     return Positioned(
@@ -148,10 +153,7 @@ class LeaderboardScreen extends StatelessWidget {
                   border: Border.all(color: Colors.white, width: 3),
                 ),
                 child: ClipOval(
-                  child: Image.asset(
-                    avatarPath,
-                    fit: BoxFit.cover,
-                  ),
+                  child: Image.asset(avatarPath, fit: BoxFit.cover),
                 ),
               ),
               Positioned(
@@ -174,12 +176,34 @@ class LeaderboardScreen extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
+          const SizedBox(height: 5),
+          // Score inside a smaller transparent box
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8,
+              vertical: 3,
+            ), // Reduced padding
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2), // Transparent background
+              borderRadius: BorderRadius.circular(
+                8,
+              ), // Slightly smaller border radius
+            ),
+            child: Text(
+              'Score: ${score ?? 0}', // Use default value if score is null
+              style: const TextStyle(
+                color: Colors.white, // White text color
+                fontSize: 12, // Reduced font size
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildLeaderboardItem(int rank, String name, String level) {
+  Widget _buildLeaderboardItem(int rank, String name, int? score) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -238,7 +262,7 @@ class LeaderboardScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    level,
+                    '${score ?? 0}', // Use default value if score is null
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -257,14 +281,14 @@ class LeaderboardScreen extends StatelessWidget {
 
 // Dummy Data for Leaderboard
 final List<Map<String, dynamic>> leaderboardData = [
-  {'rank': 1, 'name': 'Utkarsh', 'level': 'Level 1'},
-  {'rank': 2, 'name': 'Harsh', 'level': 'Level 1'},
-  {'rank': 3, 'name': 'Piyush', 'level': 'Level 1'},
-  {'rank': 4, 'name': 'Ananya', 'level': 'Level 2'},
-  {'rank': 5, 'name': 'Sona', 'level': 'Level 3'},
-  {'rank': 6, 'name': 'Raj', 'level': 'Level 4'},
-  {'rank': 7, 'name': 'Kritika', 'level': 'Level 2'},
-  {'rank': 8, 'name': 'Amit', 'level': 'Level 3'},
-  {'rank': 9, 'name': 'Pooja', 'level': 'Level 1'},
-  {'rank': 10, 'name': 'Rohan', 'level': 'Level 4'},
+  {'rank': 1, 'name': 'Utkarsh', 'score': 500},
+  {'rank': 2, 'name': 'Harsh', 'score': 450},
+  {'rank': 3, 'name': 'Piyush', 'score': 400},
+  {'rank': 4, 'name': 'Ananya', 'score': 350},
+  {'rank': 5, 'name': 'Sona', 'score': 300},
+  {'rank': 6, 'name': 'Raj', 'score': 250},
+  {'rank': 7, 'name': 'Kritika', 'score': 200},
+  {'rank': 8, 'name': 'Amit', 'score': 150},
+  {'rank': 9, 'name': 'Pooja', 'score': 100},
+  {'rank': 10, 'name': 'Rohan', 'score': 50},
 ];

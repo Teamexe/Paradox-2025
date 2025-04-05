@@ -33,55 +33,68 @@ class RulesScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             // Main Content Card
-            Container(
-              height: 571, // Set the height
-              width: 400, // Increased width
-              margin: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 20,
-              ), // Adjusted margin to move it to the top
-              decoration: BoxDecoration(
-                // ignore: deprecated_member_use
-                color: Colors.grey.shade300.withOpacity(0.7),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Column(
-                children: [
-                  // Instructions
-                  Container(
-                    margin: const EdgeInsets.all(20),
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade800,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Center(
-                          child: Text(
-                            'Instructions',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 40,
-                              fontFamily: 'Oswald',
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        _buildRuleItem('Eligibility: The game is open to all.'),
-                        const SizedBox(height: 20),
-                        _buildRuleItem(
-                          'Participation: Participants can choose to play the game in solo format or can choose their partners by choice during or at the end of level 1.',
-                        ),
-                        const SizedBox(height: 20),
-                        _buildRuleItem(
-                          'Partner Matching: If any qualified candidate for level 2 from level 1 to get into a team, they will be randomly matched with another partner by the organizers.',
-                        ),
-                      ],
-                    ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Container(
+                  width: 400, // Increased width
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 20,
+                  ), // Adjusted margin to move it to the top
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                ],
+                  child: Column(
+                    children: [
+                      // Instructions
+                      Container(
+                        margin: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade800,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Center(
+                              child: Text(
+                                'Instructions',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 40,
+                                  fontFamily: 'Oswald',
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            _buildRuleItem(
+                              'Eligibility: The game is open to all.',
+                            ),
+                            const SizedBox(height: 20),
+                            _buildRuleItem(
+                              'Participation: Participants can choose to play the game in solo format or can choose their partners by choice during or at the end of level 1.',
+                            ),
+                            const SizedBox(height: 20),
+                            _buildRuleItem(
+                              'Partner Matching: If any qualified candidate for level 2 from level 1 to get into a team, they will be randomly matched with another partner by the organizers.',
+                            ),
+                            const SizedBox(height: 20),
+                            _buildRuleItem(
+                              'Scoring: Each correct answer will increase the score by 50 points.',
+                            ),
+                            const SizedBox(height: 20),
+                            _buildRuleItem(
+                              
+                              'Use of Hint: Using hint will decrease the score by 10 points.'
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ],

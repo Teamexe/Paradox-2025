@@ -18,6 +18,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
   final TextEditingController _answerController = TextEditingController();
   int _currentQuestionIndex = 0;
   bool _isHintVisible = false; // Track hint visibility
+  int _score = 0; // Track the user's score
 
   // Questions for Level 1 and Level 2
   final Map<int, List<Map<String, String>>> _questions = {
@@ -58,22 +59,24 @@ class _QuestionScreenState extends State<QuestionScreen> {
             .toLowerCase();
 
     if (userAnswer == correctAnswer) {
-      if (_currentQuestionIndex < _questions[widget.level]!.length - 1) {
-        setState(() {
+      setState(() {
+        _score += 50; // Increment score by 50 for a correct answer
+        if (_currentQuestionIndex < _questions[widget.level]!.length - 1) {
           _currentQuestionIndex++;
           _answerController.clear();
           _isHintVisible = false; // Hide hint for the next question
-        });
-      } else {
-        widget.onLevelComplete(); // Notify that the level is complete
-        Navigator.pop(context); // Go back to the HomeScreen
-      }
+        } else {
+          widget.onLevelComplete(); // Notify that the level is complete
+          Navigator.pop(context); // Go back to the HomeScreen
+        }
+      });
     } else {
+      // Show "Wrong answer" prompt
       showDialog(
         context: context,
         builder:
             (context) => AlertDialog(
-              title: const Text('Incorrect Answer'),
+              title: const Text('Wrong Answer'),
               content: const Text('Please try again.'),
               actions: [
                 TextButton(
@@ -92,8 +95,20 @@ class _QuestionScreenState extends State<QuestionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Level ${widget.level}'),
-        backgroundColor: Colors.blue,
+        title: Text(
+          'Level ${widget.level}', // Display the level number
+          style: const TextStyle(
+            color: Colors.white, // Set text color to white
+            fontSize: 22, // Adjust font size
+            fontWeight: FontWeight.bold, // Make it bold for better visibility
+          ),
+        ),
+        backgroundColor: Colors.black, // Match the dark UI
+        centerTitle: true, // Center the title
+        elevation: 0, // Remove shadow for a cleaner look
+        iconTheme: const IconThemeData(
+          color: Colors.white, // Set the back arrow color to white
+        ),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -149,31 +164,60 @@ class _QuestionScreenState extends State<QuestionScreen> {
               ),
             ),
             const Spacer(),
-            // Hint Icon and Hint Text
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  _isHintVisible = !_isHintVisible; // Toggle hint visibility
-                });
-              },
+            // Hint and Score Row
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(Icons.lightbulb_outline, color: Colors.yellow),
-                  const SizedBox(width: 5),
-                  const Text(
-                    'Hint',
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  // Hint Button
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _isHintVisible =
+                            !_isHintVisible; // Toggle hint visibility
+                        if (_isHintVisible) {
+                          _score -= 10; // Decrease score by 10 if hint is used
+                        }
+                      });
+                    },
+                    child: Row(
+                      children: const [
+                        Icon(Icons.lightbulb_outline, color: Colors.yellow),
+                        SizedBox(width: 5),
+                        Text(
+                          'Hint',
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Score Box
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 15,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade800,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      'Score: $_score',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
+            // Hint Text (conditionally visible)
             if (_isHintVisible)
               Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 10,
-                ),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
                 padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade800,
@@ -181,30 +225,34 @@ class _QuestionScreenState extends State<QuestionScreen> {
                 ),
                 child: Text(
                   _questions[widget.level]![_currentQuestionIndex]['hint']!,
-                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            const SizedBox(height: 15),
-            // Answer Input
+            const SizedBox(height: 10),
+            // Answer Input Box
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               decoration: BoxDecoration(
-                color: Colors.black,
+                color: Colors.grey.shade800,
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey.shade700),
               ),
               child: TextField(
                 controller: _answerController,
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration(
-                  hintText: 'Enter your answer',
+                  hintText: 'Type your answer here...',
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
                 ),
               ),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 10),
             // Submit Button
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
