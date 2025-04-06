@@ -1,130 +1,136 @@
 import 'package:flutter/material.dart';
-import 'sign_in_screen.dart';
-import 'sign_up_screen.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import './auth_choice_screen.dart';
+import './home_screen.dart';
+import 'package:paradox_25/main.dart';
 
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  final storage = const FlutterSecureStorage();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAuth();
+  }
+
+  Future<void> _checkAuth() async {
+    final token = await storage.read(key: 'authToken');
+
+    if (token != null) {
+      // Token exists, validate it (strongly recommended)
+      // If the token is invalid, navigate to AuthScreen.
+      // If valid, navigate to HomeScreen.
+
+      // Example of (simplified) token validation (replace with your actual API call):
+      try {
+        final response = await http.get(
+          Uri.parse(
+            'http://your_backend_url/v1/home',
+          ), // Replace with your token validation endpoint
+          headers: {'Authorization': 'Bearer $token'},
+        );
+
+        if (response.statusCode == 200) {
+          // Token is valid, navigate to HomeScreen
+          print('Token is valid, navigating to HomeScreen');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const MainScreen()),
+          );
+        } else {
+          // Token is invalid, navigate to AuthScreen
+          print('Token is invalid, navigating to AuthScreen');
+          await storage.delete(key: 'authToken'); // Clear the invalid token
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AuthScreen(),
+            ), // Navigate to AuthScreen
+          );
+        }
+      } catch (e) {
+        // Network error or other validation error, navigate to AuthScreen
+        print('Token validation error: $e, navigating to AuthScreen');
+        await storage.delete(key: 'authToken'); // Clear the invalid token
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AuthScreen(),
+          ), // Navigate to AuthScreen
+        );
+      }
+    } else {
+      // No token, navigate to AuthScreen
+      print('No token found, navigating to AuthScreen');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const AuthScreen(),
+        ), // Navigate to AuthScreen
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenWidth = screenSize.width;
-    final double screenHeight = screenSize.height;
-
-    double fontScale = screenWidth / 375;
-    fontScale = fontScale.clamp(0.8, 1.4);
-
     return Scaffold(
-      body: Stack(
-        children: [
-          // Background Image
-          Positioned.fill(
-            child: Image.asset('assets/images/home_bg.png', fit: BoxFit.cover),
-          ),
-          // Content
-          Center(
-            child: SingleChildScrollView(
-              child: Transform.translate(
-                offset: Offset(
-                  0,
-                  screenHeight * 0.1,
-                ), // Adjusted offset to move content further down
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Removed Paradox Logo
-                    SizedBox(
-                      height: screenHeight * 0.15,
-                    ), // Increased spacing to move Paradox Text downward
-                    // Paradox Text
-                    SizedBox(
-                      height: screenHeight * 0.08,
-                      child: Image.asset('assets/images/paradox_text.png'),
-                    ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final double screenWidth = constraints.maxWidth;
+          final double screenHeight = constraints.maxHeight;
 
-                    SizedBox(
-                      height: screenHeight * 0.1,
-                    ), // Spacing between Paradox Text and buttons
-                    // Sign In Button
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: screenWidth * 0.1,
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SignInScreen(),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white.withOpacity(0.1),
-                          foregroundColor: Colors.grey.shade300,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth * 0.2,
-                            vertical: screenHeight * 0.022,
-                          ),
-                          elevation: 0,
-                        ),
-                        child: Text(
-                          'Sign In',
-                          style: TextStyle(
-                            fontSize: 18 * fontScale,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
+          // Responsive scaling function
+          double scale(double value) =>
+              value * (screenWidth / 390); // Base width
 
-                    SizedBox(
-                      height: screenHeight * 0.04,
-                    ), // Spacing between buttons
-                    // Sign Up Button
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: screenWidth * 0.1,
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SignUpScreen(),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white.withOpacity(0.1),
-                          foregroundColor: Colors.grey.shade300,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth * 0.2,
-                            vertical: screenHeight * 0.022,
-                          ),
-                          elevation: 0,
-                        ),
-                        child: Text(
-                          'Sign Up',
-                          style: TextStyle(
-                            fontSize: 18 * fontScale,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+          return Stack(
+            children: [
+              // Background Image
+              Positioned.fill(
+                child: Image.asset(
+                  'assets/images/home_bg.png',
+                  fit: BoxFit.cover,
                 ),
               ),
-            ),
-          ),
-        ],
+              // Content
+              Center(
+                child: SingleChildScrollView(
+                  child: Transform.translate(
+                    offset: Offset(
+                      0,
+                      screenHeight * 0.1,
+                    ), // Proportional vertical offset
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Removed Paradox Logo (if it's not needed in splash)
+
+                        // Paradox Text
+                        SizedBox(
+                          height: scale(80), // Scaled height
+                          child: Image.asset('assets/images/paradox_text.png'),
+                        ),
+                        SizedBox(
+                          height: screenHeight * 0.15,
+                        ), // Proportional Spacing
+                        // Removed Sign In Button (Navigation is handled in _checkAuth)
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
