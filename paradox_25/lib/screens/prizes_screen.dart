@@ -16,8 +16,7 @@ class PrizesScreen extends StatelessWidget {
               value * (screenWidth / 390); // Base width
 
           // Responsive font size function
-          double responsiveFont(double size) =>
-              size * (screenWidth / 375); // Use screenWidth for scaling
+          double responsiveFont(double size) => size * (screenWidth / 375);
 
           return Container(
             width: screenWidth,
@@ -33,25 +32,21 @@ class PrizesScreen extends StatelessWidget {
                 physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: screenHeight * 0.03,
-                    ), // Proportional Spacing
+                    SizedBox(height: screenHeight * 0.03),
                     // Logo
                     SizedBox(
-                      height: scale(60), // Scaled height
+                      height: scale(60),
                       child: Image.asset(
                         'assets/images/paradox_text.png',
                         fit: BoxFit.contain,
                       ),
                     ),
-                    SizedBox(
-                      height: screenHeight * 0.03,
-                    ), // Proportional Spacing
-                    // Main card with background
+                    SizedBox(height: screenHeight * 0.03),
+                    // Main card
                     Container(
                       margin: EdgeInsets.symmetric(
                         horizontal: screenWidth * 0.05,
-                      ), // Proportional Margin
+                      ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(scale(30)),
                       ),
@@ -73,64 +68,48 @@ class PrizesScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-
-                          // Foreground content
+                          // Foreground
                           Padding(
-                            padding: EdgeInsets.all(
-                              screenWidth * 0.04,
-                            ), // Proportional Padding
+                            padding: EdgeInsets.all(screenWidth * 0.04),
                             child: Column(
                               children: [
-                                SizedBox(
-                                  height: screenHeight * 0.02,
-                                ), // Proportional Spacing
-                                // Header
+                                SizedBox(height: screenHeight * 0.02),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.asset(
                                       'assets/images/exe_logo.png',
-                                      height: scale(32), // Scaled height
-                                      width: scale(32), // Scaled width
+                                      height: scale(32),
+                                      width: scale(32),
                                       fit: BoxFit.contain,
                                     ),
-                                    SizedBox(
-                                      width: screenWidth * 0.02,
-                                    ), // Proportional Spacing
+                                    SizedBox(width: screenWidth * 0.02),
                                     Text(
                                       'Top Prizes',
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: responsiveFont(26),
+                                        fontSize: responsiveFont(21),
                                         fontFamily: 'PixelFont',
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: screenWidth * 0.02,
-                                    ), // Proportional Spacing
+                                    SizedBox(width: screenWidth * 0.02),
                                     Image.asset(
                                       'assets/images/Nimbus_white_logo.png',
-                                      height: scale(32), // Scaled height
-                                      width: scale(32), // Scaled width
+                                      height: scale(32),
+                                      width: scale(32),
                                       fit: BoxFit.contain,
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                  height: screenHeight * 0.02,
-                                ), // Proportional Spacing
-                                // Inner content with inner background
+                                SizedBox(height: screenHeight * 0.02),
+                                // Prize card
                                 Container(
                                   margin: const EdgeInsets.symmetric(
                                     horizontal: 16,
                                   ),
                                   padding: EdgeInsets.symmetric(
-                                    vertical:
-                                        screenHeight *
-                                        0.04, // Proportional Padding
-                                    horizontal:
-                                        screenWidth *
-                                        0.04, // Proportional Padding
+                                    vertical: screenHeight * 0.04,
+                                    horizontal: screenWidth * 0.04,
                                   ),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(
@@ -145,82 +124,72 @@ class PrizesScreen extends StatelessWidget {
                                   ),
                                   child: Column(
                                     children: [
-                                      // Prize List
                                       Wrap(
                                         alignment: WrapAlignment.center,
-                                        spacing:
-                                            screenWidth *
-                                            0.04, // Proportional Spacing
-                                        runSpacing:
-                                            screenHeight *
-                                            0.02, // Proportional Spacing
+                                        spacing: screenWidth * 0.04,
+                                        runSpacing: screenHeight * 0.02,
                                         children: [
                                           _buildPrize(
                                             'assets/images/cash_prize.png',
                                             'Cash prize',
-                                            scale, // Pass scale function
+                                            scale,
                                             screenWidth,
                                             screenHeight,
                                           ),
                                           _buildPrize(
                                             'assets/images/speaker.png',
                                             'Speaker',
-                                            scale, // Pass scale function
+                                            scale,
                                             screenWidth,
                                             screenHeight,
                                           ),
                                           _buildPrize(
                                             'assets/images/watch.png',
                                             'Watch',
-                                            scale, // Pass scale function
+                                            scale,
                                             screenWidth,
                                             screenHeight,
                                           ),
                                         ],
                                       ),
-                                      SizedBox(
-                                        height: screenHeight * 0.02,
-                                      ), // Proportional Spacing
+                                      SizedBox(height: screenHeight * 0.02),
                                     ],
                                   ),
                                 ),
+                                SizedBox(height: screenHeight * 0.04),
 
+                                // ⭐ Updated prize announcement box ⭐
                                 SizedBox(
-                                  height: screenHeight * 0.04,
-                                ), // Proportional Spacing
-                                // Bottom message
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                  ),
+                                  width: double.infinity,
                                   child: Container(
-                                    height: scale(40), // Scaled height
+                                    margin: EdgeInsets.symmetric(
+                                      horizontal: screenWidth * 0.03,
+                                    ),
+                                    height: scale(40),
                                     decoration: BoxDecoration(
                                       color: Colors.black.withOpacity(0.5),
                                       borderRadius: BorderRadius.circular(
                                         scale(20),
                                       ),
                                     ),
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: screenWidth * 0.04,
                                     ),
                                     child: Row(
                                       children: [
                                         Image.asset(
                                           'assets/images/Rectangle 82.png',
-                                          height: scale(20), // Scaled height
-                                          width: scale(20), // Scaled width
+                                          height: scale(20),
+                                          width: scale(20),
                                           fit: BoxFit.contain,
                                         ),
-                                        SizedBox(
-                                          width: screenWidth * 0.025,
-                                        ), // Proportional Spacing
-                                        const Expanded(
+                                        SizedBox(width: screenWidth * 0.025),
+                                        Expanded(
                                           child: Text(
                                             'The prize will be announced soon',
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 16,
+                                              fontSize: responsiveFont(16),
                                               fontFamily: 'Overlock',
                                             ),
                                             overflow: TextOverflow.ellipsis,
@@ -230,9 +199,8 @@ class PrizesScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: screenHeight * 0.03,
-                                ), // Proportional Spacing
+
+                                SizedBox(height: screenHeight * 0.03),
                               ],
                             ),
                           ),
@@ -259,16 +227,16 @@ class PrizesScreen extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: scale(100), // Scaled height
-          width: scale(110), // Scaled width
+          height: scale(100),
+          width: scale(110),
           child: Image.asset(imagePath, fit: BoxFit.contain),
         ),
-        SizedBox(height: screenHeight * 0.01), // Proportional Spacing
+        SizedBox(height: screenHeight * 0.01),
         Text(
           prizeName,
           style: TextStyle(
             color: Colors.white,
-            fontSize: scale(16), // Scaled font size
+            fontSize: scale(16),
             fontWeight: FontWeight.bold,
             fontFamily: 'Overlock',
           ),
