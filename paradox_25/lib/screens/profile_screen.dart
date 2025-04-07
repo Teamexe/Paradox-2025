@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'loader.dart'; // Import the LoaderScreen
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -13,10 +14,11 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   String? userName;
   int? userScore;
-  String? userEmail; // Changed from userRank
+  String? userEmail;
   String? profilePictureUrl;
 
   final storage = const FlutterSecureStorage();
+  bool _isLoading = true; // Add loading state
 
   @override
   void initState() {
@@ -28,6 +30,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final token = await storage.read(key: 'authToken');
     if (token == null) {
       // User is not logged in
+      setState(() {
+        _isLoading = false; // Stop loader if no token
+      });
       return;
     }
 
@@ -42,18 +47,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           userName = data['name'];
           userScore = data['score'];
-          userEmail = data['email']; // Set userEmail from response
+          userEmail = data['email'];
           profilePictureUrl = null; // Placeholder
+          _isLoading = false; // Stop loader after data is loaded
         });
       } else {
         print('Error fetching profile data: ${response.statusCode}');
         _showErrorDialog('Error fetching profile data');
-        return;
+        setState(() {
+          _isLoading = false; // Stop loader on error
+        });
       }
     } catch (e) {
       print('Error: $e');
       _showErrorDialog('Network error. Please try again.');
-      return;
+      setState(() {
+        _isLoading = false; // Stop loader on error
+      });
     }
   }
 
@@ -77,196 +87,186 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final double screenWidth = constraints.maxWidth;
-          final double screenHeight = constraints.maxHeight;
+      body:
+          _isLoading
+              ? const LoaderScreen() // Use the loader from loader.dart
+              : LayoutBuilder(
+                builder: (context, constraints) {
+                  final double screenWidth = constraints.maxWidth;
+                  final double screenHeight = constraints.maxHeight;
 
-          // Responsive scaling function
-          double scale(double value) =>
-              value * (screenWidth / 390); // Base width
+                  // Responsive scaling function
+                  double scale(double value) =>
+                      value * (screenWidth / 390); // Base width
 
-          // Font Scaling: Clamping to reasonable values
-          double fontScale = screenWidth / 375;
-          fontScale = fontScale.clamp(0.8, 1.4);
+                  // Font Scaling: Clamping to reasonable values
+                  double fontScale = screenWidth / 375;
+                  fontScale = fontScale.clamp(0.8, 1.4);
 
-          return SafeArea(
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: const BoxDecoration(
-                color: Colors.black,
-                image: DecorationImage(
-                  image: AssetImage('assets/images/all_bg.png'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth * 0.05,
-                  ), // Proportional padding
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: screenHeight * 0.05,
-                      ), // Spacing above paradox_text.png
-                      SizedBox(
-                        height: screenHeight * 0.07,
-                        child: Image.asset(
-                          'assets/images/paradox_text.png',
-                          fit: BoxFit.contain,
+                  return SafeArea(
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/all_bg.png'),
+                          fit: BoxFit.cover,
                         ),
                       ),
-                      SizedBox(
-                        height: screenHeight * 0.1,
-                      ), // Increased spacing to move the container lower
-                      Stack(
-                        alignment:
-                            Alignment
-                                .center, // Center the inner container over the outer container
-                        children: [
-                          // Outer Container
-                          Container(
-                            width:
-                                screenWidth *
-                                0.9, // Outer container width (greater than inner container)
-                            height:
-                                screenHeight *
-                                0.5, // Outer container height (greater than inner container)
-                            decoration: BoxDecoration(
-                              image: const DecorationImage(
-                                image: AssetImage(
-                                  'assets/images/leaderboard_list_bg.png',
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.05,
+                          ), // Proportional padding
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: screenHeight * 0.05,
+                              ), // Spacing above paradox_text.png
+                              SizedBox(
+                                height: screenHeight * 0.07,
+                                child: Image.asset(
+                                  'assets/images/paradox_text.png',
+                                  fit: BoxFit.contain,
                                 ),
-                                fit: BoxFit.cover, // Cover the entire container
                               ),
-                              borderRadius: BorderRadius.circular(
-                                scale(25),
-                              ), // Rounded corners
-                            ),
-                          ),
-                          // Inner Container
-                          Container(
-                            width: screenWidth * 0.85, // Inner container width
-                            padding: EdgeInsets.all(
-                              screenWidth * 0.02,
-                            ), // Padding for inner content
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF333333).withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(
-                                scale(20),
-                              ), // Rounded corners
-                              image: const DecorationImage(
-                                image: AssetImage(
-                                  'assets/images/profile_section.png',
-                                ),
-                                fit:
-                                    BoxFit
-                                        .fill, // Background image for inner container
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                // Profile Image
-                                Container(
-                                  width: screenWidth * 0.25, // Reduced width
-                                  height: screenWidth * 0.25, // Reduced height
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: Colors.grey.shade800,
-                                      width: scale(3), // Border width
+                              SizedBox(
+                                height: screenHeight * 0.1,
+                              ), // Increased spacing to move the container lower
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  // Outer Container
+                                  Container(
+                                    width: screenWidth * 0.9,
+                                    height: screenHeight * 0.5,
+                                    decoration: BoxDecoration(
+                                      image: const DecorationImage(
+                                        image: AssetImage(
+                                          'assets/images/leaderboard_list_bg.png',
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
+                                      borderRadius: BorderRadius.circular(
+                                        scale(25),
+                                      ),
                                     ),
-                                    color: Colors.white,
                                   ),
-                                  child: ClipOval(
-                                    child:
-                                        profilePictureUrl != null
-                                            ? Image.network(
-                                              profilePictureUrl!,
-                                              fit: BoxFit.cover,
-                                              errorBuilder:
-                                                  (
-                                                    context,
-                                                    error,
-                                                    stackTrace,
-                                                  ) => const Center(
-                                                    child: Text(
-                                                      'Image not available',
-                                                      style: TextStyle(
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ),
-                                                  ),
-                                            )
-                                            : Image.asset(
-                                              'assets/images/profile_image.png',
-                                              fit: BoxFit.cover,
+                                  // Inner Container
+                                  Container(
+                                    width: screenWidth * 0.85,
+                                    padding: EdgeInsets.all(screenWidth * 0.02),
+                                    decoration: BoxDecoration(
+                                      color: const Color(
+                                        0xFF333333,
+                                      ).withOpacity(0.7),
+                                      borderRadius: BorderRadius.circular(
+                                        scale(20),
+                                      ),
+                                      image: const DecorationImage(
+                                        image: AssetImage(
+                                          'assets/images/profile_section.png',
+                                        ),
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        // Profile Image
+                                        Container(
+                                          width: screenWidth * 0.25,
+                                          height: screenWidth * 0.25,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                              color: Colors.grey.shade800,
+                                              width: scale(3),
                                             ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: screenHeight * 0.02,
-                                ), // Spacing
-                                // Name
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 6,
-                                    horizontal: 10,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade300,
-                                    borderRadius: BorderRadius.circular(
-                                      scale(10),
-                                    ), // Rounded corners
-                                  ),
-                                  child: Text(
-                                    userName ?? 'Guest',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: fontScale * 16, // Font size
-                                      fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                          child: ClipOval(
+                                            child:
+                                                profilePictureUrl != null
+                                                    ? Image.network(
+                                                      profilePictureUrl!,
+                                                      fit: BoxFit.cover,
+                                                      errorBuilder:
+                                                          (
+                                                            context,
+                                                            error,
+                                                            stackTrace,
+                                                          ) => const Center(
+                                                            child: Text(
+                                                              'Image not available',
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                    )
+                                                    : Image.asset(
+                                                      'assets/images/profile_image.png',
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                          ),
+                                        ),
+                                        SizedBox(height: screenHeight * 0.02),
+                                        // Name
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 6,
+                                            horizontal: 10,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.shade300,
+                                            borderRadius: BorderRadius.circular(
+                                              scale(10),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            userName ?? 'Guest',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: fontScale * 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: screenHeight * 0.02),
+                                        // Email Box
+                                        _buildInfoBox(
+                                          context,
+                                          icon: Icons.email,
+                                          iconColor: Colors.green.shade300,
+                                          value: userEmail ?? 'N/A',
+                                          label: 'Email',
+                                          fontSize: fontScale * 14,
+                                        ),
+                                        SizedBox(height: screenHeight * 0.015),
+                                        // Score Box
+                                        _buildInfoBox(
+                                          context,
+                                          icon: Icons.star,
+                                          iconColor: Colors.orange.shade300,
+                                          value: userScore?.toString() ?? '0',
+                                          label: 'Score',
+                                          fontSize: fontScale * 14,
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: screenHeight * 0.02,
-                                ), // Spacing
-                                // Email Box
-                                _buildInfoBox(
-                                  context,
-                                  icon: Icons.email,
-                                  iconColor: Colors.green.shade300,
-                                  value: userEmail ?? 'N/A',
-                                  label: 'Email',
-                                  fontSize: fontScale * 14, // Font size
-                                ),
-                                SizedBox(
-                                  height: screenHeight * 0.015,
-                                ), // Spacing
-                                // Score Box
-                                _buildInfoBox(
-                                  context,
-                                  icon: Icons.star,
-                                  iconColor: Colors.orange.shade300,
-                                  value: userScore?.toString() ?? '0',
-                                  label: 'Score',
-                                  fontSize: fontScale * 14, // Font size
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
-            ),
-          );
-        },
-      ),
     );
   }
 
