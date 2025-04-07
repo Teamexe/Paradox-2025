@@ -26,7 +26,7 @@ class AuthScreen extends StatelessWidget {
               // Background Image
               Positioned.fill(
                 child: Image.asset(
-                  'assets/images/all_bg.png',
+                  'assets/images/first.png',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -34,16 +34,24 @@ class AuthScreen extends StatelessWidget {
               Center(
                 child: SingleChildScrollView(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment:
+                        MainAxisAlignment.start, // Align content to the top
                     children: [
+                      SizedBox(
+                        height:
+                            screenHeight *
+                            0.2, // Add vertical spacing to push content lower
+                      ),
                       // Paradox Text Image
                       SizedBox(
                         height: scale(80), // Scaled height
                         child: Image.asset('assets/images/paradox_text.png'),
                       ),
                       SizedBox(
-                        height: screenHeight * 0.1,
-                      ), // Proportional Spacing
+                        height:
+                            screenHeight *
+                            0.05, // Reduced spacing between image and button
+                      ),
                       // Sign In Button
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -83,10 +91,9 @@ class AuthScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-
                       SizedBox(
-                        height: screenHeight * 0.04,
-                      ), // Proportional Spacing
+                        height: screenHeight * 0.04, // Proportional Spacing
+                      ),
                       // Sign Up Button
                       Padding(
                         padding: EdgeInsets.symmetric(

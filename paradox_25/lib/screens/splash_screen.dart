@@ -97,8 +97,8 @@ class _SplashScreenState extends State<SplashScreen> {
               // Background Image
               Positioned.fill(
                 child: Image.asset(
-                  'assets/images/home_bg.png',
-                  fit: BoxFit.cover,
+                  'assets/images/paradox_logo.png',
+                  fit: BoxFit.fill,
                 ),
               ),
               // Content
@@ -117,7 +117,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         // Paradox Text
                         SizedBox(
                           height: scale(80), // Scaled height
-                          child: Image.asset('assets/images/paradox_text.png'),
+                          child: Image.asset('assets/images/paradox_logo.png'),
                         ),
                         SizedBox(
                           height: screenHeight * 0.15,

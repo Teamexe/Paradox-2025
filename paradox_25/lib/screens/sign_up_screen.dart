@@ -159,15 +159,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
           return Stack(
             children: [
               // Background Image
-              Positioned.fill(
-                child: Image.asset(
-                  'assets/images/all_bg.png',
-                  fit: BoxFit.cover,
+              Container(
+                width: screenWidth,
+                height: screenHeight,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/all_bg.png'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               // Content
               SingleChildScrollView(
-                // Added SingleChildScrollView
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [

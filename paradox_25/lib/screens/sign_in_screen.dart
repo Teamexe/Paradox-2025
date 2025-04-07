@@ -108,10 +108,14 @@ class _SignInScreenState extends State<SignInScreen> {
           return Stack(
             children: [
               // Background Image
-              Positioned.fill(
-                child: Image.asset(
-                  'assets/images/all_bg.png',
-                  fit: BoxFit.cover,
+              Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/all_bg.png'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               // Content
