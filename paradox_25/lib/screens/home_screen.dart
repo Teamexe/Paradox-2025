@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
         headers: {'Authorization': 'Bearer $token'},
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 202) {
         final data = jsonDecode(response.body);
         setState(() {
           userName = data['name']; // Adjust this based on your API response

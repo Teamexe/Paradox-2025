@@ -49,15 +49,25 @@ class _QuestionScreenState extends State<QuestionScreen> {
         headers: {'Authorization': 'Bearer $token'},
       );
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        setState(() {
-          _currentQuestion = data; // Assuming the API returns question data
-        });
+      if (response.statusCode == 200 || response.statusCode == 202) {
+        print('Raw Response: ${response.body}');
+        final List<dynamic> data = jsonDecode(response.body);
+        print('Decoded Data: ${data}');
+
+        if (data.isNotEmpty) {
+          setState(() {
+            _currentQuestion = data[0];
+            print('_currentQuestion: $_currentQuestion');
+          });
+        } else {
+          _showErrorDialog('No question found for the current level.');
+        }
       } else {
         // Handle API errors
-        print('Error fetching current question: ${response.statusCode}');
-        _showErrorDialog('Error fetching question');
+        print('API Error: ${response.statusCode} - ${response.reasonPhrase}');
+        _showErrorDialog(
+          'Error fetching question: ${response.statusCode} - ${response.reasonPhrase ?? "An error occurred"}',
+        );
         return;
       }
     } catch (e) {
@@ -88,7 +98,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
         body: jsonEncode({'answer': _answerController.text.trim()}),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 202) {
         final data = jsonDecode(response.body);
         if (data['message'] == "Level is finished") {
           widget.onLevelComplete();
@@ -98,7 +108,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
             _score =
                 data['score']; // Assuming the API returns the updated score
             _currentQuestion =
-                data['data']; // Assuming the API returns the next question
+                data['data']; // Assuming the API returns the next question data
             _answerController.clear();
             _isHintVisible = false;
           });
@@ -133,13 +143,14 @@ class _QuestionScreenState extends State<QuestionScreen> {
         headers: {'Authorization': 'Bearer $token'},
       );
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+      if (response.statusCode == 200 || response.statusCode == 202) {
+        final String data = response.body; // Hint API returns a string
         setState(() {
           _isHintVisible = true;
           _score -= 10;
-          _currentQuestion!['hint'] =
-              data['hint']; // Assuming hint is returned in 'hint' field
+          if (_currentQuestion != null) {
+            _currentQuestion!['hint'] = data;
+          }
         });
       } else {
         // Handle API errors
@@ -228,8 +239,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                         borderRadius: BorderRadius.circular(scale(15)),
                       ),
                       child: Text(
-                        _currentQuestion?['question'] ??
-                            'Loading...', // Display question or loading text
+                        _currentQuestion?['title'] ?? 'Loading...',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: normalFont,
@@ -251,9 +261,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(scale(15)),
                         child:
-                            _currentQuestion?['image'] != null
+                            _currentQuestion?['descriptionOrImgUrl'] != null
                                 ? Image.network(
-                                  _currentQuestion!['image'], // Display image from URL
+                                  _currentQuestion!['descriptionOrImgUrl'],
                                   fit: BoxFit.contain,
                                   errorBuilder:
                                       (context, error, stackTrace) => Center(
@@ -278,6 +288,27 @@ class _QuestionScreenState extends State<QuestionScreen> {
                       ),
                     ),
                     SizedBox(height: height * 0.025),
+
+                    // Hint Section
+                    if (_isHintVisible && _currentQuestion?['hint'] != null)
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(padding * 0.5),
+                        decoration: BoxDecoration(
+                          color: Colors.yellow.shade100,
+                          borderRadius: BorderRadius.circular(scale(10)),
+                        ),
+                        child: Text(
+                          'Hint: ${_currentQuestion!['hint']}',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: normalFont,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    if (_isHintVisible && _currentQuestion?['hint'] != null)
+                      SizedBox(height: height * 0.015),
 
                     // Hint and Score Row
                     Row(
@@ -375,7 +406,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
                         ),
                       ),
                     ),
-
                     SizedBox(height: height * 0.03),
                   ],
                 ),

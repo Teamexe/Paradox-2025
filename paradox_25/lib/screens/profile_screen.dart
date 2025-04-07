@@ -13,7 +13,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   String? userName;
   int? userScore;
-  String? userRank;
+  String? userEmail; // Changed from userRank
   String? profilePictureUrl;
 
   final storage = const FlutterSecureStorage();
@@ -25,39 +25,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _fetchProfileData() async {
-    final token = await storage.read(key: 'authToken'); // Get token
+    final token = await storage.read(key: 'authToken');
     if (token == null) {
-      // User is not logged in, redirect to login
-      // ... (Your login redirection logic)
+      // User is not logged in
       return;
     }
 
     try {
       final response = await http.get(
-        Uri.parse(
-          'https://paradox-2025.vercel.app/api/v1/home',
-        ), // Replace with your API URL
+        Uri.parse('https://paradox-2025.vercel.app/api/v1/home'),
         headers: {'Authorization': 'Bearer $token'},
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 202) {
         final data = jsonDecode(response.body);
         setState(() {
-          userName = data['name']; // Adjust this based on your API response
-          userScore = data['score']; // Adjust this based on your API response
-          userRank =
-              data['rank'] ?? '#1'; // Assuming rank is provided, default to #1
-          profilePictureUrl =
-              data['profilePicture']; // Adjust this based on your API response
+          userName = data['name'];
+          userScore = data['score'];
+          userEmail = data['email']; // Set userEmail from response
+          profilePictureUrl = null; // Placeholder
         });
       } else {
-        // Handle API errors
         print('Error fetching profile data: ${response.statusCode}');
         _showErrorDialog('Error fetching profile data');
         return;
       }
     } catch (e) {
-      // Handle network errors
       print('Error: $e');
       _showErrorDialog('Network error. Please try again.');
       return;
@@ -160,9 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               screenWidth * 0.02,
                             ), // Padding for inner content
                             decoration: BoxDecoration(
-                              color: const Color(
-                                0xFF333333,
-                              ).withOpacity(0.7), // Same background color
+                              color: const Color(0xFF333333).withOpacity(0.7),
                               borderRadius: BorderRadius.circular(
                                 scale(20),
                               ), // Rounded corners
@@ -221,8 +212,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 // Name
                                 Container(
                                   padding: const EdgeInsets.symmetric(
-                                    vertical: 6, // Vertical padding
-                                    horizontal: 10, // Horizontal padding
+                                    vertical: 6,
+                                    horizontal: 10,
                                   ),
                                   decoration: BoxDecoration(
                                     color: Colors.grey.shade300,
@@ -242,13 +233,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 SizedBox(
                                   height: screenHeight * 0.02,
                                 ), // Spacing
-                                // Leaderboard Box
+                                // Email Box
                                 _buildInfoBox(
                                   context,
-                                  icon: Icons.bar_chart,
-                                  iconColor: Colors.blue.shade300,
-                                  value: userRank ?? '#--',
-                                  label: 'LeaderBoard',
+                                  icon: Icons.email,
+                                  iconColor: Colors.green.shade300,
+                                  value: userEmail ?? 'N/A',
+                                  label: 'Email',
                                   fontSize: fontScale * 14, // Font size
                                 ),
                                 SizedBox(
