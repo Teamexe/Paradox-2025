@@ -15,7 +15,7 @@ class LeaderboardProvider with ChangeNotifier {
 }
 
 class LeaderboardScreen extends StatefulWidget {
-  const LeaderboardScreen({Key? key}) : super(key: key);
+  const LeaderboardScreen({super.key});
 
   @override
   State<LeaderboardScreen> createState() => _LeaderboardScreenState();
@@ -202,7 +202,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                             ),
                           ),
                           // Podium Avatars
-                          if (topPlayers.length >= 1)
+                          if (topPlayers.isNotEmpty)
                             _buildPodiumAvatar(
                               top: constraints.maxHeight * 0.05,
                               name: topPlayers[0]['name'],

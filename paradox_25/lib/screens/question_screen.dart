@@ -10,10 +10,10 @@ class QuestionScreen extends StatefulWidget {
   final VoidCallback onLevelComplete;
 
   const QuestionScreen({
-    Key? key,
+    super.key,
     required this.level,
     required this.onLevelComplete,
-  }) : super(key: key);
+  });
 
   @override
   State<QuestionScreen> createState() => _QuestionScreenState();

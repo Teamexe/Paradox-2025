@@ -3,7 +3,7 @@ import './sign_in_screen.dart';
 import './sign_up_screen.dart';
 
 class AuthScreen extends StatelessWidget {
-  const AuthScreen({Key? key}) : super(key: key);
+  const AuthScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

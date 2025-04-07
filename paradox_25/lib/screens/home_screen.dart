@@ -13,7 +13,7 @@ import './profile_screen.dart';
 import 'package:paradox_25/widgets/bottom_navigation.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();

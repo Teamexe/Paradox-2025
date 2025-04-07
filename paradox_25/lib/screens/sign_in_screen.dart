@@ -6,7 +6,7 @@ import './home_screen.dart';
 import 'package:paradox_25/main.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+  const SignInScreen({super.key});
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
