@@ -105,26 +105,35 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _showLevelLockedDialog() {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Level Locked'),
+            content: const Text(
+              'Level 2 is locked. Complete Level 1 to unlock it.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
-          final Size size = constraints.biggest;
-          final double width = size.width;
-          final double height = size.height;
+          final double screenWidth = constraints.maxWidth;
+          final double screenHeight = constraints.maxHeight;
 
           // Responsive scaling function
-          double scale(double value) => value * (width / 390); // Base width
-
-          final double topSpacing = height * 0.07;
-          final double logoHeight = height * 0.07;
-          final double cardHeight = height * 0.6;
-          final double cardWidth = width * 0.85;
-          final double buttonWidth = width * 0.55;
-          final double buttonHeight = height * 0.08;
-          final double titleFontSize = width * 0.06;
-          final double buttonFontSize = width * 0.055;
+          double scale(double value) => value * (screenWidth / 390);
 
           return Container(
             width: double.infinity,
@@ -137,20 +146,20 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: Column(
               children: [
-                SizedBox(height: topSpacing),
+                SizedBox(height: screenHeight * 0.07),
                 // Paradox logo
                 SizedBox(
-                  height: logoHeight,
+                  height: screenHeight * 0.07,
                   child: Image.asset(
                     'assets/images/paradox_text.png',
                     fit: BoxFit.contain,
                   ),
                 ),
-                SizedBox(height: height * 0.05),
+                SizedBox(height: screenHeight * 0.05),
                 Center(
                   child: Container(
-                    height: cardHeight,
-                    width: cardWidth,
+                    height: screenHeight * 0.6,
+                    width: screenWidth * 0.85,
                     decoration: BoxDecoration(
                       image: const DecorationImage(
                         image: AssetImage(
@@ -163,25 +172,45 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
+                        // "Let's Begin" with Nimbus and EXE logos
                         Positioned(
-                          top: height * 0.035,
-                          child: Text(
-                            "Let's Begin",
-                            style: TextStyle(
-                              fontFamily: 'PixelFont',
-                              fontSize: titleFontSize,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                          top: screenHeight * 0.035,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/images/exe_logo.png',
+                                height: scale(32),
+                                width: scale(32),
+                                fit: BoxFit.contain,
+                              ),
+                              SizedBox(width: screenWidth * 0.02),
+                              Text(
+                                "Let's Begin",
+                                style: TextStyle(
+                                  fontFamily: 'PixelFont',
+                                  fontSize: scale(21),
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(width: screenWidth * 0.02),
+                              Image.asset(
+                                'assets/images/Nimbus_white_logo.png',
+                                height: scale(32),
+                                width: scale(32),
+                                fit: BoxFit.contain,
+                              ),
+                            ],
                           ),
                         ),
 
                         // Profile Section
                         Positioned(
-                          top: height * 0.12,
+                          top: screenHeight * 0.12,
                           child: Container(
-                            height: height * 0.32,
-                            width: width * 0.6,
+                            height: screenHeight * 0.32,
+                            width: screenWidth * 0.6,
                             decoration: BoxDecoration(
                               image: const DecorationImage(
                                 image: AssetImage(
@@ -196,10 +225,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         // Level 1 Button
                         Positioned(
-                          top: height * 0.22,
+                          top: screenHeight * 0.22,
                           child: Container(
-                            width: buttonWidth,
-                            height: buttonHeight,
+                            width: screenWidth * 0.55,
+                            height: screenHeight * 0.08,
                             decoration: BoxDecoration(
                               image: const DecorationImage(
                                 image: AssetImage(
@@ -233,7 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Text(
                                 'Level 1',
                                 style: TextStyle(
-                                  fontSize: buttonFontSize,
+                                  fontSize: scale(35), // Increased font size
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                   fontFamily: 'RaviPrakash',
@@ -245,10 +274,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         // Level 2 Button
                         Positioned(
-                          top: height * 0.33,
+                          top: screenHeight * 0.33,
                           child: Container(
-                            width: buttonWidth,
-                            height: buttonHeight,
+                            width: screenWidth * 0.55,
+                            height: screenHeight * 0.08,
                             decoration: BoxDecoration(
                               image: const DecorationImage(
                                 image: AssetImage(
@@ -275,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         );
                                       }
-                                      : null,
+                                      : _showLevelLockedDialog, // Show dialog if locked
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
                                 shadowColor: Colors.transparent,
@@ -283,7 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Text(
                                 'Level 2',
                                 style: TextStyle(
-                                  fontSize: buttonFontSize,
+                                  fontSize: scale(35), // Increased font size
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                   fontFamily: 'RaviPrakash',

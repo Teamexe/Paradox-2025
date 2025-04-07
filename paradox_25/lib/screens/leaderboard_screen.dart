@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'loader.dart'; // Import the LoaderScreen
 
 class LeaderboardProvider with ChangeNotifier {
   List<Map<String, dynamic>> _leaderboardData = [];
@@ -23,6 +24,7 @@ class LeaderboardScreen extends StatefulWidget {
 
 class _LeaderboardScreenState extends State<LeaderboardScreen> {
   late Client _httpClient;
+  bool _isLoading = true; // Add loading state
 
   @override
   void initState() {
@@ -67,6 +69,11 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                         leaderboard.cast<Map<String, dynamic>>();
 
                     leaderboardProvider.updateLeaderboard(leaderboardData);
+
+                    // Stop showing the loader once data is loaded
+                    setState(() {
+                      _isLoading = false;
+                    });
                   } catch (e) {
                     print('Error decoding SSE data: $e');
                   }
@@ -74,6 +81,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
               },
               onError: (e) {
                 print('SSE Error: $e');
+                _showErrorDialog('Error connecting to leaderboard stream');
               },
               onDone: () {
                 print('SSE connection closed');
@@ -106,6 +114,11 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      // Show the loader while data is being fetched
+      return const LoaderScreen();
+    }
+
     final size = MediaQuery.of(context).size;
     final height = size.height;
     final width = size.width;
@@ -210,13 +223,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                               avatarPath: 'assets/images/avatar_1.png',
                               scale: scale,
                             ),
-                          // Positioned(
-                          //   top: constraints.maxHeight * 0.04,
-                          //   child: Image.asset(
-                          //     'assets/images/medal.png',
-                          //     width: constraints.maxWidth * 0.1,
-                          //   ),
-                          // ),
                           if (topPlayers.length >= 2)
                             _buildPodiumAvatar(
                               top: constraints.maxHeight * 0.07,
