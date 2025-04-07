@@ -188,14 +188,14 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                 ),
                                 Image.asset(
                                   'assets/images/Nimbus_white_logo.png',
-                                  height: constraints.maxHeight * 0.06,
+                                  height: constraints.maxHeight * 0.046,
                                 ),
                               ],
                             ),
                           ),
                           // Podium Image
                           Positioned(
-                            top: constraints.maxHeight * 0.18,
+                            top: constraints.maxHeight * 0.19,
                             child: Image.asset(
                               'assets/images/leaderboard_podium.png',
                               width: constraints.maxWidth * 0.7,
@@ -210,17 +210,17 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                               avatarPath: 'assets/images/avatar_1.png',
                               scale: scale,
                             ),
-                          Positioned(
-                            top: constraints.maxHeight * 0.04,
-                            child: Image.asset(
-                              'assets/images/medal.png',
-                              width: constraints.maxWidth * 0.1,
-                            ),
-                          ),
+                          // Positioned(
+                          //   top: constraints.maxHeight * 0.04,
+                          //   child: Image.asset(
+                          //     'assets/images/medal.png',
+                          //     width: constraints.maxWidth * 0.1,
+                          //   ),
+                          // ),
                           if (topPlayers.length >= 2)
                             _buildPodiumAvatar(
                               top: constraints.maxHeight * 0.07,
-                              left: constraints.maxWidth * 0.13,
+                              left: constraints.maxWidth * 0.10,
                               name: topPlayers[1]['name'],
                               score: topPlayers[1]['score'],
                               avatarPath: 'assets/images/avatar_2.png',
@@ -229,7 +229,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                           if (topPlayers.length >= 3)
                             _buildPodiumAvatar(
                               top: constraints.maxHeight * 0.1,
-                              right: constraints.maxWidth * 0.14,
+                              right: constraints.maxWidth * 0.10,
                               name: topPlayers[2]['name'],
                               score: topPlayers[2]['score'],
                               avatarPath: 'assets/images/avatar_3.png',

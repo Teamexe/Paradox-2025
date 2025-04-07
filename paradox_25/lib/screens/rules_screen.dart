@@ -44,72 +44,86 @@ class RulesScreen extends StatelessWidget {
 
                 // Main Content
                 Expanded(
-                  child: SingleChildScrollView(
+                  child: Container(
+                    width: screenWidth * 0.9,
+                    margin: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.05,
+                      vertical: screenHeight * 0.02,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(scale(30)),
+                    ),
                     child: Container(
-                      width: screenWidth * 0.9,
-                      margin: EdgeInsets.symmetric(
-                        horizontal: screenWidth * 0.05,
-                        vertical: screenHeight * 0.02,
-                      ),
+                      margin: EdgeInsets.all(screenWidth * 0.05),
+                      padding: EdgeInsets.all(screenWidth * 0.05),
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade300.withOpacity(0.7),
-                        borderRadius: BorderRadius.circular(scale(30)),
+                        color: Colors.grey.shade800,
+                        borderRadius: BorderRadius.circular(scale(20)),
                       ),
-                      child: Container(
-                        margin: EdgeInsets.all(screenWidth * 0.05),
-                        padding: EdgeInsets.all(screenWidth * 0.05),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade800,
-                          borderRadius: BorderRadius.circular(scale(20)),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Center(
-                              child: Text(
-                                'Instructions',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: responsiveFont(
-                                    isSmallScreen ? 28 : 36,
-                                  ),
-                                  fontFamily: 'Oswald',
-                                  fontWeight: FontWeight.bold,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: Text(
+                              'Instructions',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: responsiveFont(
+                                  isSmallScreen ? 28 : 36,
                                 ),
+                                fontFamily: 'Oswald',
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: screenHeight * 0.03),
-                            _buildRuleItem(
-                              context,
-                              'Eligibility: The game is open to all.',
-                              scale, // Pass scale function
+                          ),
+                          SizedBox(height: screenHeight * 0.03),
+                          // Scrollable Rules Section
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _buildRuleItem(
+                                    context,
+                                    'Eligibility: The game is open to all.',
+                                    scale,
+                                  ),
+                                  _buildSpacing(screenHeight),
+                                  _buildRuleItem(
+                                    context,
+                                    'Participation: Participants can choose to play the game in solo format or can choose their partners by choice during or at the end of level 1.',
+                                    scale,
+                                  ),
+                                  _buildSpacing(screenHeight),
+                                  _buildRuleItem(
+                                    context,
+                                    'Partner Matching: If any qualified candidate for level 2 from level 1 to get into a team, they will be randomly matched with another partner by the organizers.',
+                                    scale,
+                                  ),
+                                  _buildSpacing(screenHeight),
+                                  _buildRuleItem(
+                                    context,
+                                    'Scoring: Each correct answer will increase the score by 50 points.',
+                                    scale,
+                                  ),
+                                  _buildSpacing(screenHeight),
+                                  _buildRuleItem(
+                                    context,
+                                    'Use of Hint: Using hint will decrease the score by 10 points.',
+                                    scale,
+                                  ),
+                                  _buildSpacing(screenHeight),
+                                  _buildRuleItem(
+                                    context,
+                                    'Time Limit: Each level must be completed within the given time limit. Failure to do so will result in disqualification.',
+                                    scale,
+                                  ),
+                                ],
+                              ),
                             ),
-                            _buildSpacing(screenHeight),
-                            _buildRuleItem(
-                              context,
-                              'Participation: Participants can choose to play the game in solo format or can choose their partners by choice during or at the end of level 1.',
-                              scale, // Pass scale function
-                            ),
-                            _buildSpacing(screenHeight),
-                            _buildRuleItem(
-                              context,
-                              'Partner Matching: If any qualified candidate for level 2 from level 1 to get into a team, they will be randomly matched with another partner by the organizers.',
-                              scale, // Pass scale function
-                            ),
-                            _buildSpacing(screenHeight),
-                            _buildRuleItem(
-                              context,
-                              'Scoring: Each correct answer will increase the score by 50 points.',
-                              scale, // Pass scale function
-                            ),
-                            _buildSpacing(screenHeight),
-                            _buildRuleItem(
-                              context,
-                              'Use of Hint: Using hint will decrease the score by 10 points.',
-                              scale, // Pass scale function
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
