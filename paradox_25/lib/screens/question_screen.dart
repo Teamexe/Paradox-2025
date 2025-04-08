@@ -19,18 +19,38 @@ class QuestionScreen extends StatefulWidget {
   State<QuestionScreen> createState() => _QuestionScreenState();
 }
 
-class _QuestionScreenState extends State<QuestionScreen> {
+class _QuestionScreenState extends State<QuestionScreen>
+    with SingleTickerProviderStateMixin {
+  // Add this mixin
   final TextEditingController _answerController = TextEditingController();
   Map<String, dynamic>? _currentQuestion;
   bool _isHintVisible = false;
   int _score = 0;
 
   final storage = const FlutterSecureStorage();
+  AnimationController? _animationController; // Animation Controller
+  Animation<double>? _animation; // Animation
 
   @override
   void initState() {
     super.initState();
     _fetchCurrentQuestion();
+
+    // Initialize animation controller
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 1000), // Adjust duration as needed
+      vsync: this,
+    );
+
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController?.dispose(); // Dispose animation controller
+    super.dispose();
   }
 
   Future<void> _fetchCurrentQuestion() async {
@@ -98,11 +118,22 @@ class _QuestionScreenState extends State<QuestionScreen> {
         body: jsonEncode({'answer': _answerController.text.trim()}),
       );
 
+      print('Response Status Code (Answer): ${response.statusCode}'); // DEBUG
+      print('Raw Response (Answer): ${response.body}'); // DEBUG
+
       if (response.statusCode == 200 || response.statusCode == 202) {
         final data = jsonDecode(response.body);
-        if (data['message'] == "Level is finished") {
+        print('Decoded Data (Answer): ${data}'); // DEBUG
+
+        if (data['data'] == "Level is finished") {
+          // Level Completed!
+          _animationController?.forward(); // Start animation
+          await Future.delayed(
+            const Duration(seconds: 2),
+          ); // Wait for animation
+
           widget.onLevelComplete();
-          Navigator.pop(context);
+          Navigator.pop(context); // Go back to Home Screen
         } else {
           setState(() {
             _score =
@@ -115,8 +146,12 @@ class _QuestionScreenState extends State<QuestionScreen> {
         }
       } else {
         // Handle incorrect answer or other API errors
-        print('Incorrect answer or API error: ${response.statusCode}');
-        _showErrorDialog('Incorrect answer');
+        print(
+          'API Error (Answer): ${response.statusCode} - ${response.reasonPhrase}',
+        ); // DEBUG
+        _showErrorDialog(
+          'Incorrect answer: ${response.statusCode} - ${response.reasonPhrase ?? "An error occurred"}',
+        );
         return;
       }
     } catch (e) {
@@ -222,194 +257,216 @@ class _QuestionScreenState extends State<QuestionScreen> {
                 fit: BoxFit.cover,
               ),
             ),
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: padding,
-                  vertical: padding * 0.5,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Question Container
-                    Container(
-                      padding: EdgeInsets.all(padding * 0.75),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(scale(15)),
-                      ),
-                      child: Text(
-                        _currentQuestion?['title'] ?? 'Loading...',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: normalFont,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+            child: Stack(
+              // Use Stack to overlay the animation
+              children: [
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: padding,
+                      vertical: padding * 0.5,
                     ),
-                    SizedBox(height: height * 0.03),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Question Container
+                        Container(
+                          padding: EdgeInsets.all(padding * 0.75),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(scale(15)),
+                          ),
+                          child: Text(
+                            _currentQuestion?['title'] ?? 'Loading...',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: normalFont,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(height: height * 0.03),
 
-                    // Image Box
-                    Container(
-                      height: imageHeight,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(scale(15)),
-                        color: Colors.grey.shade200,
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(scale(15)),
-                        child:
-                            _currentQuestion?['descriptionOrImgUrl'] != null
-                                ? Image.network(
-                                  _currentQuestion!['descriptionOrImgUrl'],
-                                  fit: BoxFit.contain,
-                                  errorBuilder:
-                                      (context, error, stackTrace) => Center(
-                                        child: Text(
-                                          'Image not available',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: smallFont,
-                                          ),
+                        // Image Box
+                        Container(
+                          height: imageHeight,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(scale(15)),
+                            color: Colors.grey.shade200,
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(scale(15)),
+                            child:
+                                _currentQuestion?['descriptionOrImgUrl'] != null
+                                    ? Image.network(
+                                      _currentQuestion!['descriptionOrImgUrl'],
+                                      fit: BoxFit.contain,
+                                      errorBuilder:
+                                          (context, error, stackTrace) =>
+                                              Center(
+                                                child: Text(
+                                                  'Image not available',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: smallFont,
+                                                  ),
+                                                ),
+                                              ),
+                                    )
+                                    : Center(
+                                      child: Text(
+                                        'Loading Image...',
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: smallFont,
                                         ),
                                       ),
-                                )
-                                : Center(
-                                  child: Text(
-                                    'Loading Image...',
+                                    ),
+                          ),
+                        ),
+                        SizedBox(height: height * 0.025),
+
+                        // Hint Section
+                        if (_isHintVisible && _currentQuestion?['hint'] != null)
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(padding * 0.5),
+                            decoration: BoxDecoration(
+                              color: Colors.yellow.shade100,
+                              borderRadius: BorderRadius.circular(scale(10)),
+                            ),
+                            child: Text(
+                              'Hint: ${_currentQuestion!['hint']}',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: normalFont,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        if (_isHintVisible && _currentQuestion?['hint'] != null)
+                          SizedBox(height: height * 0.015),
+
+                        // Hint and Score Row
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                if (!_isHintVisible) {
+                                  _fetchHint(); // Fetch hint from API
+                                } else {
+                                  setState(() {
+                                    _isHintVisible = false;
+                                  });
+                                }
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.lightbulb_outline,
+                                    color: Colors.yellow,
+                                    size: scale(20),
+                                  ),
+                                  SizedBox(width: scale(5)),
+                                  Text(
+                                    _isHintVisible ? 'Hide Hint' : 'Hint',
                                     style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: smallFont,
+                                      color: Colors.white,
+                                      fontSize: normalFont,
                                     ),
                                   ),
-                                ),
-                      ),
-                    ),
-                    SizedBox(height: height * 0.025),
-
-                    // Hint Section
-                    if (_isHintVisible && _currentQuestion?['hint'] != null)
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(padding * 0.5),
-                        decoration: BoxDecoration(
-                          color: Colors.yellow.shade100,
-                          borderRadius: BorderRadius.circular(scale(10)),
-                        ),
-                        child: Text(
-                          'Hint: ${_currentQuestion!['hint']}',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: normalFont,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    if (_isHintVisible && _currentQuestion?['hint'] != null)
-                      SizedBox(height: height * 0.015),
-
-                    // Hint and Score Row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            if (!_isHintVisible) {
-                              _fetchHint(); // Fetch hint from API
-                            } else {
-                              setState(() {
-                                _isHintVisible = false;
-                              });
-                            }
-                          },
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.lightbulb_outline,
-                                color: Colors.yellow,
-                                size: scale(20),
+                                ],
                               ),
-                              SizedBox(width: scale(5)),
-                              Text(
-                                _isHintVisible ? 'Hide Hint' : 'Hint',
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: scale(15),
+                                vertical: scale(8),
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade800,
+                                borderRadius: BorderRadius.circular(scale(10)),
+                              ),
+                              child: Text(
+                                'Score: $_score', // Display the score
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: normalFont,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
+
+                        SizedBox(height: height * 0.025),
+
+                        // Answer Field
                         Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: scale(15),
-                            vertical: scale(8),
-                          ),
+                          padding: EdgeInsets.symmetric(horizontal: scale(15)),
                           decoration: BoxDecoration(
                             color: Colors.grey.shade800,
                             borderRadius: BorderRadius.circular(scale(10)),
                           ),
-                          child: Text(
-                            'Score: $_score', // Display the score
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: normalFont,
-                              fontWeight: FontWeight.bold,
+                          child: TextField(
+                            controller: _answerController,
+                            style: const TextStyle(color: Colors.white),
+                            decoration: const InputDecoration(
+                              hintText: 'Type your answer here...',
+                              hintStyle: TextStyle(color: Colors.grey),
+                              border: InputBorder.none,
                             ),
                           ),
                         ),
+
+                        SizedBox(height: height * 0.025),
+
+                        // Submit Button
+                        SizedBox(
+                          width: double.infinity,
+                          height: height * 0.065,
+                          child: ElevatedButton(
+                            onPressed: _checkAnswer, // Submit answer to API
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(scale(10)),
+                              ),
+                            ),
+                            child: Text(
+                              'Submit',
+                              style: TextStyle(
+                                fontSize: normalFont,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: height * 0.03),
                       ],
                     ),
-
-                    SizedBox(height: height * 0.025),
-
-                    // Answer Field
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: scale(15)),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade800,
-                        borderRadius: BorderRadius.circular(scale(10)),
-                      ),
-                      child: TextField(
-                        controller: _answerController,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: const InputDecoration(
-                          hintText: 'Type your answer here...',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(height: height * 0.025),
-
-                    // Submit Button
-                    SizedBox(
-                      width: double.infinity,
-                      height: height * 0.065,
-                      child: ElevatedButton(
-                        onPressed: _checkAnswer, // Submit answer to API
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(scale(10)),
-                          ),
-                        ),
-                        child: Text(
-                          'Submit',
-                          style: TextStyle(
-                            fontSize: normalFont,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: height * 0.03),
-                  ],
+                  ),
                 ),
-              ),
+                // "Hurrah" Animation
+                if (_animationController != null)
+                  FadeTransition(
+                    opacity: _animation!,
+                    child: Center(
+                      child: Text(
+                        "Hurrah! You have completed level ${widget.level}. Wait for Level ${widget.level + 1}.",
+                        style: TextStyle(
+                          fontSize: largeFont,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
             ),
           );
         },
