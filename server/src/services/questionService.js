@@ -5,7 +5,8 @@ const {AuthRepository} = require('../repositories');
 const { response } = require('express');
 const AuthRepo=new AuthRepository();
 const quesRepo=new QuestionRepository();
-const {serverConfig}=require('../config')
+const {serverConfig}=require('../config');
+const { message } = require('../utils/common/errorResponse');
 
 async function nextQues(answer,userId){
     try {
@@ -64,7 +65,13 @@ async function currentQues(user) {
             const response="Level is finished";
             return response;
         }
-        const reponse=await quesRepo.getAll(query);
+        const ques=await quesRepo.getAll(query);
+        console.log("Current Quest:",ques);
+        const reponse={
+            ques: ques,
+            score: user.score,
+            message: "Current Question"
+        }
         console.log("Current Quest:",reponse);
         return reponse || null;
     } catch (error) {
