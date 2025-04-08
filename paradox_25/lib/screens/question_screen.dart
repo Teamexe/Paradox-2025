@@ -483,14 +483,59 @@ class _QuestionScreenState extends State<QuestionScreen>
                   FadeTransition(
                     opacity: _animation!,
                     child: Center(
-                      child: Text(
-                        "Hurrah! You have completed level ${widget.level}. Wait for Level ${widget.level + 1}.",
-                        style: TextStyle(
-                          fontSize: largeFont,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // Transparent Box for Text
+                            Container(
+                              width:
+                                  MediaQuery.of(context).size.width *
+                                  0.8, // Increased width to 80% of the screen
+                              padding: const EdgeInsets.all(
+                                20.0,
+                              ), // Increased padding inside the box
+                              decoration: BoxDecoration(
+                                image: const DecorationImage(
+                                  image: AssetImage(
+                                    'assets/images/level_image.png',
+                                  ), // Background image
+                                  fit:
+                                      BoxFit
+                                          .cover, // Cover the entire container
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  12,
+                                ), // Slightly increased rounded corners
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "Hurrah! You have completed level ${widget.level}.",
+                                    style: TextStyle(
+                                      fontSize: largeFont * 0.6,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black, // Text color
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  if (widget.level == 1)
+                                    Text(
+                                      "Wait for Level ${widget.level + 1}.",
+                                      style: TextStyle(
+                                        fontSize: largeFont * 0.6,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black, // Text color
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
