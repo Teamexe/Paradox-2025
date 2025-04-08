@@ -22,6 +22,11 @@ async function nextQues(answer,userId){
             const newQues=await quesRepo.nextQues(user.currQues,user.currLvl);
             const updateUser=await AuthRepo.update(userId,{currQues:newQues.id,score:((user.score)+serverConfig.SCORE)});
             console.log('updatedUser',updateUser);
+            response={
+                newQues:newQues,
+                score:updateUser.score,
+                message:"Correct Answer"
+            }
             return newQues;
         }
     } catch (error) {
