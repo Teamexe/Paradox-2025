@@ -7,9 +7,9 @@ const {AppError}=require('../utils/errors/appError')
 
 async function nextQues(req,res) {
     try {
-        const {answer}=req.body;
+        const answer=req.body.answer?.toLowerCase().trim();
+        console.log("Answer:",answer);
         const userId = req.user.id;
-        answer=answer.lowercase().trim();
         if(!answer){
             ErrorResponse.message='Answer is required';
             return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
@@ -37,7 +37,7 @@ async function addQues(req,res) {
         if (!lvl || !answer) {
             throw new AppError("lvl and answer are required", StatusCodes.BAD_REQUEST);
         }
-        answer=answer.lowercase().trim();
+        answer=answer.toLowerCase().trim();
         const data = {
             lvl,
             title,
@@ -65,7 +65,9 @@ async function currentQues(req,res) {
             return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse)
         }
         const response=await QuestionService.currentQues(user);
-        return res.status(StatusCodes.ACCEPTED).json(response);
+        SuccessResponse.message="Current Question fetch Successfully"
+        SuccessResponse.reponse=response;
+        return res.status(StatusCodes.ACCEPTED).json(SuccessResponse);
     } catch (error) {
         console.log(error);
         ErrorResponse.message="Something went wrong while fetching Question";

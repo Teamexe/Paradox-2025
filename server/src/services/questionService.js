@@ -10,12 +10,16 @@ const {serverConfig}=require('../config')
 async function nextQues(answer,userId){
     try {
         const user=await AuthRepo.findUserById(userId);
+        if(user.currQues===0){
+            const response="Level is finished";
+            return response;
+        }
         console.log('User:',user);
         const isCorrect=await quesRepo.verifyQuestion(user.currQues,answer);
 
        
         if(user.currQues===await(quesRepo.lastQues())){
-            const updateUser=await AuthRepo.update(userId,{currQues:(currQues.id+1),score:((user.score)+serverConfig.SCORE)});
+            const updateUser=await AuthRepo.update(userId,{currQues:0,score:((user.score)+serverConfig.SCORE)});
             const response="Level is finished";
             return response;
         }
@@ -23,12 +27,12 @@ async function nextQues(answer,userId){
             const newQues=await quesRepo.nextQues(user.currQues,user.currLvl);
             const updateUser=await AuthRepo.update(userId,{currQues:newQues.id,score:((user.score)+serverConfig.SCORE)});
             console.log('updatedUser',updateUser);
-            response={
+            const response={
                 newQues:newQues,
                 score:updateUser.score,
                 message:"Correct Answer"
             }
-            return reponse;
+            return response;
         }
     } catch (error) {
         console.log(error);
@@ -56,6 +60,10 @@ async function addQues(data) {
 async function currentQues(user) {
     try {
         const query={ lvl: user.currLvl, id: user.currQues };
+        if(user.currQues===0){
+            const response="Level is finished";
+            return response;
+        }
         const reponse=await quesRepo.getAll(query);
         console.log("Current Quest:",reponse);
         return reponse || null;
