@@ -9,6 +9,7 @@ async function nextQues(req,res) {
     try {
         const {answer}=req.body;
         const userId = req.user.id;
+        answer=answer.lowercase().trim();
         if(!answer){
             ErrorResponse.message='Answer is required';
             return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
@@ -36,6 +37,7 @@ async function addQues(req,res) {
         if (!lvl || !answer) {
             throw new AppError("lvl and answer are required", StatusCodes.BAD_REQUEST);
         }
+        answer=answer.lowercase().trim();
         const data = {
             lvl,
             title,
