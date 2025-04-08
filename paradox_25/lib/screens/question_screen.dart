@@ -25,6 +25,8 @@ class _QuestionScreenState extends State<QuestionScreen>
   final TextEditingController _answerController = TextEditingController();
   Map<String, dynamic>? _currentQuestion;
   bool _isHintVisible = false;
+  bool _isHintUsed =
+      false; // Flag to track if hint has been used for the current question
   int _score = 0;
 
   final storage = const FlutterSecureStorage();
@@ -78,6 +80,7 @@ class _QuestionScreenState extends State<QuestionScreen>
           setState(() {
             _currentQuestion = data[0];
             print('_currentQuestion: $_currentQuestion');
+            _isHintUsed = false; // Reset hint usage flag for the new question
           });
         } else {
           _showErrorDialog('No question found for the current level.');
@@ -142,6 +145,7 @@ class _QuestionScreenState extends State<QuestionScreen>
                 data['data']; // Assuming the API returns the next question data
             _answerController.clear();
             _isHintVisible = false;
+            _isHintUsed = false; // Reset hint usage for the new question
           });
         }
       } else {
@@ -182,7 +186,11 @@ class _QuestionScreenState extends State<QuestionScreen>
         final String data = response.body; // Hint API returns a string
         setState(() {
           _isHintVisible = true;
-          _score -= 10;
+          if (!_isHintUsed) {
+            // Deduct score only if hint hasn't been used for this question
+            _score -= 10;
+            _isHintUsed = true; // Mark hint as used for this question
+          }
           if (_currentQuestion != null) {
             _currentQuestion!['hint'] = data;
           }
@@ -227,6 +235,7 @@ class _QuestionScreenState extends State<QuestionScreen>
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
+            fontFamily: 'PixelFont', // Use the pixel font
           ),
         ),
         backgroundColor: Colors.black,
@@ -287,11 +296,15 @@ class _QuestionScreenState extends State<QuestionScreen>
                           ),
                         ),
                         SizedBox(height: height * 0.03),
-
                         // Image Box
                         Container(
-                          height: imageHeight,
-                          width: double.infinity,
+                          constraints: BoxConstraints(
+                            maxHeight:
+                                height *
+                                0.6, // Maximum height for the white box
+                            maxWidth:
+                                width * 0.9, // Maximum width for the white box
+                          ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(scale(15)),
                             color: Colors.grey.shade200,
@@ -303,6 +316,17 @@ class _QuestionScreenState extends State<QuestionScreen>
                                     ? Image.network(
                                       _currentQuestion!['descriptionOrImgUrl'],
                                       fit: BoxFit.contain,
+                                      loadingBuilder: (
+                                        context,
+                                        child,
+                                        loadingProgress,
+                                      ) {
+                                        if (loadingProgress == null)
+                                          return child;
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      },
                                       errorBuilder:
                                           (context, error, stackTrace) =>
                                               Center(

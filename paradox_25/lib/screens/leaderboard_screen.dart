@@ -3,13 +3,23 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'loader.dart'; // Import the loader
 
 class LeaderboardProvider with ChangeNotifier {
   List<Map<String, dynamic>> _leaderboardData = [];
+  bool _isLoading = true; // Add loading flag
+
   List<Map<String, dynamic>> get leaderboardData => _leaderboardData;
+  bool get isLoading => _isLoading;
 
   void updateLeaderboard(List<Map<String, dynamic>> data) {
     _leaderboardData = data;
+    _isLoading = false; // Set loading to false when data is updated
+    notifyListeners();
+  }
+
+  void setLoading(bool loading) {
+    _isLoading = loading;
     notifyListeners();
   }
 }
@@ -43,6 +53,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       listen: false,
     );
 
+    leaderboardProvider.setLoading(true); // Set loading to true
+
     try {
       final request = Request(
         'GET',
@@ -74,6 +86,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
               },
               onError: (e) {
                 print('SSE Error: $e');
+                _showErrorDialog('Error connecting to leaderboard stream');
               },
               onDone: () {
                 print('SSE connection closed');
@@ -130,6 +143,13 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             ),
             child: Consumer<LeaderboardProvider>(
               builder: (context, leaderboardProvider, child) {
+                if (leaderboardProvider.isLoading) {
+                  // Show loader while loading
+                  return const Center(
+                    child: LoaderScreen(), // Use the loader widget
+                  );
+                }
+
                 // Get the leaderboard data
                 final leaderboardData = leaderboardProvider.leaderboardData;
 
@@ -204,23 +224,16 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                           // Podium Avatars
                           if (topPlayers.isNotEmpty)
                             _buildPodiumAvatar(
-                              top: constraints.maxHeight * 0.05,
+                              top: constraints.maxHeight * 0.04,
                               name: topPlayers[0]['name'],
                               score: topPlayers[0]['score'],
                               avatarPath: 'assets/images/avatar_1.png',
                               scale: scale,
                             ),
-                          // Positioned(
-                          //   top: constraints.maxHeight * 0.04,
-                          //   child: Image.asset(
-                          //     'assets/images/medal.png',
-                          //     width: constraints.maxWidth * 0.1,
-                          //   ),
-                          // ),
                           if (topPlayers.length >= 2)
                             _buildPodiumAvatar(
                               top: constraints.maxHeight * 0.07,
-                              left: constraints.maxWidth * 0.10,
+                              left: constraints.maxWidth * 0.12,
                               name: topPlayers[1]['name'],
                               score: topPlayers[1]['score'],
                               avatarPath: 'assets/images/avatar_2.png',
@@ -229,7 +242,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                           if (topPlayers.length >= 3)
                             _buildPodiumAvatar(
                               top: constraints.maxHeight * 0.1,
-                              right: constraints.maxWidth * 0.10,
+                              right: constraints.maxWidth * 0.12,
                               name: topPlayers[2]['name'],
                               score: topPlayers[2]['score'],
                               avatarPath: 'assets/images/avatar_3.png',
@@ -254,6 +267,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                             score: data['score'],
                             size: size,
                             scale: scale,
+                            profileImagePath:
+                                data['profileImagePath'], // Pass profile image path
                           );
                         },
                       ),
@@ -278,6 +293,10 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     required String avatarPath,
     required double Function(double) scale,
   }) {
+    // Truncate the name if it exceeds 12 characters
+    final truncatedName =
+        name.length > 12 ? '${name.substring(0, 12)}...' : name;
+
     return Positioned(
       top: top,
       left: left,
@@ -311,7 +330,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           ),
           SizedBox(height: scale(5)),
           Text(
-            name,
+            truncatedName, // Use the truncated name
             style: TextStyle(
               color: Colors.white,
               fontSize: scale(14),
@@ -349,6 +368,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     required int? score,
     required Size size,
     required double Function(double) scale,
+    String? profileImagePath, // Add profile image path (optional)
   }) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
@@ -359,6 +379,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       ),
       child: Row(
         children: [
+          // Rank Container
           Container(
             width: scale(38),
             height: scale(38),
@@ -378,6 +399,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             ),
           ),
           SizedBox(width: scale(15)),
+          // Profile Image Container
           Container(
             width: scale(38),
             height: scale(38),
@@ -386,8 +408,21 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
               shape: BoxShape.circle,
               border: Border.all(color: Colors.red, width: 2),
             ),
+            child: ClipOval(
+              child:
+                  profileImagePath != null
+                      ? Image.asset(
+                        profileImagePath, // Use the provided profile image path
+                        fit: BoxFit.cover,
+                      )
+                      : Image.asset(
+                        'assets/images/profile_image.png', // Fallback image
+                        fit: BoxFit.cover,
+                      ),
+            ),
           ),
           SizedBox(width: scale(15)),
+          // Name and Score Container
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(
