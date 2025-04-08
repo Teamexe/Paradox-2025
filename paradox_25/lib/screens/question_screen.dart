@@ -21,13 +21,13 @@ class QuestionScreen extends StatefulWidget {
 
 class _QuestionScreenState extends State<QuestionScreen>
     with SingleTickerProviderStateMixin {
-  // Add this mixin
   final TextEditingController _answerController = TextEditingController();
   Map<String, dynamic>? _currentQuestion;
   bool _isHintVisible = false;
   bool _isHintUsed =
       false; // Flag to track if hint has been used for the current question
   int _score = 0;
+  int _questionNumber = 1; // Track the current question number
 
   final storage = const FlutterSecureStorage();
   AnimationController? _animationController; // Animation Controller
@@ -128,10 +128,13 @@ class _QuestionScreenState extends State<QuestionScreen>
         final data = jsonDecode(response.body);
         print('Decoded Data (Answer): ${data}'); // DEBUG
 
+        // Check if the level is finished
         if (data['data'] == "Level is finished") {
+          // Determine the total number of questions for the current level
+          int totalQuestions = widget.level == 1 ? 40 : 10;
+
           // Check if all questions for the current level are completed
-          if ((widget.level == 1 || widget.level == 2) &&
-              data['questionsCompleted'] == data['totalQuestions']) {
+          if (data['questionsCompleted'] == totalQuestions) {
             // All questions for the current level are completed
             _animationController?.forward(); // Start animation
             await Future.delayed(
@@ -150,6 +153,7 @@ class _QuestionScreenState extends State<QuestionScreen>
             _answerController.clear();
             _isHintVisible = false;
             _isHintUsed = false; // Reset hint usage for the new question
+            _questionNumber++; // Increment question number
           });
         }
       } else {
@@ -191,7 +195,6 @@ class _QuestionScreenState extends State<QuestionScreen>
         setState(() {
           _isHintVisible = true;
           if (!_isHintUsed) {
-            
             _isHintUsed = true; // Mark hint as used for this question
           }
           if (_currentQuestion != null) {
@@ -289,7 +292,7 @@ class _QuestionScreenState extends State<QuestionScreen>
                             borderRadius: BorderRadius.circular(scale(15)),
                           ),
                           child: Text(
-                            _currentQuestion?['title'] ?? 'Loading...',
+                            'Q$_questionNumber: ${_currentQuestion?['title'] ?? 'Loading...'}',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: normalFont,
