@@ -191,8 +191,7 @@ class _QuestionScreenState extends State<QuestionScreen>
         setState(() {
           _isHintVisible = true;
           if (!_isHintUsed) {
-            // Deduct score only if hint hasn't been used for this question
-            _score -= 10;
+            
             _isHintUsed = true; // Mark hint as used for this question
           }
           if (_currentQuestion != null) {

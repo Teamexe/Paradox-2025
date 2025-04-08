@@ -195,7 +195,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Image.asset(
-                                  'assets/images/exe_logo.png',
+                                  'assets/images/exe_logo1.png',
                                   height: constraints.maxHeight * 0.045,
                                 ),
                                 Text(

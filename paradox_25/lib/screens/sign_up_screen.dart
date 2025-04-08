@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import './home_screen.dart';
 import 'package:paradox_25/main.dart';
+import './sign_in_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -23,6 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String? _nameError;
   String? _emailError;
   String? _passwordError;
+  bool _isPasswordVisible = false; // Track password visibility
 
   Future<void> _sendOTP() async {
     final email = _emailController.text.trim();
@@ -299,7 +301,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           // Password TextField
                           TextField(
                             controller: _passwordController,
-                            obscureText: true,
+                            obscureText: !_isPasswordVisible,
                             style: const TextStyle(color: Colors.grey),
                             decoration: InputDecoration(
                               labelText: 'Password',
@@ -314,6 +316,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               errorStyle: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 12,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isPasswordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Colors.grey,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isPasswordVisible = !_isPasswordVisible;
+                                  });
+                                },
                               ),
                             ),
                           ),
@@ -411,6 +426,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           SizedBox(
                             height: screenHeight * 0.05,
                           ), // Proportional Spacing
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SignInScreen(),
+                                ),
+                              );
+                            },
+                            child: RichText(
+                              text: TextSpan(
+                                text: "Already have an account? ",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: "Sign In",
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

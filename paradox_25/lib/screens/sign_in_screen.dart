@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import './home_screen.dart';
 import 'package:paradox_25/main.dart';
+import './sign_up_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -16,6 +17,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final storage = const FlutterSecureStorage();
+  bool _isPasswordVisible = false; // Track password visibility
 
   Future<void> _signIn() async {
     final email = _emailController.text.trim();
@@ -90,6 +92,7 @@ class _SignInScreenState extends State<SignInScreen> {
           final double screenHeight = constraints.maxHeight;
 
           double scale(double value) => value * (screenWidth / 375);
+
           double fontScale = (screenWidth / 375).clamp(0.8, 1.4);
 
           return Stack(
@@ -150,10 +153,10 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           SizedBox(height: screenHeight * 0.02),
 
-                          /// Password Field
+                          /// Password Field with Eye Icon
                           TextField(
                             controller: _passwordController,
-                            obscureText: true,
+                            obscureText: !_isPasswordVisible,
                             style: const TextStyle(color: Colors.grey),
                             decoration: InputDecoration(
                               labelText: 'Password',
@@ -163,6 +166,19 @@ class _SignInScreenState extends State<SignInScreen> {
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(scale(10)),
                                 borderSide: BorderSide.none,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isPasswordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Colors.grey,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isPasswordVisible = !_isPasswordVisible;
+                                  });
+                                },
                               ),
                             ),
                           ),
@@ -191,6 +207,39 @@ class _SignInScreenState extends State<SignInScreen> {
                               ),
                             ),
                           ),
+                          SizedBox(height: screenHeight * 0.02),
+
+                          /// Don't have an account? Sign Up
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SignUpScreen(),
+                                ),
+                              );
+                            },
+                            child: RichText(
+                              text: TextSpan(
+                                text: "Don't have an account? ",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: scale(14),
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: "Sign Up",
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: scale(14),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: screenHeight * 0.05),
                         ],
                       ),
                     ),

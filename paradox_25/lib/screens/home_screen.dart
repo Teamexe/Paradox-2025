@@ -179,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Image.asset(
-                                'assets/images/exe_logo.png',
+                                'assets/images/exe_logo1.png',
                                 height: scale(32),
                                 width: scale(32),
                                 fit: BoxFit.contain,
@@ -207,10 +207,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         // Profile Section
                         Positioned(
-                          top: screenHeight * 0.12,
+                          top: screenHeight * 0.09,
                           child: Container(
-                            height: screenHeight * 0.32,
-                            width: screenWidth * 0.6,
+                            height: screenHeight * 0.45,
+                            width: screenWidth * 0.8,
                             decoration: BoxDecoration(
                               image: const DecorationImage(
                                 image: AssetImage(

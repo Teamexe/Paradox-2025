@@ -78,7 +78,7 @@ class PrizesScreen extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.asset(
-                                      'assets/images/exe_logo.png',
+                                      'assets/images/exe_logo1.png',
                                       height: scale(32),
                                       width: scale(32),
                                       fit: BoxFit.contain,

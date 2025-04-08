@@ -83,6 +83,7 @@ flutter:
     - assets/images/Nimbus_white_logo.png
     - assets/images/level_image.png
     - assets/images/first.png
+    - assets/images/exe_logo1.png
    
   fonts:
     - family: PixelFont
