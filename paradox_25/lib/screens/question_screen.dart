@@ -129,11 +129,15 @@ class _QuestionScreenState extends State<QuestionScreen>
         print('Decoded Data (Answer): ${data}'); // DEBUG
 
         if (data['data'] == "Level is finished") {
-          // Level Completed!
-          _animationController?.forward(); // Start animation
-          await Future.delayed(
-            const Duration(seconds: 2),
-          ); // Wait for animation
+          // Check if all questions for the current level are completed
+          if ((widget.level == 1 || widget.level == 2) &&
+              data['questionsCompleted'] == data['totalQuestions']) {
+            // All questions for the current level are completed
+            _animationController?.forward(); // Start animation
+            await Future.delayed(
+              const Duration(seconds: 2),
+            ); // Wait for animation
+          }
 
           widget.onLevelComplete();
           Navigator.pop(context); // Go back to Home Screen
