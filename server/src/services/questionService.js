@@ -15,6 +15,7 @@ async function nextQues(answer,userId){
 
        
         if(user.currQues===await(quesRepo.lastQues())){
+            const updateUser=await AuthRepo.update(userId,{currQues:(currQues.id+1),score:((user.score)+serverConfig.SCORE)});
             const response="Level is finished";
             return response;
         }
@@ -27,7 +28,7 @@ async function nextQues(answer,userId){
                 score:updateUser.score,
                 message:"Correct Answer"
             }
-            return newQues;
+            return reponse;
         }
     } catch (error) {
         console.log(error);
