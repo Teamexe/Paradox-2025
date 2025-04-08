@@ -20,10 +20,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool showOtpField = false;
   final storage = const FlutterSecureStorage();
 
+  String? _nameError;
+  String? _emailError;
+  String? _passwordError;
+
   Future<void> _sendOTP() async {
     final email = _emailController.text.trim();
     final name = _nameController.text.trim();
     final password = _passwordController.text;
+
+    // Validate inputs
+    setState(() {
+      _nameError = name.isEmpty ? 'Name cannot be empty' : null;
+      _emailError =
+          _validateCollegeEmail(email)
+              ? null
+              : 'Please enter your college email ID';
+      _passwordError =
+          password.isEmpty || password.length < 6
+              ? 'Password must be at least 6 characters'
+              : null;
+    });
+
+    if (_nameError != null || _emailError != null || _passwordError != null) {
+      return; // Stop execution if there are validation errors
+    }
 
     try {
       final response = await http.post(
@@ -33,18 +54,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'name': name, 'email': email, 'password': password}),
       );
-      debugPrint(response.body);
-      debugPrint(response.reasonPhrase);
+
       if (response.statusCode == 200) {
         // OTP sent successfully
         setState(() {
           showOtpField = true;
         });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please check your spam folder for the OTP email.'),
+            duration: Duration(seconds: 3),
+          ),
+        );
         print('OTP sent successfully');
-        // Optionally, show a success message to the user
+      } else if (response.statusCode == 409) {
+        // Email already in use
+        _showErrorDialog(
+          'Email is already in use. Please use a different email.',
+        );
       } else {
-        // Handle OTP sending errors
-        print('Error sending OTP: ${response.statusCode}');
+        print('Failed to send OTP: ${response.statusCode}');
         String errorMessage = 'Error sending OTP';
         if (response.body.isNotEmpty) {
           try {
@@ -59,9 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _showErrorDialog(errorMessage);
       }
     } catch (e) {
-      // Handle network errors
       print('Error: $e');
-      // Show an error message to the user
       _showErrorDialog('Network error. Please try again.');
     }
   }
@@ -71,6 +98,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
     final otp = _otpController.text.trim();
+
+    if (!_validateCollegeEmail(email)) {
+      _showErrorDialog('Please enter your college email ID.');
+      return;
+    }
 
     try {
       final response = await http.post(
@@ -103,6 +135,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
           print('Token not found in response');
           _showErrorDialog('Token not found in response');
         }
+      } else if (response.statusCode == 409) {
+        // Email already in use
+        _showErrorDialog(
+          'Email is already in use. Please use a different email.',
+        );
       } else {
         // Handle signup errors
         print('Signup failed: ${response.statusCode}');
@@ -122,9 +159,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } catch (e) {
       // Handle network errors
       print('Error: $e');
-      // Show an error message to the user
       _showErrorDialog('Network error. Please try again.');
     }
+  }
+
+  bool _validateCollegeEmail(String email) {
+    final regex = RegExp(r'^\d{2}[a-zA-Z]{3}\d{3}@nith\.ac\.in$');
+    return regex.hasMatch(email);
   }
 
   void _showErrorDialog(String message) {
@@ -222,6 +263,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 borderRadius: BorderRadius.circular(scale(10)),
                                 borderSide: BorderSide.none,
                               ),
+                              errorText: _nameError, // Show error text
+                              errorStyle: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 12,
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -239,6 +285,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(scale(10)),
                                 borderSide: BorderSide.none,
+                              ),
+                              errorText: _emailError, // Show error text
+                              errorStyle: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 12,
                               ),
                             ),
                           ),
@@ -258,6 +309,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(scale(10)),
                                 borderSide: BorderSide.none,
+                              ),
+                              errorText: _passwordError, // Show error text
+                              errorStyle: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 12,
                               ),
                             ),
                           ),
