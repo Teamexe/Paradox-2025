@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import './home_screen.dart';
 import 'package:paradox_25/main.dart';
+import 'package:paradox_25/screens/level_complete_screen.dart';
 
 class QuestionScreen extends StatefulWidget {
   final int level;
@@ -37,6 +38,7 @@ class _QuestionScreenState extends State<QuestionScreen>
   @override
   void initState() {
     super.initState();
+    _checkLevelCompletion(); // Check if the level is completed
     _fetchCurrentQuestion();
 
     // Initialize animation controller
@@ -50,6 +52,19 @@ class _QuestionScreenState extends State<QuestionScreen>
     );
   }
 
+  Future<void> _checkLevelCompletion() async {
+    final isLevel1Completed = await storage.read(key: 'level1Completed');
+    if (widget.level == 1 && isLevel1Completed == 'true') {
+      // Navigate to LevelCompleteScreen if Level 1 is completed
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HurrayScreen(), // LevelCompleteScreen
+        ),
+      );
+    }
+  }
+
   @override
   void dispose() {
     _animationController?.dispose(); // Dispose animation controller
@@ -61,66 +76,44 @@ class _QuestionScreenState extends State<QuestionScreen>
     final token = await storage.read(key: 'authToken'); // Get token
     if (token == null) {
       // User is not logged in, redirect to login
-      // ... (Your login redirection logic)
       return;
     }
 
     try {
       final response = await http.get(
-        Uri.parse(
-          'https://paradox-2025.vercel.app/api/v1/question/current',
-        ), // Replace with your API URL
+        Uri.parse('https://paradox-2025.vercel.app/api/v1/question/current'),
         headers: {'Authorization': 'Bearer $token'},
       );
 
       if (response.statusCode == 200 || response.statusCode == 202) {
-        print('Raw Response: ${response.body}');
         final Map<String, dynamic> data = jsonDecode(response.body);
-        print('Decoded Data: ${data}');
 
         if (data['success'] == true && data['data']['ques'].isNotEmpty) {
           setState(() {
             _currentQuestion = data['data']['ques'][0];
             _score = data['data']['score'] ?? 0;
-            print('_currentQuestion: $_currentQuestion');
-            _isHintUsed = false; // Reset hint usage flag for the new question
-            _questionNumber =
-                _currentQuestion?['id'] ?? 1; // Initialize question number
+            _questionNumber = data['data']['ques'][0]['id'] ?? 1; // Use the question ID
           });
         } else {
-          _showErrorDialog(
-            data['message'] ?? 'No question found for the current level.',
-          );
+          _showErrorDialog(data['message'] ?? 'No question found for the current level.');
         }
       } else {
-        // Handle API errors
-        print('API Error: ${response.statusCode} - ${response.reasonPhrase}');
-        _showErrorDialog(
-          'Error fetching question: ${response.statusCode} - ${response.reasonPhrase ?? "An error occurred"}',
-        );
-        return;
+        _showErrorDialog('Error fetching question: ${response.statusCode}');
       }
     } catch (e) {
-      // Handle network errors
-      print('Error: $e');
       _showErrorDialog('Network error. Please try again.');
-      return;
     }
   }
 
   Future<void> _checkAnswer() async {
     final token = await storage.read(key: 'authToken'); // Get token
     if (token == null) {
-      // User is not logged in, redirect to login
-      // ... (Your login redirection logic)
       return;
     }
 
     try {
       final response = await http.patch(
-        Uri.parse(
-          'https://paradox-2025.vercel.app/api/v1/question/next',
-        ), // Replace with your API URL
+        Uri.parse('https://paradox-2025.vercel.app/api/v1/question/next'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -128,65 +121,34 @@ class _QuestionScreenState extends State<QuestionScreen>
         body: jsonEncode({'answer': _answerController.text.trim()}),
       );
 
-      print('Response Status Code (Answer): ${response.statusCode}'); // DEBUG
-      print('Raw Response (Answer): ${response.body}'); // DEBUG
-
       final Map<String, dynamic> data = jsonDecode(response.body);
-      print('Decoded Data (Answer): ${data}'); // DEBUG
 
       if (response.statusCode == 200 || response.statusCode == 202) {
         if (data['success'] == true) {
-          // Check if the level is finished (if that's still a possibility)
           if (data['data'] == "Level is finished") {
-            // Determine the total number of questions for the current level
-            int totalQuestions = widget.level == 1 ? 40 : 10;
-
-            // Check if all questions for the current level are completed
-            if (data['questionsCompleted'] == totalQuestions) {
-              // All questions for the current level are completed
-              _animationController?.forward(); // Start animation
-              await Future.delayed(
-                const Duration(seconds: 2),
-              ); // Wait for animation
+            if (widget.level == 1) {
+              await storage.write(key: 'level1Completed', value: 'true');
             }
-
-            widget.onLevelComplete();
-            Navigator.pop(context); // Go back to Home Screen
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HurrayScreen()),
+            );
           } else {
             setState(() {
               _score = data['data']['score'];
               _currentQuestion = data['data']['newQues'];
+              _questionNumber = data['data']['newQues']['id']; // Use the question ID
               _answerController.clear();
-              _isHintVisible = false;
-              _isHintUsed = false;
-              _questionNumber =
-                  data['data']['newQues']['id']; // Update question number
             });
-
-            // Unlock Level 2 Logic
-            if (widget.level == 1) {
-              // Store a flag to indicate level 2 is unlocked
-              await storage.write(key: 'level2Unlocked', value: 'true');
-            }
           }
         } else {
           _showErrorDialog(data['message'] ?? 'Incorrect answer or error.');
         }
       } else {
-        // Handle incorrect answer or other API errors
-        print(
-          'API Error (Answer): ${response.statusCode} - ${response.reasonPhrase}',
-        ); // DEBUG
-        _showErrorDialog(
-          'Incorrect answer: ${response.statusCode} - ${response.reasonPhrase ?? "An error occurred"}',
-        );
-        return;
+        _showErrorDialog('Error: ${response.statusCode}');
       }
     } catch (e) {
-      // Handle network errors
-      print('Error: $e');
       _showErrorDialog('Network error. Please try again.');
-      return;
     }
   }
 
