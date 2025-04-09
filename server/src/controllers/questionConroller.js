@@ -37,13 +37,13 @@ async function addQues(req,res) {
         if (!lvl || !answer) {
             throw new AppError("lvl and answer are required", StatusCodes.BAD_REQUEST);
         }
-        answer=answer.toLowerCase().trim();
+        const formattedAnswer = answer.toLowerCase().trim();
         const data = {
             lvl,
             title,
             descriptionOrImgUrl,
             hint: hint|| "No Hint In This Question",
-            answer
+            answer: formattedAnswer
         };
         console.log("Adding Question data:",data)
         const reponse=await QuestionService.addQues(data);
