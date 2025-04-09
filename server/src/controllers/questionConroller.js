@@ -2,7 +2,8 @@ const { response } = require("express");
 const {ErrorResponse,SuccessResponse}=require("../utils/common");
 const {StatusCodes}=require('http-status-codes')
 const {QuestionService}=require('../services')
-const {AppError}=require('../utils/errors/appError')
+const {AppError}=require('../utils/errors/appError');
+const { success } = require("../utils/common/errorResponse");
 
 
 async function nextQues(req,res) {
@@ -86,7 +87,9 @@ async function hint(req,res) {
             return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse)
         }
         const response=await QuestionService.hint(user);
-        return res.status(StatusCodes.ACCEPTED).json(response);
+        SuccessResponse.message="Hint fetch Successfully"
+        SuccessResponse.data=response;
+        return res.status(StatusCodes.ACCEPTED).json(SuccessResponse);
     } catch (error) {
         console.log(error);
         ErrorResponse.error=error;
