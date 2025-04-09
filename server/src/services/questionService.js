@@ -30,7 +30,7 @@ async function nextQues(answer,userId){
             console.log('updatedUser',updateUser);
             const response={
                 newQues:newQues,
-                score:updateUser.score,
+                score:(updateUser.score+plusScore),
                 message:"Correct Answer"
             }
             return response;
