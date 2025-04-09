@@ -207,7 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                           ),
                                                     )
                                                     : Image.asset(
-                                                      'assets/images/profile_image.png',
+                                                      'assets/images/unnamed.jpg',
                                                       fit: BoxFit.cover,
                                                     ),
                                           ),

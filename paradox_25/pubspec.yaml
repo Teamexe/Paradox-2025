@@ -84,6 +84,8 @@ flutter:
     - assets/images/level_image.png
     - assets/images/first.png
     - assets/images/exe_logo1.png
+    - assets/images/unnamed.jpg
+    - assets/images/dialog_box.png
    
   fonts:
     - family: PixelFont

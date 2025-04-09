@@ -233,7 +233,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                           if (topPlayers.length >= 2)
                             _buildPodiumAvatar(
                               top: constraints.maxHeight * 0.07,
-                              left: constraints.maxWidth * 0.12,
+                              left: constraints.maxWidth * 0.09,
                               name: topPlayers[1]['name'],
                               score: topPlayers[1]['score'],
                               avatarPath: 'assets/images/avatar_2.png',
@@ -416,7 +416,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                         fit: BoxFit.cover,
                       )
                       : Image.asset(
-                        'assets/images/profile_image.png', // Fallback image
+                        'assets/images/unnamed.jpg', // Fallback image
                         fit: BoxFit.cover,
                       ),
             ),

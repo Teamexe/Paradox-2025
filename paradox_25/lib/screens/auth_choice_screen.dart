@@ -139,83 +139,80 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ),
                                 SizedBox(height: screenHeight * 0.05),
                                 if (_isLoggedIn)
-                                  ElevatedButton(
-                                    onPressed: _goToHome,
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.white.withOpacity(
-                                        0.1,
-                                      ),
-                                      foregroundColor: Colors.grey.shade300,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                          scale(30),
+                                  GestureDetector(
+                                    onTap: _goToHome,
+                                    child: Container(
+                                      width: screenWidth * 0.65, // Reduced width (65% of the screen width)
+                                      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                                      decoration: BoxDecoration(
+                                        image: const DecorationImage(
+                                          image: AssetImage('assets/images/dialog_box.png'), // Background image
+                                          fit: BoxFit.cover,
                                         ),
+                                        borderRadius: BorderRadius.circular(scale(30)), // Rounded corners
                                       ),
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: screenWidth * 0.2,
-                                        vertical: screenHeight * 0.022,
-                                      ),
-                                      elevation: 0,
-                                    ),
-                                    child: Text(
-                                      'Enter',
-                                      style: TextStyle(
-                                        fontSize: fontScale * 18,
-                                        fontWeight: FontWeight.bold,
+                                      child: Center(
+                                        child: Text(
+                                          'Enter',
+                                          style: const TextStyle(
+                                            fontFamily: 'RaviPrakash', // Custom font
+                                            fontSize: 20, // Font size
+                                            color: Colors.white, // Text color
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   )
                                 else ...[
-                                  ElevatedButton(
-                                    onPressed: _handleSignIn,
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.white.withOpacity(
-                                        0.1,
-                                      ),
-                                      foregroundColor: Colors.grey.shade300,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                          scale(30),
+                                  GestureDetector(
+                                    onTap: _handleSignIn,
+                                    child: Container(
+                                      width: screenWidth * 0.65, // Reduced width (65% of the screen width)
+                                      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                                      decoration: BoxDecoration(
+                                        image: const DecorationImage(
+                                          image: AssetImage('assets/images/dialog_box.png'), // Background image
+                                          fit: BoxFit.cover,
                                         ),
+                                        borderRadius: BorderRadius.circular(scale(30)), // Rounded corners
                                       ),
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: screenWidth * 0.2,
-                                        vertical: screenHeight * 0.022,
-                                      ),
-                                      elevation: 0,
-                                    ),
-                                    child: Text(
-                                      'Sign In',
-                                      style: TextStyle(
-                                        fontSize: fontScale * 18,
-                                        fontWeight: FontWeight.bold,
+                                      child: Center(
+                                        child: Text(
+                                          'Sign In',
+                                          style: const TextStyle(
+                                            fontFamily: 'RaviPrakash', // Custom font
+                                            fontSize: 20, // Font size
+                                            color: Colors.white, // Text color
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
                                   SizedBox(height: screenHeight * 0.04),
-                                  ElevatedButton(
-                                    onPressed: _handleSignUp,
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.white.withOpacity(
-                                        0.1,
-                                      ),
-                                      foregroundColor: Colors.grey.shade300,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                          scale(30),
+                                  GestureDetector(
+                                    onTap: _handleSignUp,
+                                    child: Container(
+                                      width: screenWidth * 0.65, // Reduced width (65% of the screen width)
+                                      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                                      decoration: BoxDecoration(
+                                        image: const DecorationImage(
+                                          image: AssetImage('assets/images/dialog_box.png'), // Background image
+                                          fit: BoxFit.cover,
                                         ),
+                                        borderRadius: BorderRadius.circular(scale(30)), // Rounded corners
                                       ),
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: screenWidth * 0.2,
-                                        vertical: screenHeight * 0.022,
-                                      ),
-                                      elevation: 0,
-                                    ),
-                                    child: Text(
-                                      'Sign Up',
-                                      style: TextStyle(
-                                        fontSize: fontScale * 18,
-                                        fontWeight: FontWeight.bold,
+                                      child: Center(
+                                        child: Text(
+                                          'Sign Up',
+                                          style: const TextStyle(
+                                            fontFamily: 'RaviPrakash', // Custom font
+                                            fontSize: 20, // Font size
+                                            color: Colors.white, // Text color
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
