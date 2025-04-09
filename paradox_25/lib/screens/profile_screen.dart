@@ -46,7 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final data = jsonDecode(response.body);
         setState(() {
           userName = data['name'];
-          userScore = data['score'];
+          userScore = data['score'] - (data['hintUsed']?.length ?? 0) * 10;
           userEmail = data['email'];
           profilePictureUrl = null; // Placeholder
           _isLoading = false; // Stop loader after data is loaded

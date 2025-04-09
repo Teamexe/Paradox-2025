@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import './home_screen.dart';
 import 'package:paradox_25/main.dart';
 import 'package:paradox_25/screens/level_complete_screen.dart';
+import 'auth_choice_screen.dart';
 
 class QuestionScreen extends StatefulWidget {
   final int level;
@@ -92,10 +93,15 @@ class _QuestionScreenState extends State<QuestionScreen>
           setState(() {
             _currentQuestion = data['data']['ques'][0];
             _score = data['data']['score'] ?? 0;
-            _questionNumber = data['data']['ques'][0]['id'] ?? 1; // Use the question ID
+            _questionNumber =
+                data['data']['ques'][0]['id'] ?? 1; // Use the question ID
+            _isHintVisible = false;
+            _isHintUsed = false;
           });
         } else {
-          _showErrorDialog(data['message'] ?? 'No question found for the current level.');
+          _showErrorDialog(
+            data['message'] ?? 'No question found for the current level.',
+          );
         }
       } else {
         _showErrorDialog('Error fetching question: ${response.statusCode}');
@@ -137,8 +143,9 @@ class _QuestionScreenState extends State<QuestionScreen>
             setState(() {
               _score = data['data']['score'];
               _currentQuestion = data['data']['newQues'];
-              _questionNumber = data['data']['newQues']['id']; // Use the question ID
+              _questionNumber = data['data']['newQues']['id'];
               _answerController.clear();
+              _isHintVisible = false;
             });
           }
         } else {
@@ -155,8 +162,10 @@ class _QuestionScreenState extends State<QuestionScreen>
   Future<void> _fetchHint() async {
     final token = await storage.read(key: 'authToken'); // Get token
     if (token == null) {
-      // User is not logged in, redirect to login
-      // ... (Your login redirection logic)
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const AuthScreen()),
+      );
       return;
     }
 
@@ -176,18 +185,6 @@ class _QuestionScreenState extends State<QuestionScreen>
             data['data'] != null &&
             data['data']['hint'] != null) {
           String hint = data['data']['hint'];
-          // Generic Hint Correction (Example)
-          // You can add more complex logic here if needed
-          if (hint.toLowerCase() == "place") {
-            hint = "Location"; // Or any other appropriate word
-          } else if (hint.toLowerCase() == "some other incorrect word") {
-            hint = "Corrected Value";
-          }
-          // If you have a list of incorrect words:
-          // const incorrectWords = ["place", "word1", "word2"];
-          // if (incorrectWords.contains(hint.toLowerCase())) {
-          //  hint = "Corrected Value";
-          // }
 
           setState(() {
             _isHintVisible = true;

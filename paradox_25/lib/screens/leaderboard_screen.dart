@@ -226,7 +226,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                             _buildPodiumAvatar(
                               top: constraints.maxHeight * 0.04,
                               name: topPlayers[0]['name'],
-                              score: topPlayers[0]['score'],
+                              score:
+                                  topPlayers[0]['score'] -
+                                  (topPlayers[0]['hintUsed']?.length ?? 0) * 10,
                               avatarPath: 'assets/images/avatar_1.png',
                               scale: scale,
                             ),
@@ -235,7 +237,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                               top: constraints.maxHeight * 0.07,
                               left: constraints.maxWidth * 0.09,
                               name: topPlayers[1]['name'],
-                              score: topPlayers[1]['score'],
+                              score:
+                                  topPlayers[1]['score'] -
+                                  (topPlayers[1]['hintUsed']?.length ?? 0) * 10,
                               avatarPath: 'assets/images/avatar_2.png',
                               scale: scale,
                             ),
@@ -244,7 +248,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                               top: constraints.maxHeight * 0.1,
                               right: constraints.maxWidth * 0.12,
                               name: topPlayers[2]['name'],
-                              score: topPlayers[2]['score'],
+                              score:
+                                  topPlayers[2]['score'] -
+                                  (topPlayers[2]['hintUsed']?.length ?? 0) * 10,
                               avatarPath: 'assets/images/avatar_3.png',
                               scale: scale,
                             ),
@@ -264,7 +270,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                           return _buildLeaderboardItem(
                             rank: index + 1,
                             name: data['name'],
-                            score: data['score'],
+                            score:
+                                data['score'] -
+                                (data['hintUsed']?.length ?? 0) * 10,
                             size: size,
                             scale: scale,
                             profileImagePath:
