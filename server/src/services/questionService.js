@@ -27,10 +27,11 @@ async function nextQues(answer,userId){
         if(isCorrect){
             const newQues=await quesRepo.nextQues(user.currQues,user.currLvl);
             const updateUser=await AuthRepo.update(userId,{currQues:newQues.id,score:((user.score)+plusScore)});
+            const hintUsed = Array.isArray(user.hintUsed) ? user.hintUsed.length : 0;
             console.log('updatedUser',updateUser);
             const response={
                 newQues:newQues,
-                score:(updateUser.score+plusScore),
+                score:(updateUser.score+plusScore)-(hintUsed * 10),
                 message:"Correct Answer"
             }
             return response;
