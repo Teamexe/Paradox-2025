@@ -213,7 +213,20 @@ class _QuestionScreenState extends State<QuestionScreen>
         if (data['success'] == true &&
             data['data'] != null &&
             data['data']['hint'] != null) {
-          final String hint = data['data']['hint'];
+          String hint = data['data']['hint'];
+          // Generic Hint Correction (Example)
+          // You can add more complex logic here if needed
+          if (hint.toLowerCase() == "place") {
+            hint = "Location"; // Or any other appropriate word
+          } else if (hint.toLowerCase() == "some other incorrect word") {
+            hint = "Corrected Value";
+          }
+          // If you have a list of incorrect words:
+          // const incorrectWords = ["place", "word1", "word2"];
+          // if (incorrectWords.contains(hint.toLowerCase())) {
+          //  hint = "Corrected Value";
+          // }
+
           setState(() {
             _isHintVisible = true;
             if (!_isHintUsed) {
