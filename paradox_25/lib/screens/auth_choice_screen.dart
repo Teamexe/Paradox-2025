@@ -142,20 +142,28 @@ class _AuthScreenState extends State<AuthScreen> {
                                   GestureDetector(
                                     onTap: _goToHome,
                                     child: Container(
-                                      width: screenWidth * 0.65, // Reduced width (65% of the screen width)
-                                      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                                      width: screenWidth * 0.65, // Button width
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: screenHeight * 0.02,
+                                      ),
                                       decoration: BoxDecoration(
-                                        image: const DecorationImage(
-                                          image: AssetImage('assets/images/dialog_box.png'), // Background image
-                                          fit: BoxFit.fill,
-                                        ),
-                                        borderRadius: BorderRadius.circular(scale(30)), // Rounded corners
+                                        color:
+                                            Colors
+                                                .transparent, // Transparent background
+                                        borderRadius: BorderRadius.circular(
+                                          scale(30),
+                                        ), // Rounded corners
+                                        border: Border.all(
+                                          color: Colors.white,
+                                          width: 2,
+                                        ), // Optional border
                                       ),
                                       child: Center(
                                         child: Text(
                                           'Enter',
                                           style: const TextStyle(
-                                            fontFamily: 'RaviPrakash', // Custom font
+                                            fontFamily:
+                                                'RaviPrakash', // Custom font
                                             fontSize: 24, // Font size
                                             color: Colors.white, // Text color
                                             fontWeight: FontWeight.bold,
@@ -168,20 +176,28 @@ class _AuthScreenState extends State<AuthScreen> {
                                   GestureDetector(
                                     onTap: _handleSignIn,
                                     child: Container(
-                                      width: screenWidth * 0.65, // Reduced width (65% of the screen width)
-                                      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                                      width: screenWidth * 0.65, // Button width
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: screenHeight * 0.02,
+                                      ),
                                       decoration: BoxDecoration(
-                                        image: const DecorationImage(
-                                          image: AssetImage('assets/images/dialog_box.png'), // Background image
-                                          fit: BoxFit.fill,
-                                        ),
-                                        borderRadius: BorderRadius.circular(scale(30)), // Rounded corners
+                                        color:
+                                            Colors
+                                                .transparent, // Transparent background
+                                        borderRadius: BorderRadius.circular(
+                                          scale(30),
+                                        ), // Rounded corners
+                                        border: Border.all(
+                                          color: Colors.white,
+                                          width: 2,
+                                        ), // Optional border
                                       ),
                                       child: Center(
                                         child: Text(
                                           'Sign In',
                                           style: const TextStyle(
-                                            fontFamily: 'RaviPrakash', // Custom font
+                                            fontFamily:
+                                                'RaviPrakash', // Custom font
                                             fontSize: 24, // Font size
                                             color: Colors.white, // Text color
                                             fontWeight: FontWeight.bold,
@@ -194,20 +210,28 @@ class _AuthScreenState extends State<AuthScreen> {
                                   GestureDetector(
                                     onTap: _handleSignUp,
                                     child: Container(
-                                      width: screenWidth * 0.65, // Reduced width (65% of the screen width)
-                                      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                                      width: screenWidth * 0.65, // Button width
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: screenHeight * 0.02,
+                                      ),
                                       decoration: BoxDecoration(
-                                        image: const DecorationImage(
-                                          image: AssetImage('assets/images/dialog_box.png'), // Background image
-                                          fit: BoxFit.fill,
-                                        ),
-                                        borderRadius: BorderRadius.circular(scale(30)), // Rounded corners
+                                        color:
+                                            Colors
+                                                .transparent, // Transparent background
+                                        borderRadius: BorderRadius.circular(
+                                          scale(30),
+                                        ), // Rounded corners
+                                        border: Border.all(
+                                          color: Colors.white,
+                                          width: 2,
+                                        ), // Optional border
                                       ),
                                       child: Center(
                                         child: Text(
                                           'Sign Up',
                                           style: const TextStyle(
-                                            fontFamily: 'RaviPrakash', // Custom font
+                                            fontFamily:
+                                                'RaviPrakash', // Custom font
                                             fontSize: 24, // Font size
                                             color: Colors.white, // Text color
                                             fontWeight: FontWeight.bold,
