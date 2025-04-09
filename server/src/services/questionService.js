@@ -29,6 +29,8 @@ async function nextQues(answer,userId){
             const updateUser=await AuthRepo.update(userId,{currQues:newQues.id,score:((user.score)+plusScore)});
             const hintUsed = Array.isArray(user.hintUsed) ? user.hintUsed.length : 0;
             console.log('updatedUser',updateUser);
+            newQues.hint=undefined;
+            newQues.answer=undefined;
             const response={
                 newQues:newQues,
                 score:(updateUser.score+plusScore)-(hintUsed * 10),
@@ -68,9 +70,12 @@ async function currentQues(user) {
         }
         const ques=await quesRepo.getAll(query);
         console.log("Current Quest:",ques);
+        ques.hint=undefined;
+        ques.answer=undefined;
+        const hintUsed = Array.isArray(user.hintUsed) ? user.hintUsed.length : 0;
         const reponse={
             ques: ques,
-            score: user.score,
+            score: (user.score)-(hintUsed * 10),
             message: "Current Question"
         }
         console.log("Current Quest:",reponse);
