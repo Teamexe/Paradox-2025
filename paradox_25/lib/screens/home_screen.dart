@@ -21,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool isLevel1Completed = false;
+  bool isLevel2Unlocked = false;
   String? userName;
   int? userScore;
 
@@ -62,6 +63,10 @@ class _HomeScreenState extends State<HomeScreen> {
               data['level1Completed'] ??
               false; // Adjust this based on your backend response
         });
+
+        // Check if level 2 is unlocked
+        final level2UnlockedValue = await storage.read(key: 'level2Unlocked');
+        isLevel2Unlocked = level2UnlockedValue == 'true';
       } else if (response.statusCode == 401) {
         // Unauthorized, token is invalid, redirect to login
         await storage.delete(key: 'authToken'); // Clear stored token
@@ -289,7 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             child: ElevatedButton(
                               onPressed:
-                                  isLevel1Completed
+                                  isLevel2Unlocked
                                       ? () {
                                         Navigator.push(
                                           context,

@@ -32,6 +32,7 @@ class _QuestionScreenState extends State<QuestionScreen>
   final storage = const FlutterSecureStorage();
   AnimationController? _animationController; // Animation Controller
   Animation<double>? _animation; // Animation
+  final FocusNode _focusNode = FocusNode(); // FocusNode for TextField
 
   @override
   void initState() {
@@ -52,6 +53,7 @@ class _QuestionScreenState extends State<QuestionScreen>
   @override
   void dispose() {
     _animationController?.dispose(); // Dispose animation controller
+    _focusNode.dispose(); // Dispose FocusNode
     super.dispose();
   }
 
@@ -73,17 +75,22 @@ class _QuestionScreenState extends State<QuestionScreen>
 
       if (response.statusCode == 200 || response.statusCode == 202) {
         print('Raw Response: ${response.body}');
-        final List<dynamic> data = jsonDecode(response.body);
+        final Map<String, dynamic> data = jsonDecode(response.body);
         print('Decoded Data: ${data}');
 
-        if (data.isNotEmpty) {
+        if (data['success'] == true && data['data']['ques'].isNotEmpty) {
           setState(() {
-            _currentQuestion = data[0];
+            _currentQuestion = data['data']['ques'][0];
+            _score = data['data']['score'] ?? 0;
             print('_currentQuestion: $_currentQuestion');
             _isHintUsed = false; // Reset hint usage flag for the new question
+            _questionNumber =
+                _currentQuestion?['id'] ?? 1; // Initialize question number
           });
         } else {
-          _showErrorDialog('No question found for the current level.');
+          _showErrorDialog(
+            data['message'] ?? 'No question found for the current level.',
+          );
         }
       } else {
         // Handle API errors
@@ -124,37 +131,46 @@ class _QuestionScreenState extends State<QuestionScreen>
       print('Response Status Code (Answer): ${response.statusCode}'); // DEBUG
       print('Raw Response (Answer): ${response.body}'); // DEBUG
 
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      print('Decoded Data (Answer): ${data}'); // DEBUG
+
       if (response.statusCode == 200 || response.statusCode == 202) {
-        final data = jsonDecode(response.body);
-        print('Decoded Data (Answer): ${data}'); // DEBUG
+        if (data['success'] == true) {
+          // Check if the level is finished (if that's still a possibility)
+          if (data['data'] == "Level is finished") {
+            // Determine the total number of questions for the current level
+            int totalQuestions = widget.level == 1 ? 40 : 10;
 
-        // Check if the level is finished
-        if (data['data'] == "Level is finished") {
-          // Determine the total number of questions for the current level
-          int totalQuestions = widget.level == 1 ? 40 : 10;
+            // Check if all questions for the current level are completed
+            if (data['questionsCompleted'] == totalQuestions) {
+              // All questions for the current level are completed
+              _animationController?.forward(); // Start animation
+              await Future.delayed(
+                const Duration(seconds: 2),
+              ); // Wait for animation
+            }
 
-          // Check if all questions for the current level are completed
-          if (data['questionsCompleted'] == totalQuestions) {
-            // All questions for the current level are completed
-            _animationController?.forward(); // Start animation
-            await Future.delayed(
-              const Duration(seconds: 2),
-            ); // Wait for animation
+            widget.onLevelComplete();
+            Navigator.pop(context); // Go back to Home Screen
+          } else {
+            setState(() {
+              _score = data['data']['score'];
+              _currentQuestion = data['data']['newQues'];
+              _answerController.clear();
+              _isHintVisible = false;
+              _isHintUsed = false;
+              _questionNumber =
+                  data['data']['newQues']['id']; // Update question number
+            });
+
+            // Unlock Level 2 Logic
+            if (widget.level == 1) {
+              // Store a flag to indicate level 2 is unlocked
+              await storage.write(key: 'level2Unlocked', value: 'true');
+            }
           }
-
-          widget.onLevelComplete();
-          Navigator.pop(context); // Go back to Home Screen
         } else {
-          setState(() {
-            _score =
-                data['score']; // Assuming the API returns the updated score
-            _currentQuestion =
-                data['data']; // Assuming the API returns the next question data
-            _answerController.clear();
-            _isHintVisible = false;
-            _isHintUsed = false; // Reset hint usage for the new question
-            _questionNumber++; // Increment question number
-          });
+          _showErrorDialog(data['message'] ?? 'Incorrect answer or error.');
         }
       } else {
         // Handle incorrect answer or other API errors
@@ -191,16 +207,25 @@ class _QuestionScreenState extends State<QuestionScreen>
       );
 
       if (response.statusCode == 200 || response.statusCode == 202) {
-        final String data = response.body; // Hint API returns a string
-        setState(() {
-          _isHintVisible = true;
-          if (!_isHintUsed) {
-            _isHintUsed = true; // Mark hint as used for this question
-          }
-          if (_currentQuestion != null) {
-            _currentQuestion!['hint'] = data;
-          }
-        });
+        final Map<String, dynamic> data = jsonDecode(
+          response.body,
+        ); // Hint API might return a JSON
+        if (data['success'] == true &&
+            data['data'] != null &&
+            data['data']['hint'] != null) {
+          final String hint = data['data']['hint'];
+          setState(() {
+            _isHintVisible = true;
+            if (!_isHintUsed) {
+              _isHintUsed = true; // Mark hint as used for this question
+            }
+            if (_currentQuestion != null) {
+              _currentQuestion!['hint'] = hint;
+            }
+          });
+        } else {
+          _showErrorDialog(data['message'] ?? 'Error fetching hint.');
+        }
       } else {
         // Handle API errors
         print('Error fetching hint: ${response.statusCode}');
@@ -435,19 +460,29 @@ class _QuestionScreenState extends State<QuestionScreen>
                         SizedBox(height: height * 0.025),
 
                         // Answer Field
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: scale(15)),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade800,
-                            borderRadius: BorderRadius.circular(scale(10)),
-                          ),
-                          child: TextField(
-                            controller: _answerController,
-                            style: const TextStyle(color: Colors.white),
-                            decoration: const InputDecoration(
-                              hintText: 'Type your answer here...',
-                              hintStyle: TextStyle(color: Colors.grey),
-                              border: InputBorder.none,
+                        GestureDetector(
+                          onTap: () {
+                            FocusScope.of(
+                              context,
+                            ).requestFocus(_focusNode); // Request focus
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: scale(15),
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade800,
+                              borderRadius: BorderRadius.circular(scale(10)),
+                            ),
+                            child: TextField(
+                              controller: _answerController,
+                              style: const TextStyle(color: Colors.white),
+                              decoration: const InputDecoration(
+                                hintText: 'Type your answer here...',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                border: InputBorder.none,
+                              ),
+                              focusNode: _focusNode, // Assign the FocusNode
                             ),
                           ),
                         ),
@@ -475,7 +510,6 @@ class _QuestionScreenState extends State<QuestionScreen>
                             ),
                           ),
                         ),
-                        SizedBox(height: height * 0.03),
                       ],
                     ),
                   ),
@@ -508,9 +542,7 @@ class _QuestionScreenState extends State<QuestionScreen>
                                       BoxFit
                                           .cover, // Cover the entire container
                                 ),
-                                borderRadius: BorderRadius.circular(
-                                  12,
-                                ), // Slightly increased rounded corners
+                                borderRadius: BorderRadius.circular(12),
                               ),
                               child: Column(
                                 children: [
