@@ -92,13 +92,13 @@ class RulesScreen extends StatelessWidget {
                                   _buildSpacing(screenHeight),
                                   _buildRuleItem(
                                     context,
-                                    'Participation: Participants can choose to play the game in solo format or can choose their partners by choice during or at the end of level 1.',
+                                    'Participation: The game must be played solo throughout all levels.',
                                     scale,
                                   ),
                                   _buildSpacing(screenHeight),
                                   _buildRuleItem(
                                     context,
-                                    'Partner Matching: If any qualified candidate for level 2 from level 1 to get into a team, they will be randomly matched with another partner by the organizers.',
+                                    'Levels: The game consists of two levels — Level 1 includes 40 image-based word guessing questions, while Level 2 contains 10 text-based riddles or puzzles.',
                                     scale,
                                   ),
                                   _buildSpacing(screenHeight),
@@ -116,7 +116,7 @@ class RulesScreen extends StatelessWidget {
                                   _buildSpacing(screenHeight),
                                   _buildRuleItem(
                                     context,
-                                    'Time Limit: Each level must be completed within the given time limit. Failure to do so will result in disqualification.',
+                                    'Qualification: Only the top 50 scorers from Level 1 will be eligible to move on to Level 2.',
                                     scale,
                                   ),
                                 ],
