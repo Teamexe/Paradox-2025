@@ -88,7 +88,7 @@ async function hint(req,res) {
         }
         const response=await QuestionService.hint(user);
         SuccessResponse.message="Hint fetch Successfully"
-        SuccessResponse.data=response;
+        SuccessResponse.data={hint:response};
         return res.status(StatusCodes.ACCEPTED).json(SuccessResponse);
     } catch (error) {
         console.log(error);
