@@ -17,16 +17,16 @@ async function nextQues(answer,userId){
         }
         console.log('User:',user);
         const isCorrect=await quesRepo.verifyQuestion(user.currQues,answer);
-
+        const plusScore=Number(serverConfig.SCORE);
        
         if(user.currQues===await(quesRepo.lastQues())){
-            const updateUser=await AuthRepo.update(userId,{currQues:0,score:((user.score)+serverConfig.SCORE)});
+            const updateUser=await AuthRepo.update(userId,{currQues:0,score:((user.score)+plusScore)});
             const response="Level is finished";
             return response;
         }
         if(isCorrect){
             const newQues=await quesRepo.nextQues(user.currQues,user.currLvl);
-            const updateUser=await AuthRepo.update(userId,{currQues:newQues.id,score:((user.score)+serverConfig.SCORE)});
+            const updateUser=await AuthRepo.update(userId,{currQues:newQues.id,score:((user.score)+plusScore)});
             console.log('updatedUser',updateUser);
             const response={
                 newQues:newQues,
