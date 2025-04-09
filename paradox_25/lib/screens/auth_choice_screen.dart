@@ -147,7 +147,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       decoration: BoxDecoration(
                                         image: const DecorationImage(
                                           image: AssetImage('assets/images/dialog_box.png'), // Background image
-                                          fit: BoxFit.cover,
+                                          fit: BoxFit.fill,
                                         ),
                                         borderRadius: BorderRadius.circular(scale(30)), // Rounded corners
                                       ),
@@ -156,7 +156,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           'Enter',
                                           style: const TextStyle(
                                             fontFamily: 'RaviPrakash', // Custom font
-                                            fontSize: 20, // Font size
+                                            fontSize: 24, // Font size
                                             color: Colors.white, // Text color
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -173,7 +173,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       decoration: BoxDecoration(
                                         image: const DecorationImage(
                                           image: AssetImage('assets/images/dialog_box.png'), // Background image
-                                          fit: BoxFit.cover,
+                                          fit: BoxFit.fill,
                                         ),
                                         borderRadius: BorderRadius.circular(scale(30)), // Rounded corners
                                       ),
@@ -182,7 +182,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           'Sign In',
                                           style: const TextStyle(
                                             fontFamily: 'RaviPrakash', // Custom font
-                                            fontSize: 20, // Font size
+                                            fontSize: 24, // Font size
                                             color: Colors.white, // Text color
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -199,7 +199,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       decoration: BoxDecoration(
                                         image: const DecorationImage(
                                           image: AssetImage('assets/images/dialog_box.png'), // Background image
-                                          fit: BoxFit.cover,
+                                          fit: BoxFit.fill,
                                         ),
                                         borderRadius: BorderRadius.circular(scale(30)), // Rounded corners
                                       ),
@@ -208,7 +208,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           'Sign Up',
                                           style: const TextStyle(
                                             fontFamily: 'RaviPrakash', // Custom font
-                                            fontSize: 20, // Font size
+                                            fontSize: 24, // Font size
                                             color: Colors.white, // Text color
                                             fontWeight: FontWeight.bold,
                                           ),
