@@ -66,7 +66,7 @@ async function currentQues(req,res) {
         }
         const response=await QuestionService.currentQues(user);
         SuccessResponse.message="Current Question fetch Successfully"
-        SuccessResponse.reponse=response;
+        SuccessResponse.data=response;
         return res.status(StatusCodes.ACCEPTED).json(SuccessResponse);
     } catch (error) {
         console.log(error);
