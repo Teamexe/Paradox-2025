@@ -73,8 +73,8 @@ async function currentQues(user) {
         ques.hint=undefined;
         ques.answer=undefined;
         const hintUsed = Array.isArray(user.hintUsed) ? user.hintUsed.length : 0;
-        ques.hint=undefined;
-        ques.answer=undefined;
+        ques[0].hint=undefined;
+        ques[0].answer=undefined;
         const reponse={
             ques: ques,
             score: (user.score)-(hintUsed * 10),
