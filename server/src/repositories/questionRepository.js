@@ -33,7 +33,7 @@ class QuestionRepository extends crudRepository{
     }
     async lastQues(currLvl){
         try {
-            const lastQuestion = await Questions.findOne(currLvl).sort({ id: -1 }); 
+            const lastQuestion = await Questions.findOne({lvl:currLvl}).sort({ id: -1 }); 
             if (!lastQuestion) {
                 // throw new AppError("No questions found",StatusCodes.INTERNAL_SERVER_ERROR);
                 return 0;

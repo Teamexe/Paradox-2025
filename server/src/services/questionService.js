@@ -18,8 +18,8 @@ async function nextQues(answer,userId){
         console.log('User:',user);
         const isCorrect=await quesRepo.verifyQuestion(user.currQues,answer);
         const plusScore=Number(serverConfig.SCORE);
-       
-        if(user.currQues===await(quesRepo.lastQues())){
+       console.log(await(quesRepo.lastQues()));
+        if(user.currQues===await(quesRepo.lastQues(user.currLvl))){
             const updateUser=await AuthRepo.update(userId,{currQues:0,score:((user.score)+plusScore)});
             const response="Level is finished";
             return response;
