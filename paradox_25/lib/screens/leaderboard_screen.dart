@@ -416,7 +416,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                         fit: BoxFit.cover,
                       )
                       : Image.asset(
-                        'assets/images/unnamed.jpg', // Fallback image
+                        'assets/images/user_image.webp', // Fallback image
                         fit: BoxFit.cover,
                       ),
             ),

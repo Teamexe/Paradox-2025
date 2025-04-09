@@ -86,6 +86,8 @@ flutter:
     - assets/images/exe_logo1.png
     - assets/images/unnamed.jpg
     - assets/images/dialog_box.png
+    - assets/images/your_image.webp
+    - assets/images/user_image.webp
    
   fonts:
     - family: PixelFont
