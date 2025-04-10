@@ -7,10 +7,12 @@ const app = express();
 // const cors = require('cors');
 const mongoose = require('mongoose');
 
-// app.use(cors({
-//     origin: "*",
-//     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
-// }));app.options('*', cors());
+app.use(cors({
+    origin: '*', // Allow all origins for mobile apps
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: false // Credentials are not typically needed for mobile apps
+}));
+app.options('*', cors());
 
 const session = require('express-session');
 app.use(session({
@@ -34,6 +36,7 @@ mongoose.connect(dbConfig.MONGODB_URI, dbConfig.MONGOOSE_OPTIONS)
 );
 
 const apiRoutes = require('./src/routes');
+const cors = require('cors');
 
 
 app.get('/', (req, res) => {
