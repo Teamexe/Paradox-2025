@@ -8,8 +8,12 @@ router.get("/leaderboard-stream", async (req, res) => {
     res.setHeader("Connection", "keep-alive");
 
     const sendLeaderboard = async () => {
-        const leaderboard = await User.find().sort({ score: -1 }).limit(100);
-        res.write(`data: ${JSON.stringify(leaderboard)}\n\n`);
+        const leaderboard = await User.find().limit(100);
+        const response={
+            name:leaderboard.name,
+            score:(leaderboard.score)-leaderboard.hintUsed.length()*10,
+        }.sort({ score: -1 });
+        res.write(`data: ${JSON.stringify(response)}\n\n`);
     };
 
     sendLeaderboard();
