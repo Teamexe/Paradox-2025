@@ -4,7 +4,7 @@ const passport=require('passport')
 const { serverConfig, dbConfig } = require('./src/config');
 const express = require('express');
 const app = express();
-// const cors = require('cors');
+const cors = require('cors');
 const mongoose = require('mongoose');
 
 app.use(cors({
