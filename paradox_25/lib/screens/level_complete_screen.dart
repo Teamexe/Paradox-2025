@@ -101,7 +101,7 @@ class _HurrayScreenState extends State<HurrayScreen>
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Text(
-                    'Hurray 🎉! You have completed Level 1,\nProceed to Level 2',
+                    'Hurray 🎉! You have completed Level 1,\nLevel 2 starts on 12th April',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: fontSize.clamp(18, 30),

@@ -116,8 +116,18 @@ class _HomeScreenState extends State<HomeScreen> {
       builder:
           (context) => AlertDialog(
             title: const Text('Level Locked'),
-            content: const Text(
-              'Level 2 is locked. Complete Level 1 to unlock it.',
+            content: const Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Level 2 is currently locked.'),
+                SizedBox(height: 8),
+                Text('You need to complete Level 1 first to unlock Level 2.'),
+                SizedBox(height: 8),
+                Text(
+                  'Level 2 will officially start on **April 12th**. Stay tuned!',
+                ),
+              ],
             ),
             actions: [
               TextButton(
