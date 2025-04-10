@@ -30,12 +30,14 @@ class _HurrayScreenState extends State<HurrayScreen>
       curve: Curves.elasticOut,
     );
 
-    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
-    _confettiController =
-        ConfettiController(duration: const Duration(seconds: 3));
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 3),
+    );
 
     _controller.forward();
     _confettiController.play();
@@ -59,10 +61,7 @@ class _HurrayScreenState extends State<HurrayScreen>
         children: [
           // Background Image
           Positioned.fill(
-            child: Image.asset(
-              'assets/images/all_bg.png',
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset('assets/images/all_bg.png', fit: BoxFit.cover),
           ),
 
           // Paradox Text Image at the Top
@@ -84,7 +83,13 @@ class _HurrayScreenState extends State<HurrayScreen>
             numberOfParticles: 30,
             emissionFrequency: 0.05,
             gravity: 0.2,
-            colors: const [Colors.green, Colors.blue, Colors.pink, Colors.orange, Colors.purple],
+            colors: const [
+              Colors.green,
+              Colors.blue,
+              Colors.pink,
+              Colors.orange,
+              Colors.purple,
+            ],
           ),
 
           // Centered Animated Text

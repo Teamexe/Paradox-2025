@@ -99,9 +99,7 @@ class _QuestionScreenState extends State<QuestionScreen>
             _isHintUsed = false;
           });
         } else {
-          _showErrorDialog(
-            data['message'] ?? 'No question found for the current level.',
-          );
+          _showErrorDialog('No question found for the current level.');
         }
       } else {
         _showErrorDialog('Error fetching question: ${response.statusCode}');
@@ -149,7 +147,7 @@ class _QuestionScreenState extends State<QuestionScreen>
             });
           }
         } else {
-          _showErrorDialog(data['message'] ?? 'Incorrect answer or error.');
+          _showErrorDialog('Incorrect answer! Please Try Again.');
         }
       } else {
         _showErrorDialog('Error: ${response.statusCode}');
@@ -196,7 +194,7 @@ class _QuestionScreenState extends State<QuestionScreen>
             }
           });
         } else {
-          _showErrorDialog(data['message'] ?? 'Error fetching hint.');
+          _showErrorDialog('Error fetching hint.');
         }
       } else {
         // Handle API errors
