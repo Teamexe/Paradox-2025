@@ -131,21 +131,21 @@ class PrizesScreen extends StatelessWidget {
                                         children: [
                                           _buildPrize(
                                             'assets/images/cash_prize.png',
-                                            'Cash prize',
+                                            '₹1500',
                                             scale,
                                             screenWidth,
                                             screenHeight,
                                           ),
                                           _buildPrize(
                                             'assets/images/speaker.png',
-                                            'Speaker',
+                                            '₹1000',
                                             scale,
                                             screenWidth,
                                             screenHeight,
                                           ),
                                           _buildPrize(
                                             'assets/images/watch.png',
-                                            'Watch',
+                                            '₹500',
                                             scale,
                                             screenWidth,
                                             screenHeight,
