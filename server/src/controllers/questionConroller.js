@@ -21,7 +21,10 @@ async function nextQues(req,res) {
             return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
         }
         SuccessResponse.message="Next Question fetch Successfully";
-        SuccessResponse.data=reponse;
+        SuccessResponse.data={
+            reponse,
+            currLvl:req.user.currLvl
+        };
         return res.status(StatusCodes.ACCEPTED).json(SuccessResponse);
     } catch (error) {
         console.log(error);
@@ -67,7 +70,10 @@ async function currentQues(req,res) {
         }
         const response=await QuestionService.currentQues(user);
         SuccessResponse.message="Current Question fetch Successfully"
-        SuccessResponse.data=response;
+        SuccessResponse.data={
+            response,
+            currLvl:user.currLvl
+        };
         return res.status(StatusCodes.ACCEPTED).json(SuccessResponse);
     } catch (error) {
         console.log(error);
