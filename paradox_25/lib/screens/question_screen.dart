@@ -162,9 +162,7 @@ class _QuestionScreenState extends State<QuestionScreen>
 
     try {
       final response = await http.get(
-        Uri.parse(
-          'https://paradox-2025.vercel.app/api/v1/question/hint',
-        ), // Replace with your API URL
+        Uri.parse('https://paradox-2025.vercel.app/api/v1/question/hint'),
         headers: {'Authorization': 'Bearer $token'},
       );
 
@@ -269,7 +267,7 @@ class _QuestionScreenState extends State<QuestionScreen>
                         borderRadius: BorderRadius.circular(scale(15)),
                       ),
                       child: Text(
-                        'Q$_questionNumber: ${_currentQuestion?['title'] ?? 'Loading...'}',
+                        'Q: ${_currentQuestion?['title'] ?? 'Loading...'}',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: normalFont,
@@ -433,11 +431,28 @@ class _QuestionScreenState extends State<QuestionScreen>
                       height: height * 0.065,
                       child: ElevatedButton(
                         onPressed: _checkAnswer,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(scale(10)),
-                          ),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.resolveWith<
+                            Color
+                          >((Set<WidgetState> states) {
+                            if (states.contains(WidgetState.pressed)) {
+                              // Define the color when the button is pressed (e.g., Colors.grey)
+                              return Colors.grey;
+                            }
+                            // Otherwise, the button is in its normal (unpressed) state
+                            return Colors.white;
+                          }),
+                          foregroundColor: WidgetStateProperty.all<Color>(
+                            Colors.black,
+                          ), // Ensure text color is visible
+                          shape:
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    scale(10),
+                                  ),
+                                ),
+                              ),
                         ),
                         child: Text(
                           'Submit',

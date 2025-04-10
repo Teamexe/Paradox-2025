@@ -3,18 +3,18 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
-import 'loader.dart'; // Import the loader
+import 'loader.dart';
 
 class LeaderboardProvider with ChangeNotifier {
   List<Map<String, dynamic>> _leaderboardData = [];
-  bool _isLoading = true; // Add loading flag
+  bool _isLoading = true;
 
   List<Map<String, dynamic>> get leaderboardData => _leaderboardData;
   bool get isLoading => _isLoading;
 
   void updateLeaderboard(List<Map<String, dynamic>> data) {
     _leaderboardData = data;
-    _isLoading = false; // Set loading to false when data is updated
+    _isLoading = false;
     notifyListeners();
   }
 
@@ -53,7 +53,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       listen: false,
     );
 
-    leaderboardProvider.setLoading(true); // Set loading to true
+    leaderboardProvider.setLoading(true);
 
     try {
       final request = Request(
@@ -123,14 +123,12 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     final height = size.height;
     final width = size.width;
 
-    // Responsive scaling function
     double scale(double value) => value * (width / 390);
 
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
-          final isSmallScreen =
-              constraints.maxWidth < 600; // Example breakpoint
+          final isSmallScreen = constraints.maxWidth < 600;
           return Container(
             width: constraints.maxWidth,
             height: constraints.maxHeight,
@@ -144,21 +142,15 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             child: Consumer<LeaderboardProvider>(
               builder: (context, leaderboardProvider, child) {
                 if (leaderboardProvider.isLoading) {
-                  // Show loader while loading
-                  return const Center(
-                    child: LoaderScreen(), // Use the loader widget
-                  );
+                  return const Center(child: LoaderScreen());
                 }
 
-                // Get the leaderboard data
                 final leaderboardData = leaderboardProvider.leaderboardData;
 
-                // Sort the data by score (descending) to get top players
                 leaderboardData.sort(
                   (a, b) => (b['score'] ?? 0).compareTo(a['score'] ?? 0),
                 );
 
-                // Get the top 3 players
                 final topPlayers =
                     leaderboardData.length >= 3
                         ? leaderboardData.sublist(0, 3)
@@ -172,7 +164,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                       child: Image.asset('assets/images/paradox_text.png'),
                     ),
                     SizedBox(height: constraints.maxHeight * 0.02),
-                    // Leaderboard Container
                     Container(
                       width: constraints.maxWidth * 0.9,
                       height: constraints.maxHeight * 0.4,
@@ -186,7 +177,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                       child: Stack(
                         alignment: Alignment.topCenter,
                         children: [
-                          // Header Row
                           Positioned(
                             top: 0,
                             left: 0,
@@ -213,7 +203,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                               ],
                             ),
                           ),
-                          // Podium Image
                           Positioned(
                             top: constraints.maxHeight * 0.19,
                             child: Image.asset(
@@ -226,9 +215,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                             _buildPodiumAvatar(
                               top: constraints.maxHeight * 0.04,
                               name: topPlayers[0]['name'],
-                              score:
-                                  topPlayers[0]['score'] -
-                                  (topPlayers[0]['hintUsed']?.length ?? 0) * 10,
+                              score: topPlayers[0]['score'],
                               avatarPath: 'assets/images/avatar_1.png',
                               scale: scale,
                             ),
@@ -237,9 +224,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                               top: constraints.maxHeight * 0.07,
                               left: constraints.maxWidth * 0.09,
                               name: topPlayers[1]['name'],
-                              score:
-                                  topPlayers[1]['score'] -
-                                  (topPlayers[1]['hintUsed']?.length ?? 0) * 10,
+                              score: topPlayers[1]['score'],
                               avatarPath: 'assets/images/avatar_2.png',
                               scale: scale,
                             ),
@@ -248,9 +233,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                               top: constraints.maxHeight * 0.1,
                               right: constraints.maxWidth * 0.12,
                               name: topPlayers[2]['name'],
-                              score:
-                                  topPlayers[2]['score'] -
-                                  (topPlayers[2]['hintUsed']?.length ?? 0) * 10,
+                              score: topPlayers[2]['score'],
                               avatarPath: 'assets/images/avatar_3.png',
                               scale: scale,
                             ),
@@ -270,13 +253,10 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                           return _buildLeaderboardItem(
                             rank: index + 1,
                             name: data['name'],
-                            score:
-                                data['score'] -
-                                (data['hintUsed']?.length ?? 0) * 10,
+                            score: data['score'],
                             size: size,
                             scale: scale,
-                            profileImagePath:
-                                data['profileImagePath'], // Pass profile image path
+                            profileImagePath: data['profileImagePath'],
                           );
                         },
                       ),
@@ -291,7 +271,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     );
   }
 
-  // Podium Avatar Widget
   Widget _buildPodiumAvatar({
     required double top,
     double? left,
@@ -301,7 +280,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     required String avatarPath,
     required double Function(double) scale,
   }) {
-    // Truncate the name if it exceeds 12 characters
     final truncatedName =
         name.length > 12 ? '${name.substring(0, 12)}...' : name;
 
@@ -338,7 +316,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           ),
           SizedBox(height: scale(5)),
           Text(
-            truncatedName, // Use the truncated name
+            truncatedName,
             style: TextStyle(
               color: Colors.white,
               fontSize: scale(14),
@@ -369,14 +347,13 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     );
   }
 
-  // Leaderboard Item Widget
   Widget _buildLeaderboardItem({
     required int rank,
     required String name,
     required int? score,
     required Size size,
     required double Function(double) scale,
-    String? profileImagePath, // Add profile image path (optional)
+    String? profileImagePath,
   }) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
@@ -387,7 +364,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       ),
       child: Row(
         children: [
-          // Rank Container
           Container(
             width: scale(38),
             height: scale(38),
@@ -407,7 +383,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             ),
           ),
           SizedBox(width: scale(15)),
-          // Profile Image Container
           Container(
             width: scale(38),
             height: scale(38),
@@ -419,18 +394,14 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             child: ClipOval(
               child:
                   profileImagePath != null
-                      ? Image.asset(
-                        profileImagePath, // Use the provided profile image path
-                        fit: BoxFit.cover,
-                      )
+                      ? Image.asset(profileImagePath, fit: BoxFit.cover)
                       : Image.asset(
-                        'assets/images/user_image.webp', // Fallback image
+                        'assets/images/user_image.webp',
                         fit: BoxFit.cover,
                       ),
             ),
           ),
           SizedBox(width: scale(15)),
-          // Name and Score Container
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(
@@ -458,7 +429,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: scale(16),
-                      fontFamily: 'Kenia',
+                      fontFamily: 'KdamThmorPro',
                     ),
                   ),
                 ],

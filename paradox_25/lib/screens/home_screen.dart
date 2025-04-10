@@ -34,47 +34,36 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _checkAuthAndFetchData() async {
-    final token = await storage.read(key: 'authToken'); // Get token
+    final token = await storage.read(key: 'authToken');
     if (token == null) {
-      // User is not logged in, redirect to login
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => AuthScreen(),
-        ), // Replace with your login screen
+        MaterialPageRoute(builder: (context) => AuthScreen()),
       );
       return;
     }
 
     try {
       final response = await http.get(
-        Uri.parse(
-          'https://paradox-2025.vercel.app/api/v1/home',
-        ), // Replace with your API URL
+        Uri.parse('https://paradox-2025.vercel.app/api/v1/home'),
         headers: {'Authorization': 'Bearer $token'},
       );
 
       if (response.statusCode == 200 || response.statusCode == 202) {
         final data = jsonDecode(response.body);
         setState(() {
-          userName = data['name']; // Adjust this based on your API response
-          userScore = data['score']; // Adjust this based on your API response
-          isLevel1Completed =
-              data['level1Completed'] ??
-              false; // Adjust this based on your backend response
+          userName = data['name'];
+          userScore = data['score'];
+          isLevel1Completed = data['level1Completed'] ?? false;
         });
 
-        // Check if level 2 is unlocked
         final level2UnlockedValue = await storage.read(key: 'level2Unlocked');
         isLevel2Unlocked = level2UnlockedValue == 'true';
       } else if (response.statusCode == 401) {
-        // Unauthorized, token is invalid, redirect to login
-        await storage.delete(key: 'authToken'); // Clear stored token
+        await storage.delete(key: 'authToken');
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) => SignInScreen(),
-          ), // Replace with your login screen
+          MaterialPageRoute(builder: (context) => SignInScreen()),
         );
         return; // Return to prevent further execution
       } else {
