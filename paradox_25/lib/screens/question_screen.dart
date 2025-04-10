@@ -56,7 +56,9 @@ class _QuestionScreenState extends State<QuestionScreen>
     if (widget.level == 1 && isLevel1Completed == 'true') {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HurrayScreen()),
+        MaterialPageRoute(
+          builder: (context) => const HurrayScreen(completedLevel: 1),
+        ),
       );
     }
   }
@@ -83,7 +85,10 @@ class _QuestionScreenState extends State<QuestionScreen>
       if (response.statusCode == 200 || response.statusCode == 202) {
         final Map<String, dynamic> data = jsonDecode(response.body);
 
-        if (data['success'] == true && data['data']['ques'].isNotEmpty) {
+        if (data['success'] == true &&
+            data['data'] != null &&
+            data['data']['ques'] != null &&
+            data['data']['ques'].isNotEmpty) {
           setState(() {
             _currentQuestion = data['data']['ques'][0];
             _score = data['data']['score'] ?? 0;
@@ -125,22 +130,30 @@ class _QuestionScreenState extends State<QuestionScreen>
           if (data['data'] == "Level is finished") {
             if (widget.level == 1) {
               await storage.write(key: 'level1Completed', value: 'true');
+              widget
+                  .onLevelComplete(); // Call the callback to update HomeScreen state
             }
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const HurrayScreen()),
+              MaterialPageRoute(
+                builder: (context) => const HurrayScreen(completedLevel: 1),
+              ),
             );
-          } else {
+          } else if (data['data'] != null && data['data']['newQues'] != null) {
             setState(() {
-              _score = data['data']['score'];
+              _score = data['data']['score'] ?? _score;
               _currentQuestion = data['data']['newQues'];
-              _questionNumber = data['data']['newQues']['id'];
+              _questionNumber = data['data']['newQues']['id'] ?? 1;
               _answerController.clear();
               _isHintVisible = false;
             });
+          } else {
+            _showErrorDialog(data['message'] ?? 'Something went wrong.');
           }
         } else {
-          _showErrorDialog('Incorrect answer! Please Try Again.');
+          _showErrorDialog(
+            data['message'] ?? 'Incorrect answer! Please Try Again.',
+          );
         }
       } else {
         _showErrorDialog('Incorrect Answer! Please Try Again');
@@ -183,7 +196,7 @@ class _QuestionScreenState extends State<QuestionScreen>
             }
           });
         } else {
-          _showErrorDialog('Error fetching hint.');
+          _showErrorDialog(data['message'] ?? 'Error fetching hint.');
         }
       } else {
         print('Error fetching hint: ${response.statusCode}');
@@ -326,7 +339,6 @@ class _QuestionScreenState extends State<QuestionScreen>
                       ),
                     ),
                     SizedBox(height: height * 0.025),
-
                     if (_isHintVisible && _currentQuestion?['hint'] != null)
                       Container(
                         width: double.infinity,
@@ -346,7 +358,6 @@ class _QuestionScreenState extends State<QuestionScreen>
                       ),
                     if (_isHintVisible && _currentQuestion?['hint'] != null)
                       SizedBox(height: height * 0.015),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -398,9 +409,7 @@ class _QuestionScreenState extends State<QuestionScreen>
                         ),
                       ],
                     ),
-
                     SizedBox(height: height * 0.025),
-
                     GestureDetector(
                       onTap: () {
                         FocusScope.of(context).requestFocus(_focusNode);
@@ -423,28 +432,25 @@ class _QuestionScreenState extends State<QuestionScreen>
                         ),
                       ),
                     ),
-
                     SizedBox(height: height * 0.025),
-
                     SizedBox(
                       width: double.infinity,
                       height: height * 0.065,
                       child: ElevatedButton(
                         onPressed: _checkAnswer,
                         style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.resolveWith<
-                            Color
-                          >((Set<WidgetState> states) {
-                            if (states.contains(WidgetState.pressed)) {
-                              // Define the color when the button is pressed (e.g., Colors.grey)
-                              return Colors.grey;
-                            }
-                            // Otherwise, the button is in its normal (unpressed) state
-                            return Colors.white;
-                          }),
+                          backgroundColor:
+                              WidgetStateProperty.resolveWith<Color>((
+                                Set<WidgetState> states,
+                              ) {
+                                if (states.contains(WidgetState.pressed)) {
+                                  return Colors.grey;
+                                }
+                                return Colors.white;
+                              }),
                           foregroundColor: WidgetStateProperty.all<Color>(
                             Colors.black,
-                          ), // Ensure text color is visible
+                          ),
                           shape:
                               WidgetStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(

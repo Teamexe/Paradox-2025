@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:paradox_25/screens/auth_choice_screen.dart';
 import 'package:paradox_25/screens/splash_screen.dart';
+import 'package:paradox_25/screens/level_complete_screen.dart'; // Import Hurray Screen
 import 'question_screen.dart';
+import 'level2_question_screen.dart'; // Import Level2QuestionScreen
 import './sign_in_screen.dart';
 import './prizes_screen.dart';
 import './leaderboard_screen.dart';
@@ -20,10 +22,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isLevel1Completed = false;
-  bool isLevel2Unlocked = false;
   String? userName;
   int? userScore;
+  int _currentLevel = 1; // Default to level 1
 
   final storage = const FlutterSecureStorage();
 
@@ -44,22 +45,19 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     try {
-      final response = await http.get(
+      // Fetch home data
+      final homeResponse = await http.get(
         Uri.parse('https://paradox-2025.vercel.app/api/v1/home'),
         headers: {'Authorization': 'Bearer $token'},
       );
 
-      if (response.statusCode == 200 || response.statusCode == 202) {
-        final data = jsonDecode(response.body);
+      if (homeResponse.statusCode == 200 || homeResponse.statusCode == 202) {
+        final homeData = jsonDecode(homeResponse.body);
         setState(() {
-          userName = data['name'];
-          userScore = data['score'];
-          isLevel1Completed = data['level1Completed'] ?? false;
+          userName = homeData['name'];
+          userScore = homeData['score'];
         });
-
-        final level2UnlockedValue = await storage.read(key: 'level2Unlocked');
-        isLevel2Unlocked = level2UnlockedValue == 'true';
-      } else if (response.statusCode == 401) {
+      } else if (homeResponse.statusCode == 401) {
         await storage.delete(key: 'authToken');
         Navigator.pushReplacement(
           context,
@@ -67,17 +65,40 @@ class _HomeScreenState extends State<HomeScreen> {
         );
         return; // Return to prevent further execution
       } else {
-        // Handle other errors
-        print('Error fetching user data: ${response.statusCode}');
-        _showErrorDialog('Error fetching user data'); // Use _showErrorDialog
+        print('Error fetching user home data: ${homeResponse.statusCode}');
+        _showErrorDialog('Error fetching user data');
+        return; // Return to prevent further execution
+      }
+
+      // Fetch current level
+      final levelResponse = await http.get(
+        Uri.parse('https://paradox-2025.vercel.app/api/v1/currentLevel'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (levelResponse.statusCode == 200 || levelResponse.statusCode == 202) {
+        final levelData = jsonDecode(levelResponse.body);
+        if (levelData['success'] == true) {
+          setState(() {
+            _currentLevel = levelData['data'];
+          });
+        } else {
+          print('Error fetching current level: ${levelData['message']}');
+          _showErrorDialog(
+            'Error fetching current level: ${levelData['message']}',
+          );
+          return;
+        }
+      } else {
+        print('Error fetching current level: ${levelResponse.statusCode}');
+        _showErrorDialog(
+          'Error fetching current level (Status: ${levelResponse.statusCode})',
+        );
         return; // Return to prevent further execution
       }
     } catch (e) {
       print('Error: $e');
-      // Handle network errors
-      _showErrorDialog(
-        'Network error. Please try again.',
-      ); // Use _showErrorDialog
+      _showErrorDialog('Network error. Please try again.');
       return; // Return to prevent further execution
     }
   }
@@ -104,17 +125,20 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('Level Locked'),
+            title: const Text('Level 2 Locked'),
             content: const Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Level 2 is currently locked.'),
                 SizedBox(height: 8),
-                Text('You need to complete Level 1 first to unlock Level 2.'),
+                Text(
+                  'Top 50 participants of Level 1 will commence to Level 2 tomorrow.',
+                ),
                 SizedBox(height: 8),
                 Text(
                   'Level 2 will officially start on **April 12th**. Stay tuned!',
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -125,6 +149,56 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
+    );
+  }
+
+  void _showLevel1CompletedDialog() {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Level 1 Completed'),
+            content: const Text('You have already completed Level 1.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+    );
+  }
+
+  void _navigateToQuestionScreen(int level) {
+    Widget nextScreen;
+    if (level == 2) {
+      nextScreen = Level2QuestionScreen(
+        level: level,
+        onLevelComplete: () {
+          // After completing Level 2, re-fetch the current level
+          _checkAuthAndFetchData();
+          // Optionally navigate to a different screen after Level 2 completion
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HurrayScreen(completedLevel: 2),
+            ),
+          );
+        },
+      );
+    } else {
+      nextScreen = QuestionScreen(
+        level: level,
+        onLevelComplete: () {
+          // After completing Level 1, re-fetch the current level
+          _checkAuthAndFetchData();
+        },
+      );
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => nextScreen),
     );
   }
 
@@ -244,20 +318,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) => QuestionScreen(
-                                          level: 1,
-                                          onLevelComplete: () {
-                                            setState(() {
-                                              isLevel1Completed = true;
-                                            });
-                                          },
-                                        ),
-                                  ),
-                                );
+                                if (_currentLevel > 1) {
+                                  _showLevel1CompletedDialog();
+                                } else if (_currentLevel == 1) {
+                                  _navigateToQuestionScreen(1);
+                                } else {
+                                  // This case shouldn't ideally happen
+                                  _showErrorDialog(
+                                    "Level 1 is not yet available.",
+                                  );
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
@@ -266,7 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Text(
                                 'Level 1',
                                 style: TextStyle(
-                                  fontSize: scale(35), // Increased font size
+                                  fontSize: scale(35),
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                   fontFamily: 'RaviPrakash',
@@ -292,23 +362,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius: BorderRadius.circular(scale(10)),
                             ),
                             child: ElevatedButton(
-                              onPressed:
-                                  isLevel2Unlocked
-                                      ? () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder:
-                                                (context) => QuestionScreen(
-                                                  level: 2,
-                                                  onLevelComplete: () {
-                                                    // Handle Level 2 completion
-                                                  },
-                                                ),
-                                          ),
-                                        );
-                                      }
-                                      : _showLevelLockedDialog, // Show dialog if locked
+                              onPressed: () {
+                                if (_currentLevel >= 2) {
+                                  _navigateToQuestionScreen(2);
+                                } else if (_currentLevel == 1) {
+                                  _showLevelLockedDialog();
+                                } else {
+                                  _showErrorDialog(
+                                    "Level 2 is not yet available.",
+                                  );
+                                }
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
                                 shadowColor: Colors.transparent,
@@ -316,7 +380,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Text(
                                 'Level 2',
                                 style: TextStyle(
-                                  fontSize: scale(35), // Increased font size
+                                  fontSize: scale(35),
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                   fontFamily: 'RaviPrakash',

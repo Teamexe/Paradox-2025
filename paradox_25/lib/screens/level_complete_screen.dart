@@ -3,7 +3,9 @@ import 'package:confetti/confetti.dart';
 import 'dart:math';
 
 class HurrayScreen extends StatefulWidget {
-  const HurrayScreen({super.key});
+  final int completedLevel;
+
+  const HurrayScreen({super.key, required this.completedLevel});
 
   @override
   State<HurrayScreen> createState() => _HurrayScreenState();
@@ -50,10 +52,21 @@ class _HurrayScreenState extends State<HurrayScreen>
     super.dispose();
   }
 
+  String _getHurrayText() {
+    if (widget.completedLevel == 1) {
+      return 'Hurray 🎉! You have completed Level 1,\nLevel 2 starts on 12th April';
+    } else if (widget.completedLevel == 2) {
+      return 'Hurray 🎉! You have completed Level 2.\nResults will be announced soon';
+    } else {
+      return 'Hurray 🎉! Level ${widget.completedLevel} completed!'; // Default case
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final double fontSize = screenSize.width * 0.06; // Responsive font size
+    final String hurrayText = _getHurrayText();
 
     return Scaffold(
       body: Stack(
@@ -101,7 +114,7 @@ class _HurrayScreenState extends State<HurrayScreen>
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Text(
-                    'Hurray 🎉! You have completed Level 1,\nLevel 2 starts on 12th April',
+                    hurrayText,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: fontSize.clamp(18, 30),
