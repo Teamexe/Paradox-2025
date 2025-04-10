@@ -36,7 +36,6 @@ mongoose.connect(dbConfig.MONGODB_URI, dbConfig.MONGOOSE_OPTIONS)
 );
 
 const apiRoutes = require('./src/routes');
-const cors = require('cors');
 
 
 app.get('/', (req, res) => {
