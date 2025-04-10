@@ -10,9 +10,11 @@ class RulesScreen extends StatelessWidget {
         builder: (context, constraints) {
           final screenWidth = constraints.maxWidth;
           final screenHeight = constraints.maxHeight;
+          final isSmallScreen = screenWidth < 400;
 
           double scale(double value) => value * (screenWidth / 390);
-          double fontScale(double size) => size * (screenWidth / 375);
+
+          double responsiveFont(double size) => size * (screenWidth / 375);
 
           return Container(
             decoration: const BoxDecoration(
@@ -36,7 +38,7 @@ class RulesScreen extends StatelessWidget {
                 ),
                 SizedBox(height: screenHeight * 0.02),
 
-                // Main Instruction Container
+                // Main Content
                 Expanded(
                   child: Container(
                     width: screenWidth * 0.9,
@@ -49,8 +51,8 @@ class RulesScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(scale(30)),
                     ),
                     child: Container(
-                      margin: EdgeInsets.all(screenWidth * 0.04),
-                      padding: EdgeInsets.all(screenWidth * 0.04),
+                      margin: EdgeInsets.all(screenWidth * 0.05),
+                      padding: EdgeInsets.all(screenWidth * 0.05),
                       decoration: BoxDecoration(
                         color: Colors.grey.shade800,
                         borderRadius: BorderRadius.circular(scale(20)),
@@ -63,13 +65,16 @@ class RulesScreen extends StatelessWidget {
                               'Instructions',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: fontScale(44), // Bigger title
+                                fontSize: responsiveFont(
+                                  isSmallScreen ? 28 : 36,
+                                ),
                                 fontFamily: 'Oswald',
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                           SizedBox(height: screenHeight * 0.03),
+                          // Scrollable Rules Section
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
@@ -79,42 +84,36 @@ class RulesScreen extends StatelessWidget {
                                     context,
                                     'Eligibility: The game is open to all.',
                                     scale,
-                                    fontScale,
                                   ),
                                   _buildSpacing(screenHeight),
                                   _buildRuleItem(
                                     context,
                                     'Participation: The game must be played solo throughout all levels.',
                                     scale,
-                                    fontScale,
                                   ),
                                   _buildSpacing(screenHeight),
                                   _buildRuleItem(
                                     context,
                                     'Levels: The game consists of two levels — Level 1 includes 40 image-based word guessing questions, while Level 2 contains 10 text-based riddles or puzzles.',
                                     scale,
-                                    fontScale,
                                   ),
                                   _buildSpacing(screenHeight),
                                   _buildRuleItem(
                                     context,
                                     'Scoring: Each correct answer will increase the score by 50 points.',
                                     scale,
-                                    fontScale,
                                   ),
                                   _buildSpacing(screenHeight),
                                   _buildRuleItem(
                                     context,
-                                    'Use of Hint: Using a hint will decrease the score by 10 points.',
+                                    'Use of Hint: Using hint will decrease the score by 10 points.',
                                     scale,
-                                    fontScale,
                                   ),
                                   _buildSpacing(screenHeight),
                                   _buildRuleItem(
                                     context,
                                     'Qualification: Only the top 50 scorers from Level 1 will be eligible to move on to Level 2.',
                                     scale,
-                                    fontScale,
                                   ),
                                 ],
                               ),
@@ -140,26 +139,25 @@ class RulesScreen extends StatelessWidget {
     BuildContext context,
     String text,
     double Function(double) scale,
-    double Function(double) fontScale,
   ) {
-    final bulletSize = scale(28); // Larger bullet
-    final textSize = fontScale(22); // Larger text
+    final isSmallScreen = MediaQuery.of(context).size.width < 400;
+    double fontSize = isSmallScreen ? scale(15) : scale(19);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.only(top: scale(6), right: scale(10)),
-          child: Icon(Icons.diamond, color: Colors.white, size: bulletSize),
+        Container(
+          margin: EdgeInsets.only(top: scale(5), right: scale(10)),
+          child: Icon(Icons.diamond, color: Colors.white, size: scale(20)),
         ),
         Expanded(
           child: Text(
             text,
             style: TextStyle(
               color: Colors.white,
-              fontSize: textSize,
+              fontSize: fontSize,
               fontFamily: 'Overlock',
-              height: 1.6,
+              height: 1.5,
             ),
           ),
         ),
