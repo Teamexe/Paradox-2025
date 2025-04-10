@@ -120,30 +120,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final token =
-            data['data']['token']; // Adjust this based on your API response structure
+        final token = data['data']['token'];
 
         if (token != null) {
-          await storage.write(key: 'authToken', value: token); // Store token
-          // Navigate to the MainScreen or HomeScreen
+          await storage.write(key: 'authToken', value: token);
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder: (context) => const MainScreen(),
-            ), // Replace with your main screen
+            MaterialPageRoute(builder: (context) => const MainScreen()),
           );
         } else {
-          // Handle case where token is not in the response
           print('Token not found in response');
           _showErrorDialog('Token not found in response');
         }
       } else if (response.statusCode == 409) {
-        // Email already in use
         _showErrorDialog(
           'Email is already in use. Please use a different email.',
         );
       } else {
-        // Handle signup errors
         print('Signup failed: ${response.statusCode}');
         String errorMessage = 'Signup failed. Please check your details.';
         if (response.body.isNotEmpty) {
@@ -159,7 +152,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _showErrorDialog(errorMessage);
       }
     } catch (e) {
-      // Handle network errors
       print('Error: $e');
       _showErrorDialog('Network error. Please try again.');
     }
@@ -195,13 +187,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
           final double screenWidth = constraints.maxWidth;
           final double screenHeight = constraints.maxHeight;
 
-          // Responsive scaling function
-          double scale(double value) =>
-              value * (screenWidth / 375); // Base width
+          double scale(double value) => value * (screenWidth / 375);
 
           return Stack(
             children: [
-              // Background Image
               Container(
                 width: screenWidth,
                 height: screenHeight,
@@ -212,47 +201,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
-              // Content
               SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    SizedBox(height: screenHeight * 0.08),
                     SizedBox(
-                      height: screenHeight * 0.08,
-                    ), // Proportional Spacing
-                    // Paradox Text Image
-                    SizedBox(
-                      height: scale(60), // Scaled height
+                      height: scale(60),
                       child: Image.asset(
                         'assets/images/paradox_text.png',
                         fit: BoxFit.contain,
                       ),
                     ),
-                    SizedBox(
-                      height: screenHeight * 0.06,
-                    ), // Proportional Spacing
-                    // Centered Form Content
+                    SizedBox(height: screenHeight * 0.06),
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: screenWidth * 0.05,
-                      ), // Proportional Padding
+                      ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          // Sign Up Title
                           Text(
                             'Sign Up',
                             style: TextStyle(
-                              fontSize: scale(28), // Scaled font size
+                              fontSize: scale(28),
                               fontWeight: FontWeight.bold,
                               color: Colors.grey,
                             ),
                           ),
-                          SizedBox(
-                            height: screenHeight * 0.02,
-                          ), // Proportional Spacing
-                          // Name TextField
+                          SizedBox(height: screenHeight * 0.02),
                           TextField(
                             controller: _nameController,
                             style: const TextStyle(color: Colors.grey),
@@ -265,17 +243,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 borderRadius: BorderRadius.circular(scale(10)),
                                 borderSide: BorderSide.none,
                               ),
-                              errorText: _nameError, // Show error text
+                              errorText: _nameError,
                               errorStyle: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 12,
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: screenHeight * 0.02,
-                          ), // Proportional Spacing
-                          // Email TextField
+                          SizedBox(height: screenHeight * 0.02),
                           TextField(
                             controller: _emailController,
                             style: const TextStyle(color: Colors.grey),
@@ -295,10 +270,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: screenHeight * 0.02,
-                          ), // Proportional Spacing
-                          // Password TextField
+                          SizedBox(height: screenHeight * 0.02),
                           TextField(
                             controller: _passwordController,
                             obscureText: !_isPasswordVisible,
@@ -312,7 +284,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 borderRadius: BorderRadius.circular(scale(10)),
                                 borderSide: BorderSide.none,
                               ),
-                              errorText: _passwordError, // Show error text
+                              errorText: _passwordError,
                               errorStyle: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 12,
@@ -332,13 +304,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: screenHeight * 0.03,
-                          ), // Proportional Spacing
+                          SizedBox(height: screenHeight * 0.03),
                           if (showOtpField)
                             Column(
                               children: [
-                                // OTP TextField
                                 TextField(
                                   controller: _otpController,
                                   style: const TextStyle(color: Colors.grey),
@@ -357,10 +326,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: screenHeight * 0.03,
-                                ), // Proportional Spacing
-                                // Verify Button
+                                SizedBox(height: screenHeight * 0.03),
                                 ElevatedButton(
                                   onPressed: _signUp,
                                   style: ElevatedButton.styleFrom(
@@ -374,19 +340,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       ),
                                     ),
                                     padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          screenWidth *
-                                          0.25, // Proportional Padding
-                                      vertical:
-                                          screenHeight *
-                                          0.02, // Proportional Padding
+                                      horizontal: screenWidth * 0.25,
+                                      vertical: screenHeight * 0.02,
                                     ),
                                     elevation: 0,
                                   ),
                                   child: Text(
                                     'Verify',
                                     style: TextStyle(
-                                      fontSize: scale(18), // Scaled font size
+                                      fontSize: scale(18),
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -394,7 +356,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ],
                             )
                           else
-                            // Get OTP Button
                             ElevatedButton(
                               onPressed: _sendOTP,
                               style: ElevatedButton.styleFrom(
@@ -406,26 +367,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   ),
                                 ),
                                 padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      screenWidth *
-                                      0.25, // Proportional Padding
-                                  vertical:
-                                      screenHeight *
-                                      0.02, // Proportional Padding
+                                  horizontal: screenWidth * 0.25,
+                                  vertical: screenHeight * 0.02,
                                 ),
                                 elevation: 0,
                               ),
                               child: Text(
                                 'Get OTP',
                                 style: TextStyle(
-                                  fontSize: scale(18), // Scaled font size
+                                  fontSize: scale(18),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
-                          SizedBox(
-                            height: screenHeight * 0.05,
-                          ), // Proportional Spacing
+                          SizedBox(height: screenHeight * 0.05),
                           GestureDetector(
                             onTap: () {
                               Navigator.push(

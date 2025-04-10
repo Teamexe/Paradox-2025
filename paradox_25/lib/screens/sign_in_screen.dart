@@ -136,7 +136,6 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           SizedBox(height: screenHeight * 0.02),
 
-                          /// Email Field
                           TextField(
                             controller: _emailController,
                             style: const TextStyle(color: Colors.grey),
@@ -153,7 +152,6 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           SizedBox(height: screenHeight * 0.02),
 
-                          /// Password Field with Eye Icon
                           TextField(
                             controller: _passwordController,
                             obscureText: !_isPasswordVisible,
@@ -184,7 +182,6 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           SizedBox(height: screenHeight * 0.03),
 
-                          /// Sign In Button
                           ElevatedButton(
                             onPressed: _signIn,
                             style: ElevatedButton.styleFrom(
@@ -209,7 +206,6 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           SizedBox(height: screenHeight * 0.02),
 
-                          /// Don't have an account? Sign Up
                           GestureDetector(
                             onTap: () {
                               Navigator.push(
