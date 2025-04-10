@@ -35,7 +35,7 @@ router.get('/currentLevel',ValidateAuthReq.checkAuth,async (req,res)=>{
         const response=user.currLvl;
         SuccessResponse.message="Current Level and Score fetched successfully";
         SuccessResponse.data=response;
-        return res.status(StatusCodes.ACCEPTED).json(response);
+        return res.status(StatusCodes.ACCEPTED).json(SuccessResponse);
     } catch (error) {
         console.error('Error fetching user:', error);
         return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Internal server error' });
