@@ -26,25 +26,23 @@ class _QuestionScreenState extends State<QuestionScreen>
   final TextEditingController _answerController = TextEditingController();
   Map<String, dynamic>? _currentQuestion;
   bool _isHintVisible = false;
-  bool _isHintUsed =
-      false; // Flag to track if hint has been used for the current question
+  bool _isHintUsed = false;
   int _score = 0;
-  int _questionNumber = 1; // Track the current question number
+  int _questionNumber = 1;
 
   final storage = const FlutterSecureStorage();
-  AnimationController? _animationController; // Animation Controller
-  Animation<double>? _animation; // Animation
-  final FocusNode _focusNode = FocusNode(); // FocusNode for TextField
+  AnimationController? _animationController;
+  Animation<double>? _animation;
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    _checkLevelCompletion(); // Check if the level is completed
+    _checkLevelCompletion();
     _fetchCurrentQuestion();
 
-    // Initialize animation controller
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 1000), // Adjust duration as needed
+      duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
 
@@ -56,27 +54,23 @@ class _QuestionScreenState extends State<QuestionScreen>
   Future<void> _checkLevelCompletion() async {
     final isLevel1Completed = await storage.read(key: 'level1Completed');
     if (widget.level == 1 && isLevel1Completed == 'true') {
-      // Navigate to LevelCompleteScreen if Level 1 is completed
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => const HurrayScreen(), // LevelCompleteScreen
-        ),
+        MaterialPageRoute(builder: (context) => const HurrayScreen()),
       );
     }
   }
 
   @override
   void dispose() {
-    _animationController?.dispose(); // Dispose animation controller
-    _focusNode.dispose(); // Dispose FocusNode
+    _animationController?.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
   Future<void> _fetchCurrentQuestion() async {
-    final token = await storage.read(key: 'authToken'); // Get token
+    final token = await storage.read(key: 'authToken');
     if (token == null) {
-      // User is not logged in, redirect to login
       return;
     }
 
@@ -93,8 +87,7 @@ class _QuestionScreenState extends State<QuestionScreen>
           setState(() {
             _currentQuestion = data['data']['ques'][0];
             _score = data['data']['score'] ?? 0;
-            _questionNumber =
-                data['data']['ques'][0]['id'] ?? 1; // Use the question ID
+            _questionNumber = data['data']['ques'][0]['id'] ?? 1;
             _isHintVisible = false;
             _isHintUsed = false;
           });
@@ -110,7 +103,7 @@ class _QuestionScreenState extends State<QuestionScreen>
   }
 
   Future<void> _checkAnswer() async {
-    final token = await storage.read(key: 'authToken'); // Get token
+    final token = await storage.read(key: 'authToken');
     if (token == null) {
       return;
     }
@@ -150,7 +143,7 @@ class _QuestionScreenState extends State<QuestionScreen>
           _showErrorDialog('Incorrect answer! Please Try Again.');
         }
       } else {
-        _showErrorDialog('Error: ${response.statusCode}');
+        _showErrorDialog('Incorrect Answer! Please Try Again');
       }
     } catch (e) {
       _showErrorDialog('Network error. Please try again.');
@@ -158,7 +151,7 @@ class _QuestionScreenState extends State<QuestionScreen>
   }
 
   Future<void> _fetchHint() async {
-    final token = await storage.read(key: 'authToken'); // Get token
+    final token = await storage.read(key: 'authToken');
     if (token == null) {
       Navigator.pushReplacement(
         context,
@@ -176,9 +169,7 @@ class _QuestionScreenState extends State<QuestionScreen>
       );
 
       if (response.statusCode == 200 || response.statusCode == 202) {
-        final Map<String, dynamic> data = jsonDecode(
-          response.body,
-        ); // Hint API might return a JSON
+        final Map<String, dynamic> data = jsonDecode(response.body);
         if (data['success'] == true &&
             data['data'] != null &&
             data['data']['hint'] != null) {
@@ -187,7 +178,7 @@ class _QuestionScreenState extends State<QuestionScreen>
           setState(() {
             _isHintVisible = true;
             if (!_isHintUsed) {
-              _isHintUsed = true; // Mark hint as used for this question
+              _isHintUsed = true;
             }
             if (_currentQuestion != null) {
               _currentQuestion!['hint'] = hint;
@@ -197,13 +188,11 @@ class _QuestionScreenState extends State<QuestionScreen>
           _showErrorDialog('Error fetching hint.');
         }
       } else {
-        // Handle API errors
         print('Error fetching hint: ${response.statusCode}');
         _showErrorDialog('Error fetching hint');
         return;
       }
     } catch (e) {
-      // Handle network errors
       print('Error: $e');
       _showErrorDialog('Network error. Please try again.');
       return;
@@ -236,7 +225,7 @@ class _QuestionScreenState extends State<QuestionScreen>
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontFamily: 'PixelFont', // Use the pixel font
+            fontFamily: 'PixelFont',
           ),
         ),
         backgroundColor: Colors.black,
@@ -249,14 +238,11 @@ class _QuestionScreenState extends State<QuestionScreen>
           final double width = constraints.maxWidth;
           final double height = constraints.maxHeight;
 
-          // Responsive scaling function
-          double scale(double value) => value * (width / 390); // Base width
+          double scale(double value) => value * (width / 390);
 
           final double padding = width * 0.05;
           final double smallFont = width * 0.035;
           final double normalFont = width * 0.045;
-          final double largeFont = width * 0.06;
-          final double imageHeight = height * 0.28;
 
           return Container(
             width: width,
@@ -276,7 +262,6 @@ class _QuestionScreenState extends State<QuestionScreen>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Question Container
                     Container(
                       padding: EdgeInsets.all(padding * 0.75),
                       decoration: BoxDecoration(
@@ -294,13 +279,10 @@ class _QuestionScreenState extends State<QuestionScreen>
                       ),
                     ),
                     SizedBox(height: height * 0.03),
-                    // Image Box
                     Container(
                       constraints: BoxConstraints(
-                        maxHeight:
-                            height * 0.6, // Maximum height for the white box
-                        maxWidth:
-                            width * 0.9, // Maximum width for the white box
+                        maxHeight: height * 0.6,
+                        maxWidth: width * 0.9,
                       ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(scale(15)),
@@ -347,7 +329,6 @@ class _QuestionScreenState extends State<QuestionScreen>
                     ),
                     SizedBox(height: height * 0.025),
 
-                    // Hint Section
                     if (_isHintVisible && _currentQuestion?['hint'] != null)
                       Container(
                         width: double.infinity,
@@ -368,14 +349,13 @@ class _QuestionScreenState extends State<QuestionScreen>
                     if (_isHintVisible && _currentQuestion?['hint'] != null)
                       SizedBox(height: height * 0.015),
 
-                    // Hint and Score Row
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GestureDetector(
                           onTap: () {
                             if (!_isHintVisible) {
-                              _fetchHint(); // Fetch hint from API
+                              _fetchHint();
                             } else {
                               setState(() {
                                 _isHintVisible = false;
@@ -410,7 +390,7 @@ class _QuestionScreenState extends State<QuestionScreen>
                             borderRadius: BorderRadius.circular(scale(10)),
                           ),
                           child: Text(
-                            'Score: $_score', // Display the score
+                            'Score: $_score',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: normalFont,
@@ -423,12 +403,9 @@ class _QuestionScreenState extends State<QuestionScreen>
 
                     SizedBox(height: height * 0.025),
 
-                    // Answer Field
                     GestureDetector(
                       onTap: () {
-                        FocusScope.of(
-                          context,
-                        ).requestFocus(_focusNode); // Request focus
+                        FocusScope.of(context).requestFocus(_focusNode);
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: scale(15)),
@@ -444,19 +421,18 @@ class _QuestionScreenState extends State<QuestionScreen>
                             hintStyle: TextStyle(color: Colors.grey),
                             border: InputBorder.none,
                           ),
-                          focusNode: _focusNode, // Assign the FocusNode
+                          focusNode: _focusNode,
                         ),
                       ),
                     ),
 
                     SizedBox(height: height * 0.025),
 
-                    // Submit Button
                     SizedBox(
                       width: double.infinity,
                       height: height * 0.065,
                       child: ElevatedButton(
-                        onPressed: _checkAnswer, // Submit answer to API
+                        onPressed: _checkAnswer,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
                           shape: RoundedRectangleBorder(
