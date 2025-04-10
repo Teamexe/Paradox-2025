@@ -22,7 +22,7 @@ async function nextQues(answer,userId){
         if(user.currQues===await(quesRepo.lastQues(user.currLvl))){
             const updateUser=await AuthRepo.update(userId,{currQues:0,score:((user.score)+plusScore)});
             const response={
-                newQues:"Level is finished 💥"
+                newQues:"Level is finisheduuuu 💥"
             };
             return response;
         }
