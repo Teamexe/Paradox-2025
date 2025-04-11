@@ -47,7 +47,8 @@ async function nextQues(answer,userId){
 
 async function addQues(data) {
     try {
-        const lastQues=(await quesRepo.lastQues()) || 0;
+        const lastQues=(await quesRepo.lastQuess()) || 0;
+        console.log("lastQues:",lastQues);
         const id=(lastQues)+1;
         data.id=id
         console.log("data",data)
