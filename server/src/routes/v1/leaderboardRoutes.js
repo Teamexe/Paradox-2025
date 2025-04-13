@@ -9,7 +9,7 @@ router.get("/leaderboard-stream", async (req, res) => {
 
     const sendLeaderboard = async () => {
         try {
-            const leaderboard = await User.find().sort({ score: -1 }).limit(100);
+            const leaderboard = await User.find().sort({ score: -1 , updatedAt:1}).limit(100);
             
             const response = leaderboard.map(user => {
                 const hintUsed = Array.isArray(user.hintUsed) ? user.hintUsed.length : 0;
