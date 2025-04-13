@@ -5,6 +5,7 @@ const {ValidateAuthReq}=require('../../middlewares');
 const {ValidateAdmin}=require('../../middlewares');
 
 
+
 router.patch('/next',ValidateAuthReq.checkAuth,QuestionConroller.nextQues);
 router.get('/current',ValidateAuthReq.checkAuth,QuestionConroller.currentQues);
 router.get('/hint',ValidateAuthReq.checkAuth,QuestionConroller.hint);

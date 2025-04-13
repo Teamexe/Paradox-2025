@@ -5,24 +5,38 @@ const {AuthRepository} = require('../repositories');
 const { response } = require('express');
 const AuthRepo=new AuthRepository();
 const quesRepo=new QuestionRepository();
-const {serverConfig}=require('../config')
+const {serverConfig}=require('../config');
+const { message } = require('../utils/common/errorResponse');
 
 async function nextQues(answer,userId){
     try {
         const user=await AuthRepo.findUserById(userId);
+        if(user.currQues===0){
+            const response="Level is finished";
+            return response;
+        }
         console.log('User:',user);
         const isCorrect=await quesRepo.verifyQuestion(user.currQues,answer);
-
-       
-        if(user.currQues===await(quesRepo.lastQues())){
+        const plusScore=Number(serverConfig.SCORE);
+       console.log(await(quesRepo.lastQues()));
+        if(user.currQues===await(quesRepo.lastQues(user.currLvl))){
+            const updateUser=await AuthRepo.update(userId,{currQues:0,score:((user.score)+plusScore)});
             const response="Level is finished";
             return response;
         }
         if(isCorrect){
             const newQues=await quesRepo.nextQues(user.currQues,user.currLvl);
-            const updateUser=await AuthRepo.update(userId,{currQues:newQues.id,score:((user.score)+serverConfig.SCORE)});
+            const updateUser=await AuthRepo.update(userId,{currQues:newQues.id,score:((user.score)+plusScore)});
+            const hintUsed = Array.isArray(user.hintUsed) ? user.hintUsed.length : 0;
             console.log('updatedUser',updateUser);
-            return newQues;
+            newQues.hint=undefined;
+            newQues.answer=undefined;
+            const response={
+                newQues:newQues,
+                score:(updateUser.score+plusScore)-(hintUsed * 10),
+                message:"Correct Answer"
+            }
+            return response;
         }
     } catch (error) {
         console.log(error);
@@ -33,7 +47,8 @@ async function nextQues(answer,userId){
 
 async function addQues(data) {
     try {
-        const lastQues=(await quesRepo.lastQues()) || 0;
+        const lastQues=(await quesRepo.lastQuess()) || 0;
+        console.log("lastQues:",lastQues);
         const id=(lastQues)+1;
         data.id=id
         console.log("data",data)
@@ -50,7 +65,22 @@ async function addQues(data) {
 async function currentQues(user) {
     try {
         const query={ lvl: user.currLvl, id: user.currQues };
-        const reponse=await quesRepo.getAll(query);
+        if(user.currQues===0){
+            const response="Level is finished";
+            return response;
+        }
+        const ques=await quesRepo.getAll(query);
+        console.log("Current Quest:",ques);
+        ques.hint=undefined;
+        ques.answer=undefined;
+        const hintUsed = Array.isArray(user.hintUsed) ? user.hintUsed.length : 0;
+        ques[0].hint=undefined;
+        ques[0].answer=undefined;
+        const reponse={
+            ques: ques,
+            score: (user.score)-(hintUsed * 10),
+            message: "Current Question"
+        }
         console.log("Current Quest:",reponse);
         return reponse || null;
     } catch (error) {

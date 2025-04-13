@@ -8,8 +8,22 @@ router.get("/leaderboard-stream", async (req, res) => {
     res.setHeader("Connection", "keep-alive");
 
     const sendLeaderboard = async () => {
-        const leaderboard = await User.find().sort({ score: -1 }).limit(100);
-        res.write(`data: ${JSON.stringify(leaderboard)}\n\n`);
+        try {
+            const leaderboard = await User.find().sort({ score: -1 }).limit(100);
+            
+            const response = leaderboard.map(user => {
+                const hintUsed = Array.isArray(user.hintUsed) ? user.hintUsed.length : 0;
+                return {
+                    name: user.name,
+                    score: user.score - (hintUsed * 10)                          
+                };
+            });    
+            response.sort((a, b) => b.score - a.score);
+            res.write(`data: ${JSON.stringify(response)}\n\n`);
+        } catch (error) {
+            console.error('Error fetching leaderboard:', error);
+            res.write('data: {"error": "Failed to fetch leaderboard"}\n\n');
+        }
     };
 
     sendLeaderboard();

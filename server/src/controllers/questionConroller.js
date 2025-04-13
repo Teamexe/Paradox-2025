@@ -2,12 +2,14 @@ const { response } = require("express");
 const {ErrorResponse,SuccessResponse}=require("../utils/common");
 const {StatusCodes}=require('http-status-codes')
 const {QuestionService}=require('../services')
-const {AppError}=require('../utils/errors/appError')
+const {AppError}=require('../utils/errors/appError');
+const { success } = require("../utils/common/errorResponse");
 
 
 async function nextQues(req,res) {
     try {
-        const {answer}=req.body;
+        const answer=req.body.answer?.toLowerCase().trim();
+        console.log("Answer:",answer);
         const userId = req.user.id;
         if(!answer){
             ErrorResponse.message='Answer is required';
@@ -36,12 +38,13 @@ async function addQues(req,res) {
         if (!lvl || !answer) {
             throw new AppError("lvl and answer are required", StatusCodes.BAD_REQUEST);
         }
+        const formattedAnswer = answer.toLowerCase().trim();
         const data = {
             lvl,
             title,
             descriptionOrImgUrl,
             hint: hint|| "No Hint In This Question",
-            answer
+            answer: formattedAnswer
         };
         console.log("Adding Question data:",data)
         const reponse=await QuestionService.addQues(data);
@@ -63,7 +66,9 @@ async function currentQues(req,res) {
             return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse)
         }
         const response=await QuestionService.currentQues(user);
-        return res.status(StatusCodes.ACCEPTED).json(response);
+        SuccessResponse.message="Current Question fetch Successfully"
+        SuccessResponse.data=response;
+        return res.status(StatusCodes.ACCEPTED).json(SuccessResponse);
     } catch (error) {
         console.log(error);
         ErrorResponse.message="Something went wrong while fetching Question";
@@ -82,7 +87,9 @@ async function hint(req,res) {
             return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse)
         }
         const response=await QuestionService.hint(user);
-        return res.status(StatusCodes.ACCEPTED).json(response);
+        SuccessResponse.message="Hint fetch Successfully"
+        SuccessResponse.data={hint:response};
+        return res.status(StatusCodes.ACCEPTED).json(SuccessResponse);
     } catch (error) {
         console.log(error);
         ErrorResponse.error=error;

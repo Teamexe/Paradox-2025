@@ -7,6 +7,12 @@ const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 
+app.use(cors({
+    origin: '*', // Allow all origins for mobile apps
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: false // Credentials are not typically needed for mobile apps
+}));
+app.options('*', cors());
 
 const session = require('express-session');
 app.use(session({
@@ -17,11 +23,6 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cors({
-    origin: "*",
-    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
-    credentials: true,
-}));app.options('*', cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const { StatusCodes } = require('http-status-codes');
 const {serverConfig} = require('../config');
 const bcrypt = require('bcryptjs');
+const {AuthRepository} = require('../repositories/');
+const authRepo=new AuthRepository();
 
 const adminRepo=new AdminRepository();
 
@@ -66,9 +68,25 @@ async function isAuthentication(token) {
 }
 
 
+
+async function changeLevel(data) {
+    try {
+        const { Ques, Lvl, TopNumUser } = data;
+        // console.log(Ques,Lvl,TopNumUser);
+        const user = await authRepo.updateLevel(Ques, Lvl, TopNumUser);
+        return user;
+    } catch (error) {
+        throw new AppError("Error updating level", StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+}
+
+
+
+
 module.exports={
     signIn,
     generateToken,
     comparePassword,
-    isAuthentication
+    isAuthentication,
+    changeLevel
 }

@@ -78,8 +78,27 @@ async function signIn(req,res) {
 }
 
 
+async function checkAuth(req,res) {
+    try {
+        const user=req.user;
+        if(user){
+            SuccessResponse.data=user;
+            SuccessResponse.message="User authenticated successfully";
+            return res.status(StatusCodes.OK).json(SuccessResponse);
+        }
+        ErrorResponse.message="User not found";
+        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+    } catch (error) {
+        console.log(error);
+        ErrorResponse.error=error;
+        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+    }
+}
+
+
 
 module.exports={
     signUp,
-    signIn
+    signIn,
+    checkAuth
 }
