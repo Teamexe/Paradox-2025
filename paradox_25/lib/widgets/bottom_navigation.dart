@@ -7,7 +7,7 @@ class ParadoxBottomNavigation extends StatelessWidget {
   const ParadoxBottomNavigation({
     super.key,
     required this.selectedIndex,
-    required this.onItemTapped, required int currentIndex,
+    required this.onItemTapped,
   });
 
   @override
@@ -16,12 +16,7 @@ class ParadoxBottomNavigation extends StatelessWidget {
       height: 60,
       decoration: const BoxDecoration(
         color: Color(0xFF555555),
-        border: Border(
-          top: BorderSide(
-            color: Color(0xFFFF6A13),
-            width: 2.0,
-          ),
-        ),
+        border: Border(top: BorderSide(color: Color(0xFFFF6A13), width: 2.0)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
